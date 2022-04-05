@@ -1,6 +1,6 @@
 # Hexagonal API Platform 3
 
-An example projet to use **API Platform 3** following the **hexagonal architecture**.
+An example project using **API Platform 3** following the **hexagonal architecture**.
 
 This example has been explained during the [SymfonyLive Paris 2022](https://live.symfony.com/2022-paris/schedule#session-625)
 ([slides](https://slides.com/mathiasarlaud/sflive-apip-ddd)).
