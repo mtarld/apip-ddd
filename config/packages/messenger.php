@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Domain\Shared\Command\CommandInterface;
-use App\Domain\Shared\Query\QueryInterface;
+use App\Application\Shared\Command\CommandInterface;
+use App\Application\Shared\Query\QueryInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

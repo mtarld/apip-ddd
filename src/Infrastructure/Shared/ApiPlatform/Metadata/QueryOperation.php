@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace App\Infrastructure\Shared\ApiPlatform\Metadata;
 
 use ApiPlatform\Metadata\Operation;
+use App\Application\Shared\Query\QueryInterface;
 
 final class QueryOperation extends Operation
 {
-    public string $query;
+    /**
+     * @var class-string<QueryInterface>
+     */
+    private string $query;
 
     /**
-     * @param class-string $query
+     * @param class-string<QueryInterface> $query
      */
     public function __construct(
         string $uriTemplate,
@@ -94,5 +98,24 @@ final class QueryOperation extends Operation
         unset($args[1]);
 
         parent::__construct(self::METHOD_GET, ...array_values($args));
+    }
+
+    /**
+     * @return class-string<QueryInterface>
+     */
+    public function getQuery(): string
+    {
+        return $this->query;
+    }
+
+    /**
+     * @param class-string<QueryInterface> $query
+     */
+    public function withQuery(string $query): static
+    {
+        $self = clone $this;
+        $self->query = $query;
+
+        return $self;
     }
 }

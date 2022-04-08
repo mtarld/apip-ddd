@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Shared\Symfony\Messenger;
 
-use App\Domain\Shared\Command\CommandBusInterface;
-use App\Domain\Shared\Command\CommandInterface;
+use App\Application\Shared\Command\CommandBusInterface;
+use App\Application\Shared\Command\CommandInterface;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;

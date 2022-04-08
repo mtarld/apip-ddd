@@ -10,7 +10,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         'metadata_backward_compatibility_layer' => false,
         'mapping' => [
             'paths' => [
-                '%kernel.project_dir%/src/Infrastructure/Library/ApiPlatform/Resource/',
+                '%kernel.project_dir%/src/Infrastructure/BookStore/ApiPlatform/Resource/',
             ],
         ],
         'patch_formats' => [

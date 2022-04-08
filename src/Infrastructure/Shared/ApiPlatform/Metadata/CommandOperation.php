@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace App\Infrastructure\Shared\ApiPlatform\Metadata;
 
 use ApiPlatform\Metadata\Operation;
+use App\Application\Shared\Command\CommandInterface;
 
 final class CommandOperation extends Operation
 {
-    public string $command;
+    /**
+     * @var class-string<CommandInterface>
+     */
+    private string $command;
 
     /**
-     * @param class-string $command
+     * @param class-string<CommandInterface> $command
      */
     public function __construct(
         string $uriTemplate,
@@ -97,5 +101,24 @@ final class CommandOperation extends Operation
         unset($args[1]);
 
         parent::__construct(self::METHOD_POST, ...array_values($args));
+    }
+
+    /**
+     * @return class-string<CommandInterface>
+     */
+    public function getCommand(): string
+    {
+        return $this->command;
+    }
+
+    /**
+     * @param class-string<CommandInterface> $command
+     */
+    public function withCommand(string $command): static
+    {
+        $self = clone $this;
+        $self->command = $command;
+
+        return $self;
     }
 }

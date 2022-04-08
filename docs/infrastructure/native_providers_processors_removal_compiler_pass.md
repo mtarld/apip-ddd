@@ -22,8 +22,8 @@ $ bin/console debug:container --tag=api_platform.state_provider
 ----------------------------------------------------------------------------- ----------
  Service ID                                                                    priority
 ----------------------------------------------------------------------------- ----------
- App\Infrastructure\Library\ApiPlatform\State\Provider\CheapestBooksProvider   1
- App\Infrastructure\Library\ApiPlatform\State\Provider\BookCrudProvider        0
+ App\Infrastructure\BookStore\ApiPlatform\State\Provider\CheapestBooksProvider   1
+ App\Infrastructure\BookStore\ApiPlatform\State\Provider\BookCrudProvider        0
  api_platform.doctrine.orm.state.collection_provider                           -100
  api_platform.doctrine.orm.state.item_provider                                 -100
  api_platform.legacy_data_provider_state                                       -1000
@@ -33,9 +33,9 @@ $ bin/console debug:container --tag=api_platform.state_processor
 -------------------------------------------------------------------------------- ----------
  Service ID                                                                       priority
 -------------------------------------------------------------------------------- ----------
- App\Infrastructure\Library\ApiPlatform\State\Processor\AnonymizeBooksProcessor   1
- App\Infrastructure\Library\ApiPlatform\State\Processor\DiscountBookProcessor     1
- App\Infrastructure\Library\ApiPlatform\State\Processor\BookCrudProcessor         0
+ App\Infrastructure\BookStore\ApiPlatform\State\Processor\AnonymizeBooksProcessor   1
+ App\Infrastructure\BookStore\ApiPlatform\State\Processor\DiscountBookProcessor     1
+ App\Infrastructure\BookStore\ApiPlatform\State\Processor\BookCrudProcessor         0
  api_platform.doctrine.orm.state.processor                                        -100
  api_platform.messenger.processor                                                 -900
 -------------------------------------------------------------------------------- ----------
@@ -52,16 +52,16 @@ $ bin/console debug:container --tag=api_platform.state_provider
 ----------------------------------------------------------------------------- ----------
  Service ID                                                                    priority
 ----------------------------------------------------------------------------- ----------
- App\Infrastructure\Library\ApiPlatform\State\Provider\CheapestBooksProvider   1
- App\Infrastructure\Library\ApiPlatform\State\Provider\BookCrudProvider        0
+ App\Infrastructure\BookStore\ApiPlatform\State\Provider\CheapestBooksProvider   1
+ App\Infrastructure\BookStore\ApiPlatform\State\Provider\BookCrudProvider        0
 ----------------------------------------------------------------------------- ----------
 
 $ bin/console debug:container --tag=api_platform.state_processor
 -------------------------------------------------------------------------------- ----------
  Service ID                                                                       priority
 -------------------------------------------------------------------------------- ----------
- App\Infrastructure\Library\ApiPlatform\State\Processor\AnonymizeBooksProcessor   1
- App\Infrastructure\Library\ApiPlatform\State\Processor\DiscountBookProcessor     1
- App\Infrastructure\Library\ApiPlatform\State\Processor\BookCrudProcessor         0
+ App\Infrastructure\BookStore\ApiPlatform\State\Processor\AnonymizeBooksProcessor   1
+ App\Infrastructure\BookStore\ApiPlatform\State\Processor\DiscountBookProcessor     1
+ App\Infrastructure\BookStore\ApiPlatform\State\Processor\BookCrudProcessor         0
 -------------------------------------------------------------------------------- ----------
 ```

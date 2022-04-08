@@ -16,11 +16,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'auto_generate_proxy_classes' => true,
                 'naming_strategy' => 'doctrine.orm.naming_strategy.underscore_number_aware',
                 'mappings' => [
-                    'Library' => [
+                    'BookStore' => [
                         'is_bundle' => false,
                         'type' => 'attribute',
-                        'dir' => '%kernel.project_dir%/src/Domain/Library/Model',
-                        'prefix' => 'App\Domain\Library\Model',
+                        'dir' => '%kernel.project_dir%/src/Domain/BookStore/Model',
+                        'prefix' => 'App\Domain\BookStore\Model',
                     ],
                 ],
             ],

@@ -30,7 +30,7 @@ use App\Infrastructure\Shared\ApiPlatform\Metadata\QueryOperation;
 public function supports(string $resourceClass, array $identifiers = [], ?string $operationName = null, array $context = []): bool
 {
     return $context['operation'] instanceof QueryOperation 
-        && MyQuery::class === $context['operation']->query;
+        && MyQuery::class === $context['operation']->getQuery();
 }
 ```
 

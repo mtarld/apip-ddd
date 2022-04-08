@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Shared\Symfony;
 
-use App\Domain\Shared\Command\CommandHandlerInterface;
-use App\Domain\Shared\Query\QueryHandlerInterface;
+use App\Application\Shared\Command\CommandHandlerInterface;
+use App\Application\Shared\Query\QueryHandlerInterface;
 use App\Infrastructure\Shared\Symfony\DependencyInjection\Compiler\ClearNativeProviderAndProcessorsCompilerPass;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
