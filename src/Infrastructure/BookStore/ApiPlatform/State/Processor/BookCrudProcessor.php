@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\BookStore\ApiPlatform\State\Processor;
 
+use ApiPlatform\Metadata\DeleteOperationInterface;
+use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\Application\BookStore\Command\CreateBookCommand;
 use App\Application\BookStore\Command\DeleteBookCommand;
@@ -20,25 +22,20 @@ final class BookCrudProcessor implements ProcessorInterface
     ) {
     }
 
-    public function supports($data, array $identifiers = [], ?string $operationName = null, array $context = []): bool
-    {
-        return isset($context['operation']) && BookResource::class === $context['operation']->getClass();
-    }
-
     /**
      * @param BookResource $data
      */
-    public function process($data, array $identifiers = [], ?string $operationName = null, array $context = []): ?BookResource
+    public function process($data, Operation $operation, array $uriVariables = [], array $context = [])
     {
-        if ($context['operation']->isDelete()) {
-            $this->commandBus->dispatch(new DeleteBookCommand(Uuid::fromString($identifiers['id'])));
+        if ($operation instanceof DeleteOperationInterface) {
+            $this->commandBus->dispatch(new DeleteBookCommand(Uuid::fromString($uriVariables['id'])));
 
             return null;
         }
 
-        $command = !isset($identifiers['id'])
+        $command = !isset($uriVariables['id'])
             ? new CreateBookCommand($data->name, $data->description, $data->author, $data->content, $data->price)
-            : new UpdateBookCommand(Uuid::fromString($identifiers['id']), $data->name, $data->description, $data->author, $data->content, $data->price)
+            : new UpdateBookCommand(Uuid::fromString($uriVariables['id']), $data->name, $data->description, $data->author, $data->content, $data->price)
         ;
 
         /** @var Book $model */

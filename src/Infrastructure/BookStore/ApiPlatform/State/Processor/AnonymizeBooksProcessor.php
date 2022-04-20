@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\BookStore\ApiPlatform\State\Processor;
 
+use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\Application\BookStore\Command\AnonymizeBooksCommand;
 use App\Application\Shared\Command\CommandBusInterface;
@@ -15,13 +16,8 @@ final class AnonymizeBooksProcessor implements ProcessorInterface
     ) {
     }
 
-    public function process($data, array $identifiers = [], ?string $operationName = null, array $context = []): void
+    public function process($data, Operation $operation, array $uriVariables = [], array $context = [])
     {
         $this->commandBus->dispatch($data);
-    }
-
-    public function supports($data, array $identifiers = [], ?string $operationName = null, array $context = []): bool
-    {
-        return $data instanceof AnonymizeBooksCommand;
     }
 }

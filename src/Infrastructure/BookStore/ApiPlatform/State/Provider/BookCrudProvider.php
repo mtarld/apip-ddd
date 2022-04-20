@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\BookStore\ApiPlatform\State\Provider;
 
+use ApiPlatform\Metadata\CollectionOperationInterface;
+use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\Pagination\Pagination;
 use ApiPlatform\State\ProviderInterface;
 use App\Application\BookStore\Query\FindBookQuery;
@@ -24,11 +26,11 @@ final class BookCrudProvider implements ProviderInterface
     /**
      * @return BookResource|Paginator<BookResource>|array<BookResource>
      */
-    public function provide(string $resourceClass, array $identifiers = [], ?string $operationName = null, array $context = []): object|array|null
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
-        if ('item' === $context['operation_type']) {
+        if (!$operation instanceof CollectionOperationInterface) {
             /** @var Book|null $model */
-            $model = $this->queryBus->ask(new FindBookQuery($identifiers['id']));
+            $model = $this->queryBus->ask(new FindBookQuery($uriVariables['id']));
 
             return null !== $model ? BookResource::fromModel($model) : null;
         }
@@ -36,9 +38,9 @@ final class BookCrudProvider implements ProviderInterface
         $author = $context['filters']['author'] ?? null;
         $offset = $limit = null;
 
-        if ($this->pagination->isEnabled($resourceClass, $operationName, $context)) {
+        if ($this->pagination->isEnabled($operation->getClass(), $operation->getName(), $context)) {
             $offset = $this->pagination->getPage($context);
-            $limit = $this->pagination->getLimit($resourceClass, $operationName, $context);
+            $limit = $this->pagination->getLimit($operation->getClass(), $operation->getName(), $context);
         }
 
         /** @var BookRepositoryInterface $models */
@@ -60,10 +62,5 @@ final class BookCrudProvider implements ProviderInterface
         }
 
         return $resources;
-    }
-
-    public function supports(string $resourceClass, array $identifiers = [], ?string $operationName = null, array $context = []): bool
-    {
-        return BookResource::class === $resourceClass;
     }
 }

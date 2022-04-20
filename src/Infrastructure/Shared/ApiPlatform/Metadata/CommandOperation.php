@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Shared\ApiPlatform\Metadata;
 
-use ApiPlatform\Metadata\Operation;
+use ApiPlatform\Metadata\HttpOperation;
 use App\Application\Shared\Command\CommandInterface;
 
-final class CommandOperation extends Operation
+final class CommandOperation extends HttpOperation
 {
     /**
      * @var class-string<CommandInterface>
@@ -18,10 +18,8 @@ final class CommandOperation extends Operation
      * @param class-string<CommandInterface> $command
      */
     public function __construct(
-        string $uriTemplate,
-        string $command,
-        ?string $shortName = null,
-        ?string $description = null,
+        ?string $uriTemplate = null,
+        ?string $command = null,
         ?array $types = null,
         $formats = null,
         $inputFormats = null,
@@ -40,67 +38,67 @@ final class CommandOperation extends Operation
         ?array $schemes = null,
         ?string $condition = null,
         ?string $controller = null,
-        ?string $class = null,
-        ?int $urlGenerationStrategy = null,
-        ?bool $collection = null,
-        ?string $deprecationReason = null,
         ?array $cacheHeaders = null,
-        ?array $normalizationContext = null,
-        ?array $denormalizationContext = null,
+
         ?array $hydraContext = null,
         ?array $openapiContext = null,
-        ?array $swaggerContext = null,
-        ?array $validationContext = null,
-        ?array $filters = null,
-        ?bool $elasticsearch = null,
-        $mercure = null,
-        $messenger = null,
-        $input = null,
-        $output = null,
-        ?array $order = null,
-        ?bool $fetchPartial = null,
-        ?bool $forceEager = null,
-        ?bool $paginationClientEnabled = null,
-        ?bool $paginationClientItemsPerPage = null,
-        ?bool $paginationClientPartial = null,
-        ?array $paginationViaCursor = null,
+        ?array $exceptionToStatus = null,
+
+        ?bool $queryParameterValidationEnabled = null,
+
+        ?string $shortName = null,
+        ?string $class = null,
         ?bool $paginationEnabled = null,
-        ?bool $paginationFetchJoinCollection = null,
-        ?bool $paginationUseOutputWalkers = null,
+        ?string $paginationType = null,
         ?int $paginationItemsPerPage = null,
         ?int $paginationMaximumItemsPerPage = null,
         ?bool $paginationPartial = null,
-        ?string $paginationType = null,
+        ?bool $paginationClientEnabled = null,
+        ?bool $paginationClientItemsPerPage = null,
+        ?bool $paginationClientPartial = null,
+        ?bool $paginationFetchJoinCollection = null,
+        ?bool $paginationUseOutputWalkers = null,
+        ?array $paginationViaCursor = null,
+        ?array $order = null,
+        ?string $description = null,
+        ?array $normalizationContext = null,
+        ?array $denormalizationContext = null,
         ?string $security = null,
         ?string $securityMessage = null,
         ?string $securityPostDenormalize = null,
         ?string $securityPostDenormalizeMessage = null,
         ?string $securityPostValidation = null,
         ?string $securityPostValidationMessage = null,
-        ?bool $compositeIdentifier = null,
-        ?array $exceptionToStatus = null,
-        ?bool $queryParameterValidationEnabled = null,
+        ?string $deprecationReason = null,
+        ?array $filters = null,
+        ?array $validationContext = null,
+        $input = null,
+        $output = null,
+        $mercure = null,
+        $messenger = null,
+        ?bool $elasticsearch = null,
+        ?int $urlGenerationStrategy = null,
         ?bool $read = null,
         ?bool $deserialize = null,
         ?bool $validate = null,
         ?bool $write = null,
         ?bool $serialize = null,
-        ?bool $queryParameterValidate = null,
+        ?bool $fetchPartial = null,
+        ?bool $forceEager = null,
         ?int $priority = null,
         ?string $name = null,
+        ?string $provider = null,
+        ?string $processor = null,
         array $extraProperties = []
     ) {
         $this->command = $command;
 
         $args = func_get_args();
 
-        // set command as input fallback
-        $args[37] = $args[37] ?? $command;
-
         // remove the extra command parameter
         unset($args[1]);
 
-        parent::__construct(self::METHOD_POST, ...array_values($args));
+        parent::__construct(self::METHOD_POST, ...$args);
     }
 
     /**
