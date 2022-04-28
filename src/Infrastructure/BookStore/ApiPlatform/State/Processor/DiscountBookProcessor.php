@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\BookStore\ApiPlatform\State\Processor;
 
+use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\Application\BookStore\Command\DiscountBookCommand;
 use App\Application\BookStore\Query\FindBookQuery;
@@ -20,7 +21,7 @@ final class DiscountBookProcessor implements ProcessorInterface
     ) {
     }
 
-    public function process($data, array $identifiers = [], ?string $operationName = null, array $context = []): BookResource
+    public function process($data, Operation $operation, array $uriVariables = [], array $context = [])
     {
         $this->commandBus->dispatch($data);
 
@@ -28,10 +29,5 @@ final class DiscountBookProcessor implements ProcessorInterface
         $model = $this->queryBus->ask(new FindBookQuery($data->id));
 
         return BookResource::fromModel($model);
-    }
-
-    public function supports($data, array $identifiers = [], ?string $operationName = null, array $context = []): bool
-    {
-        return $data instanceof DiscountBookCommand;
     }
 }

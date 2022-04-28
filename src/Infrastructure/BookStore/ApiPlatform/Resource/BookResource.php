@@ -18,8 +18,14 @@ use App\Application\BookStore\Query\FindCheapestBooksQuery;
 use App\Domain\BookStore\Model\Book;
 use App\Infrastructure\BookStore\ApiPlatform\OpenApi\AuthorFilter;
 use App\Infrastructure\BookStore\ApiPlatform\Payload\DiscountBookPayload;
+use App\Infrastructure\BookStore\ApiPlatform\State\Processor\AnonymizeBooksProcessor;
+use App\Infrastructure\BookStore\ApiPlatform\State\Processor\BookCrudProcessor;
+use App\Infrastructure\BookStore\ApiPlatform\State\Processor\DiscountBookProcessor;
+use App\Infrastructure\BookStore\ApiPlatform\State\Provider\BookCrudProvider;
+use App\Infrastructure\BookStore\ApiPlatform\State\Provider\CheapestBooksProvider;
 use App\Infrastructure\Shared\ApiPlatform\Metadata\CommandOperation as Command;
 use App\Infrastructure\Shared\ApiPlatform\Metadata\QueryOperation as Query;
+use App\Infrastructure\Shared\ApiPlatform\Metadata\QueryCollectionOperation as QueryCollection;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -27,10 +33,10 @@ use Symfony\Component\Validator\Constraints as Assert;
     shortName: 'Book',
     operations: [
         // queries
-        new Query(
+        new QueryCollection(
             '/books/cheapest.{_format}',
             query: FindCheapestBooksQuery::class,
-            collection: true,
+            provider: CheapestBooksProvider::class,
             paginationEnabled: false,
             openapiContext: ['summary' => 'Find cheapest Book resources.'],
         ),
@@ -38,7 +44,8 @@ use Symfony\Component\Validator\Constraints as Assert;
         // commands
         new Command(
             '/books/anonymize.{_format}',
-            AnonymizeBooksCommand::class,
+            command: AnonymizeBooksCommand::class,
+            processor: AnonymizeBooksProcessor::class,
             output: false,
             status: 202,
             openapiContext: ['summary' => 'Anonymize author of every Book resources.'],
@@ -46,6 +53,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Command(
             '/books/{id}/discount.{_format}',
             command: DiscountBookCommand::class,
+            processor: DiscountBookProcessor::class,
             input: DiscountBookPayload::class,
             output: false,
             status: 202,
@@ -53,12 +61,12 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
 
         // basic crud
-        new GetCollection(filters: [AuthorFilter::class]),
-        new Get(),
-        new Post(validationContext: ['groups' => ['create']]),
-        new Put(),
-        new Patch(),
-        new Delete(),
+        new GetCollection(filters: [AuthorFilter::class], provider: BookCrudProvider::class),
+        new Get(provider: BookCrudProvider::class),
+        new Post(validationContext: ['groups' => ['create']], processor: BookCrudProcessor::class),
+        new Put(processor: BookCrudProcessor::class),
+        new Patch(processor: BookCrudProcessor::class),
+        new Delete(processor: BookCrudProcessor::class),
     ],
 )]
 final class BookResource

@@ -8,7 +8,7 @@ use ApiPlatform\Metadata\HttpOperation;
 use ApiPlatform\Metadata\CollectionOperationInterface;
 use App\Application\Shared\Query\QueryInterface;
 
-final class QueryOperation extends HttpOperation
+final class QueryCollectionOperation extends HttpOperation implements CollectionOperationInterface
 {
     /**
      * @var class-string<QueryInterface>
