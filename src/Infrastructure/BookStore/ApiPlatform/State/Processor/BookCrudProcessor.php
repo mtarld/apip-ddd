@@ -14,6 +14,7 @@ use App\Application\Shared\Command\CommandBusInterface;
 use App\Domain\BookStore\Model\Book;
 use App\Infrastructure\BookStore\ApiPlatform\Resource\BookResource;
 use Symfony\Component\Uid\Uuid;
+use Webmozart\Assert\Assert;
 
 final class BookCrudProcessor implements ProcessorInterface
 {
@@ -22,11 +23,10 @@ final class BookCrudProcessor implements ProcessorInterface
     ) {
     }
 
-    /**
-     * @param BookResource $data
-     */
     public function process($data, Operation $operation, array $uriVariables = [], array $context = [])
     {
+        Assert::isInstanceOf($data, BookResource::class);
+
         if ($operation instanceof DeleteOperationInterface) {
             $this->commandBus->dispatch(new DeleteBookCommand(Uuid::fromString($uriVariables['id'])));
 
