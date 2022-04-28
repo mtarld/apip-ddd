@@ -11,6 +11,7 @@ use ApiPlatform\State\ProviderInterface;
 use App\Application\BookStore\Query\FindBookQuery;
 use App\Application\BookStore\Query\FindBooksQuery;
 use App\Application\Shared\Query\QueryBusInterface;
+use App\Domain\BookStore\Model\Book;
 use App\Domain\BookStore\Repository\BookRepositoryInterface;
 use App\Infrastructure\BookStore\ApiPlatform\Resource\BookResource;
 use App\Infrastructure\Shared\ApiPlatform\State\Paginator;

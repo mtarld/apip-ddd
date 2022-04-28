@@ -11,7 +11,10 @@ use App\Application\BookStore\Query\FindBookQuery;
 use App\Application\Shared\Command\CommandBusInterface;
 use App\Application\Shared\Query\QueryBusInterface;
 use App\Domain\BookStore\Model\Book;
+use App\Infrastructure\BookStore\ApiPlatform\Payload\DiscountBookPayload;
 use App\Infrastructure\BookStore\ApiPlatform\Resource\BookResource;
+use Symfony\Component\Uid\Uuid;
+use Webmozart\Assert\Assert;
 
 final class DiscountBookProcessor implements ProcessorInterface
 {
@@ -23,10 +26,17 @@ final class DiscountBookProcessor implements ProcessorInterface
 
     public function process($data, Operation $operation, array $uriVariables = [], array $context = [])
     {
-        $this->commandBus->dispatch($data);
+        Assert::isInstanceOf($data, DiscountBookPayload::class);
+
+        $command = new DiscountBookCommand(
+            Uuid::fromString($context['identifiers_values']['id']),
+            $data->discountPercentage
+        );
+
+        $this->commandBus->dispatch($command);
 
         /** @var Book $model */
-        $model = $this->queryBus->ask(new FindBookQuery($data->id));
+        $model = $this->queryBus->ask(new FindBookQuery($command->id));
 
         return BookResource::fromModel($model);
     }

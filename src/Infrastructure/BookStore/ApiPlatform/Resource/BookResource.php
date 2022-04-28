@@ -13,8 +13,6 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Application\BookStore\Command\AnonymizeBooksCommand;
-use App\Application\BookStore\Command\DiscountBookCommand;
-use App\Application\BookStore\Query\FindCheapestBooksQuery;
 use App\Domain\BookStore\Model\Book;
 use App\Infrastructure\BookStore\ApiPlatform\OpenApi\AuthorFilter;
 use App\Infrastructure\BookStore\ApiPlatform\Payload\DiscountBookPayload;
@@ -23,9 +21,6 @@ use App\Infrastructure\BookStore\ApiPlatform\State\Processor\BookCrudProcessor;
 use App\Infrastructure\BookStore\ApiPlatform\State\Processor\DiscountBookProcessor;
 use App\Infrastructure\BookStore\ApiPlatform\State\Provider\BookCrudProvider;
 use App\Infrastructure\BookStore\ApiPlatform\State\Provider\CheapestBooksProvider;
-use App\Infrastructure\Shared\ApiPlatform\Metadata\CommandOperation as Command;
-use App\Infrastructure\Shared\ApiPlatform\Metadata\QueryOperation as Query;
-use App\Infrastructure\Shared\ApiPlatform\Metadata\QueryCollectionOperation as QueryCollection;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -33,30 +28,26 @@ use Symfony\Component\Validator\Constraints as Assert;
     shortName: 'Book',
     operations: [
         // queries
-        new QueryCollection(
+        new GetCollection(
             '/books/cheapest.{_format}',
-            query: FindCheapestBooksQuery::class,
             provider: CheapestBooksProvider::class,
             paginationEnabled: false,
             openapiContext: ['summary' => 'Find cheapest Book resources.'],
         ),
 
         // commands
-        new Command(
+        new Post(
             '/books/anonymize.{_format}',
-            command: AnonymizeBooksCommand::class,
+            input: AnonymizeBooksCommand::class,
             processor: AnonymizeBooksProcessor::class,
             output: false,
             status: 202,
             openapiContext: ['summary' => 'Anonymize author of every Book resources.'],
         ),
-        new Command(
+        new Post(
             '/books/{id}/discount.{_format}',
-            command: DiscountBookCommand::class,
-            processor: DiscountBookProcessor::class,
             input: DiscountBookPayload::class,
-            output: false,
-            status: 202,
+            processor: DiscountBookProcessor::class,
             openapiContext: ['summary' => 'Apply a discount percentage on a Book resource.'],
         ),
 
