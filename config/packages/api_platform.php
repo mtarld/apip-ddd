@@ -7,7 +7,6 @@ use Webmozart\Assert\InvalidArgumentException;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->extension('api_platform', [
-        'metadata_backward_compatibility_layer' => false,
         'mapping' => [
             'paths' => [
                 '%kernel.project_dir%/src/Infrastructure/BookStore/ApiPlatform/Resource/',
