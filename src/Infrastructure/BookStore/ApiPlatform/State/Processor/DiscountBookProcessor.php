@@ -13,7 +13,6 @@ use App\Application\Shared\Query\QueryBusInterface;
 use App\Domain\BookStore\Model\Book;
 use App\Infrastructure\BookStore\ApiPlatform\Payload\DiscountBookPayload;
 use App\Infrastructure\BookStore\ApiPlatform\Resource\BookResource;
-use Symfony\Component\Uid\Uuid;
 use Webmozart\Assert\Assert;
 
 final class DiscountBookProcessor implements ProcessorInterface
@@ -24,12 +23,15 @@ final class DiscountBookProcessor implements ProcessorInterface
     ) {
     }
 
-    public function process($data, Operation $operation, array $uriVariables = [], array $context = [])
+    public function process($data, Operation $operation, array $uriVariables = [], array $context = []): mixed
     {
         Assert::isInstanceOf($data, DiscountBookPayload::class);
 
+        $bookResource = $context['previous_data'];
+        Assert::isInstanceOf($bookResource, BookResource::class);
+
         $command = new DiscountBookCommand(
-            Uuid::fromString($context['identifiers_values']['id']),
+            $bookResource->id,
             $data->discountPercentage
         );
 

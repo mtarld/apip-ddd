@@ -21,7 +21,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 QueryInterface::class => 'sync',
                 CommandInterface::class => 'sync',
             ],
-            'reset_on_message' => true,
         ],
     ]);
 };

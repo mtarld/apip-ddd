@@ -39,9 +39,9 @@ final class BookCrudProvider implements ProviderInterface
         $author = $context['filters']['author'] ?? null;
         $offset = $limit = null;
 
-        if ($this->pagination->isEnabled($operation->getClass(), $operation->getName(), $context)) {
+        if ($this->pagination->isEnabled($operation, $context)) {
             $offset = $this->pagination->getPage($context);
-            $limit = $this->pagination->getLimit($operation->getClass(), $operation->getName(), $context);
+            $limit = $this->pagination->getLimit($operation, $context);
         }
 
         /** @var BookRepositoryInterface $models */

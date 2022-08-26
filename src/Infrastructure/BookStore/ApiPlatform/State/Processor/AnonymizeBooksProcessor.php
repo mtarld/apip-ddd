@@ -6,7 +6,6 @@ namespace App\Infrastructure\BookStore\ApiPlatform\State\Processor;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
-use App\Application\BookStore\Command\AnonymizeBooksCommand;
 use App\Application\Shared\Command\CommandBusInterface;
 
 final class AnonymizeBooksProcessor implements ProcessorInterface
@@ -16,8 +15,10 @@ final class AnonymizeBooksProcessor implements ProcessorInterface
     ) {
     }
 
-    public function process($data, Operation $operation, array $uriVariables = [], array $context = [])
+    public function process($data, Operation $operation, array $uriVariables = [], array $context = []): mixed
     {
         $this->commandBus->dispatch($data);
+
+        return null;
     }
 }

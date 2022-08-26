@@ -13,7 +13,6 @@ use App\Application\BookStore\Command\UpdateBookCommand;
 use App\Application\Shared\Command\CommandBusInterface;
 use App\Domain\BookStore\Model\Book;
 use App\Infrastructure\BookStore\ApiPlatform\Resource\BookResource;
-use Symfony\Component\Uid\Uuid;
 use Webmozart\Assert\Assert;
 
 final class BookCrudProcessor implements ProcessorInterface
@@ -23,19 +22,19 @@ final class BookCrudProcessor implements ProcessorInterface
     ) {
     }
 
-    public function process($data, Operation $operation, array $uriVariables = [], array $context = [])
+    public function process($data, Operation $operation, array $uriVariables = [], array $context = []): mixed
     {
         Assert::isInstanceOf($data, BookResource::class);
 
         if ($operation instanceof DeleteOperationInterface) {
-            $this->commandBus->dispatch(new DeleteBookCommand(Uuid::fromString($uriVariables['id'])));
+            $this->commandBus->dispatch(new DeleteBookCommand($data->id));
 
             return null;
         }
 
         $command = !isset($uriVariables['id'])
             ? new CreateBookCommand($data->name, $data->description, $data->author, $data->content, $data->price)
-            : new UpdateBookCommand(Uuid::fromString($uriVariables['id']), $data->name, $data->description, $data->author, $data->content, $data->price)
+            : new UpdateBookCommand($data->id, $data->name, $data->description, $data->author, $data->content, $data->price)
         ;
 
         /** @var Book $model */
