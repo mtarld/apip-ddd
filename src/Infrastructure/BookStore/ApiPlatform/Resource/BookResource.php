@@ -47,23 +47,41 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Post(
             '/books/{id}/discount.{_format}',
             input: DiscountBookPayload::class,
+            provider: BookCrudProvider::class,
             processor: DiscountBookProcessor::class,
             openapiContext: ['summary' => 'Apply a discount percentage on a Book resource.'],
         ),
 
         // basic crud
-        new GetCollection(filters: [AuthorFilter::class], provider: BookCrudProvider::class),
-        new Get(provider: BookCrudProvider::class),
-        new Post(validationContext: ['groups' => ['create']], processor: BookCrudProcessor::class),
-        new Put(processor: BookCrudProcessor::class),
-        new Patch(processor: BookCrudProcessor::class),
-        new Delete(processor: BookCrudProcessor::class),
+        new GetCollection(
+            provider: BookCrudProvider::class,
+            filters: [AuthorFilter::class], 
+        ),
+        new Get(
+            provider: BookCrudProvider::class,
+        ),
+        new Post(
+            validationContext: ['groups' => ['create']],
+            processor: BookCrudProcessor::class,
+        ),
+        new Put(
+            provider: BookCrudProvider::class,
+            processor: BookCrudProcessor::class
+        ),
+        new Patch(
+            provider: BookCrudProvider::class,
+            processor: BookCrudProcessor::class,
+        ),
+        new Delete(
+            provider: BookCrudProvider::class,
+            processor: BookCrudProcessor::class,
+        ),
     ],
 )]
 final class BookResource
 {
     public function __construct(
-        #[ApiProperty(identifier: true, writable: false)]
+        #[ApiProperty(identifier: true, readable: false, writable: false)]
         public ?Uuid $id = null,
 
         #[Assert\NotNull(groups: ['create'])]
