@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\BookStore\Application\Command;
 
 use App\BookStore\Domain\Repository\BookRepositoryInterface;
+use App\BookStore\Domain\ValueObject\Author;
 use App\Shared\Application\Command\CommandHandlerInterface;
 
 final class AnonymizeBooksCommandHandler implements CommandHandlerInterface
@@ -18,7 +19,7 @@ final class AnonymizeBooksCommandHandler implements CommandHandlerInterface
         $books = $this->bookRepository->withoutPagination();
 
         foreach ($books as $book) {
-            $book->author = $command->anonymizedName;
+            $book->author = new Author($command->anonymizedName);
 
             $this->bookRepository->remove($book);
             $this->bookRepository->add($book);

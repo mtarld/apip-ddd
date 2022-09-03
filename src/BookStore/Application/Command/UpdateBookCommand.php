@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\BookStore\Application\Command;
 
+use App\BookStore\Domain\ValueObject\BookId;
 use App\Shared\Application\Command\CommandInterface;
-use Symfony\Component\Uid\Uuid;
 use Webmozart\Assert\Assert;
 
 final class UpdateBookCommand implements CommandInterface
 {
     public function __construct(
-        public readonly Uuid $id,
-        public readonly ?string $name = null,
+        public readonly BookId $id,
+        public readonly ?string $name = null, // TODO VO
         public readonly ?string $description = null,
         public readonly ?string $author = null,
         public readonly ?string $content = null,

@@ -6,10 +6,11 @@ namespace App\BookStore\Infrastructure\Doctrine;
 
 use App\BookStore\Domain\Model\Book;
 use App\BookStore\Domain\Repository\BookRepositoryInterface;
+use App\BookStore\Domain\ValueObject\Author;
+use App\BookStore\Domain\ValueObject\BookId;
 use App\Shared\Infrastructure\Doctrine\DoctrineRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\Uid\Uuid;
 
 final class DoctrineBookRepository extends DoctrineRepository implements BookRepositoryInterface
 {
@@ -33,12 +34,12 @@ final class DoctrineBookRepository extends DoctrineRepository implements BookRep
         $this->em->flush();
     }
 
-    public function ofId(Uuid $id): ?Book
+    public function ofId(BookId $id): ?Book
     {
         return $this->em->find(self::ENTITY_CLASS, $id);
     }
 
-    public function withAuthor(string $author): static
+    public function withAuthor(Author $author): static
     {
         return $this->filter(static function (QueryBuilder $qb) use ($author): void {
             $qb->where(sprintf('%s.author = :author', self::ALIAS))->setParameter('author', $author);

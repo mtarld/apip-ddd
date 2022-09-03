@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Tests\BookStore\Acceptance;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
-use App\BookStore\Domain\Model\Book;
 use App\BookStore\Domain\Repository\BookRepositoryInterface;
 use App\BookStore\Infrastructure\ApiPlatform\Resource\BookResource;
+use App\Tests\BookStore\DummyFactory\DummyBookFactory;
 
 final class CheapestBooksTest extends ApiTestCase
 {
@@ -15,10 +15,11 @@ final class CheapestBooksTest extends ApiTestCase
     {
         $client = static::createClient();
 
-        for ($i = 0; $i < 20; ++$i) {
-            $book = new Book('name', 'description', 'author', 'content', $i);
+        /** @var BookRepositoryInterface $bookRepository */
+        $bookRepository = static::getContainer()->get(BookRepositoryInterface::class);
 
-            static::getContainer()->get(BookRepositoryInterface::class)->add($book);
+        for ($i = 0; $i < 20; ++$i) {
+            $bookRepository->add(DummyBookFactory::createBook(price: $i));
         }
 
         $response = $client->request('GET', '/api/books/cheapest');
@@ -40,11 +41,12 @@ final class CheapestBooksTest extends ApiTestCase
     {
         $client = static::createClient();
 
-        $prices = [2000, 1000, 3000];
-        array_walk($prices, static function (int $price): void {
-            $book = new Book('name', 'description', 'author', 'content', $price);
+        /** @var BookRepositoryInterface $bookRepository */
+        $bookRepository = static::getContainer()->get(BookRepositoryInterface::class);
 
-            static::getContainer()->get(BookRepositoryInterface::class)->add($book);
+        $prices = [2000, 1000, 3000];
+        array_walk($prices, static function (int $price) use ($bookRepository): void {
+            $bookRepository->add(DummyBookFactory::createBook(price: $price));
         });
 
         $response = $client->request('GET', '/api/books/cheapest');

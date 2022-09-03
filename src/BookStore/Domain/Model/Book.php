@@ -4,39 +4,36 @@ declare(strict_types=1);
 
 namespace App\BookStore\Domain\Model;
 
+use App\BookStore\Domain\ValueObject\Author;
+use App\BookStore\Domain\ValueObject\BookContent;
+use App\BookStore\Domain\ValueObject\BookDescription;
+use App\BookStore\Domain\ValueObject\BookId;
+use App\BookStore\Domain\ValueObject\BookName;
+use App\BookStore\Domain\ValueObject\Price;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Uid\Uuid;
-use Webmozart\Assert\Assert;
 
 #[ORM\Entity]
 class Book
 {
-    #[ORM\Id]
-    #[ORM\Column(type: 'uuid')]
-    public readonly Uuid $id;
+    #[ORM\Embedded(columnPrefix: false)]
+    public BookId $id;
 
     public function __construct(
-        #[ORM\Column(length: 255)]
-        public string $name,
+        #[ORM\Embedded(columnPrefix: false)]
+        public BookName $name,
 
-        #[ORM\Column(length: 1023)]
-        public string $description,
+        #[ORM\Embedded(columnPrefix: false)]
+        public BookDescription $description,
 
-        #[ORM\Column(length: 255)]
-        public string $author,
+        #[ORM\Embedded(columnPrefix: false)]
+        public Author $author,
 
-        #[ORM\Column(length: 65535)]
-        public string $content,
+        #[ORM\Embedded(columnPrefix: false)]
+        public BookContent $content,
 
-        #[ORM\Column(type: 'integer', options: ['unsigned' => true])]
-        public int $price,
+        #[ORM\Embedded(columnPrefix: false)]
+        public Price $price,
     ) {
-        $this->id = Uuid::v4();
-
-        Assert::lengthBetween($name, 1, 255);
-        Assert::lengthBetween($description, 1, 1023);
-        Assert::lengthBetween($author, 1, 255);
-        Assert::lengthBetween($content, 1, 65535);
-        Assert::natural($price);
+        $this->id = new BookId();
     }
 }

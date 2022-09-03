@@ -12,6 +12,7 @@ use App\BookStore\Application\Query\FindBookQuery;
 use App\BookStore\Application\Query\FindBooksQuery;
 use App\BookStore\Domain\Model\Book;
 use App\BookStore\Domain\Repository\BookRepositoryInterface;
+use App\BookStore\Domain\ValueObject\BookId;
 use App\BookStore\Infrastructure\ApiPlatform\Resource\BookResource;
 use App\Shared\Application\Query\QueryBusInterface;
 use App\Shared\Infrastructure\ApiPlatform\State\Paginator;
@@ -31,7 +32,7 @@ final class BookCrudProvider implements ProviderInterface
     {
         if (!$operation instanceof CollectionOperationInterface) {
             /** @var Book|null $model */
-            $model = $this->queryBus->ask(new FindBookQuery($uriVariables['id']));
+            $model = $this->queryBus->ask(new FindBookQuery(new BookId($uriVariables['id'])));
 
             return null !== $model ? BookResource::fromModel($model) : null;
         }
