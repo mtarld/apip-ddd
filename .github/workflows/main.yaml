@@ -6,8 +6,23 @@ on:
 
 jobs:
     phpunit:
-        runs-on: ubuntu-latest
         name: PHPUnit
+        runs-on: ubuntu-latest
+
+        services:
+            database:
+                image: postgres:13-alpine
+                env:
+                    POSTGRES_USER: symfony
+                    POSTGRES_PASSWORD: ChangeMe
+                options: >-
+                    --health-cmd pg_isready
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+                ports:
+                    - 5432:5432
+
         steps:
             - name: Checkout
               uses: actions/checkout@v2
@@ -33,3 +48,5 @@ jobs:
 
             - name: Run tests
               run: bin/phpunit
+              env:
+                  DATABASE_URL: 'postgresql://symfony:ChangeMe@localhost:5432/app_test?serverVersion=13&charset=utf8'

@@ -4,22 +4,21 @@ declare(strict_types=1);
 
 namespace App\BookStore\Application\Command;
 
+use App\BookStore\Domain\ValueObject\Author;
+use App\BookStore\Domain\ValueObject\BookContent;
+use App\BookStore\Domain\ValueObject\BookDescription;
+use App\BookStore\Domain\ValueObject\BookName;
+use App\BookStore\Domain\ValueObject\Price;
 use App\Shared\Application\Command\CommandInterface;
-use Webmozart\Assert\Assert;
 
 final class CreateBookCommand implements CommandInterface
 {
     public function __construct(
-        public readonly string $name,
-        public readonly string $description,
-        public readonly string $author,
-        public readonly string $content,
-        public readonly int $price,
+        public readonly BookName $name,
+        public readonly BookDescription $description,
+        public readonly Author $author,
+        public readonly BookContent $content,
+        public readonly Price $price,
     ) {
-        Assert::lengthBetween($name, 1, 255);
-        Assert::lengthBetween($description, 1, 1023);
-        Assert::lengthBetween($author, 1, 255);
-        Assert::lengthBetween($content, 1, 65535);
-        Assert::natural($price);
     }
 }

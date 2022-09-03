@@ -45,9 +45,9 @@ final class CheapestBooksTest extends ApiTestCase
         $bookRepository = static::getContainer()->get(BookRepositoryInterface::class);
 
         $prices = [2000, 1000, 3000];
-        array_walk($prices, static function (int $price) use ($bookRepository): void {
+        foreach ($prices as $price) {
             $bookRepository->add(DummyBookFactory::createBook(price: $price));
-        });
+        }
 
         $response = $client->request('GET', '/api/books/cheapest');
 

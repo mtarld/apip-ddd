@@ -36,20 +36,20 @@ final class DoctrineBookRepository extends DoctrineRepository implements BookRep
 
     public function ofId(BookId $id): ?Book
     {
-        return $this->em->find(self::ENTITY_CLASS, $id);
+        return $this->em->find(self::ENTITY_CLASS, $id->value);
     }
 
     public function withAuthor(Author $author): static
     {
         return $this->filter(static function (QueryBuilder $qb) use ($author): void {
-            $qb->where(sprintf('%s.author = :author', self::ALIAS))->setParameter('author', $author);
+            $qb->where(sprintf('%s.author.value = :author', self::ALIAS))->setParameter('author', $author->value);
         });
     }
 
     public function withCheapestsFirst(): static
     {
         return $this->filter(static function (QueryBuilder $qb): void {
-            $qb->orderBy(sprintf('%s.price', self::ALIAS), 'ASC');
+            $qb->orderBy(sprintf('%s.price.value', self::ALIAS), 'ASC');
         });
     }
 }
