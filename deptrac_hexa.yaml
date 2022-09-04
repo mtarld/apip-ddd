@@ -1,5 +1,7 @@
 parameters:
-    paths: [ ./src ]
+    paths:
+        - ./src/BookStore
+        - ./src/Shared
 
     layers:
         - name: Domain

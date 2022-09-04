@@ -88,7 +88,7 @@ php-cs-fixer:
 
 ## Run psalm static analysis
 psalm:
-	@$(EXEC) vendor/bin/psalm
+	@$(EXEC) vendor/bin/psalm --show-info=true
 
 ## Run phpunit tests
 phpunit:
