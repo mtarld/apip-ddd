@@ -17,9 +17,12 @@ use App\BookStore\Domain\Model\Book;
 use App\BookStore\Infrastructure\ApiPlatform\OpenApi\AuthorFilter;
 use App\BookStore\Infrastructure\ApiPlatform\Payload\DiscountBookPayload;
 use App\BookStore\Infrastructure\ApiPlatform\State\Processor\AnonymizeBooksProcessor;
-use App\BookStore\Infrastructure\ApiPlatform\State\Processor\BookCrudProcessor;
+use App\BookStore\Infrastructure\ApiPlatform\State\Processor\CreateBookProcessor;
+use App\BookStore\Infrastructure\ApiPlatform\State\Processor\DeleteBookProcessor;
 use App\BookStore\Infrastructure\ApiPlatform\State\Processor\DiscountBookProcessor;
-use App\BookStore\Infrastructure\ApiPlatform\State\Provider\BookCrudProvider;
+use App\BookStore\Infrastructure\ApiPlatform\State\Processor\UpdateBookProcessor;
+use App\BookStore\Infrastructure\ApiPlatform\State\Provider\BookCollectionProvider;
+use App\BookStore\Infrastructure\ApiPlatform\State\Provider\BookItemProvider;
 use App\BookStore\Infrastructure\ApiPlatform\State\Provider\CheapestBooksProvider;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -47,34 +50,34 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Post(
             '/books/{id}/discount.{_format}',
             input: DiscountBookPayload::class,
-            provider: BookCrudProvider::class,
+            provider: BookItemProvider::class,
             processor: DiscountBookProcessor::class,
             openapiContext: ['summary' => 'Apply a discount percentage on a Book resource.'],
         ),
 
         // basic crud
         new GetCollection(
-            provider: BookCrudProvider::class,
+            provider: BookCollectionProvider::class,
             filters: [AuthorFilter::class],
         ),
         new Get(
-            provider: BookCrudProvider::class,
+            provider: BookItemProvider::class,
         ),
         new Post(
             validationContext: ['groups' => ['create']],
-            processor: BookCrudProcessor::class,
+            processor: CreateBookProcessor::class,
         ),
         new Put(
-            provider: BookCrudProvider::class,
-            processor: BookCrudProcessor::class
+            provider: BookItemProvider::class,
+            processor: UpdateBookProcessor::class
         ),
         new Patch(
-            provider: BookCrudProvider::class,
-            processor: BookCrudProcessor::class,
+            provider: BookItemProvider::class,
+            processor: UpdateBookProcessor::class,
         ),
         new Delete(
-            provider: BookCrudProvider::class,
-            processor: BookCrudProcessor::class,
+            provider: BookItemProvider::class,
+            processor: DeleteBookProcessor::class,
         ),
     ],
 )]
@@ -83,23 +86,18 @@ final class BookResource
     public function __construct(
         #[ApiProperty(identifier: true, readable: false, writable: false)]
         public ?Uuid $id = null,
-
         #[Assert\NotNull(groups: ['create'])]
         #[Assert\Length(min: 1, max: 255, groups: ['create', 'Default'])]
         public ?string $name = null,
-
         #[Assert\NotNull(groups: ['create'])]
         #[Assert\Length(min: 1, max: 1023, groups: ['create', 'Default'])]
         public ?string $description = null,
-
         #[Assert\NotNull(groups: ['create'])]
         #[Assert\Length(min: 1, max: 255, groups: ['create', 'Default'])]
         public ?string $author = null,
-
         #[Assert\NotNull(groups: ['create'])]
         #[Assert\Length(min: 1, max: 65535, groups: ['create', 'Default'])]
         public ?string $content = null,
-
         #[Assert\NotNull(groups: ['create'])]
         #[Assert\PositiveOrZero(groups: ['create', 'Default'])]
         public ?int $price = null,
