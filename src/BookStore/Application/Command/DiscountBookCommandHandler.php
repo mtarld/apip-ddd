@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\BookStore\Application\Command;
 
 use App\BookStore\Domain\Repository\BookRepositoryInterface;
+use App\BookStore\Domain\ValueObject\Price;
 use App\Shared\Application\Command\CommandHandlerInterface;
 
 final class DiscountBookCommandHandler implements CommandHandlerInterface
@@ -17,7 +18,8 @@ final class DiscountBookCommandHandler implements CommandHandlerInterface
     {
         $book = $this->bookRepository->ofId($command->id);
 
-        $book->price = $book->price - ($book->price * $command->discountPercentage / 100);
+        $amount = $book->price->value - ($book->price->value * $command->discountPercentage / 100);
+        $book->price = new Price($amount);
 
         $this->bookRepository->remove($book);
         $this->bookRepository->add($book);

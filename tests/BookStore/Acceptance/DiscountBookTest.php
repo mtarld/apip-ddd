@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\Tests\BookStore\Acceptance;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
-use App\BookStore\Domain\Model\Book;
 use App\BookStore\Domain\Repository\BookRepositoryInterface;
+use App\BookStore\Domain\ValueObject\Price;
 use App\BookStore\Infrastructure\ApiPlatform\Resource\BookResource;
+use App\Tests\BookStore\DummyFactory\DummyBookFactory;
 
 final class DiscountBookTest extends ApiTestCase
 {
@@ -18,7 +19,7 @@ final class DiscountBookTest extends ApiTestCase
         /** @var BookRepositoryInterface $bookRepository */
         $bookRepository = static::getContainer()->get(BookRepositoryInterface::class);
 
-        $book = new Book('name', 'description', 'author', 'content', 1000);
+        $book = DummyBookFactory::createBook(price: 1000);
         $bookRepository->add($book);
 
         $client->request('POST', sprintf('/api/books/%s/discount', (string) $book->id), [
@@ -31,7 +32,7 @@ final class DiscountBookTest extends ApiTestCase
         static::assertMatchesResourceItemJsonSchema(BookResource::class);
         static::assertJsonContains(['price' => 800]);
 
-        static::assertSame(800, $bookRepository->ofId($book->id)->price);
+        static::assertEquals(new Price(800), $bookRepository->ofId($book->id)->price);
     }
 
     public function testValidateDiscountAmount(): void
@@ -41,7 +42,7 @@ final class DiscountBookTest extends ApiTestCase
         /** @var BookRepositoryInterface $bookRepository */
         $bookRepository = static::getContainer()->get(BookRepositoryInterface::class);
 
-        $book = new Book('name', 'description', 'author', 'content', 1000);
+        $book = DummyBookFactory::createBook(price: 1000);
         $bookRepository->add($book);
 
         $client->request('POST', sprintf('/api/books/%s/discount', (string) $book->id), [
@@ -57,6 +58,6 @@ final class DiscountBookTest extends ApiTestCase
             ],
         ]);
 
-        static::assertSame(1000, $bookRepository->ofId($book->id)->price);
+        static::assertEquals(new Price(1000), $bookRepository->ofId($book->id)->price);
     }
 }

@@ -9,6 +9,7 @@ use ApiPlatform\State\ProcessorInterface;
 use App\BookStore\Application\Command\DiscountBookCommand;
 use App\BookStore\Application\Query\FindBookQuery;
 use App\BookStore\Domain\Model\Book;
+use App\BookStore\Domain\ValueObject\BookId;
 use App\BookStore\Infrastructure\ApiPlatform\Payload\DiscountBookPayload;
 use App\BookStore\Infrastructure\ApiPlatform\Resource\BookResource;
 use App\Shared\Application\Command\CommandBusInterface;
@@ -31,7 +32,7 @@ final class DiscountBookProcessor implements ProcessorInterface
         Assert::isInstanceOf($bookResource, BookResource::class);
 
         $command = new DiscountBookCommand(
-            $bookResource->id,
+            new BookId($bookResource->id),
             $data->discountPercentage
         );
 

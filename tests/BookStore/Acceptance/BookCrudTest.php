@@ -5,9 +5,15 @@ declare(strict_types=1);
 namespace App\Tests\BookStore\Acceptance;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
-use App\BookStore\Domain\Model\Book;
 use App\BookStore\Domain\Repository\BookRepositoryInterface;
+use App\BookStore\Domain\ValueObject\Author;
+use App\BookStore\Domain\ValueObject\BookContent;
+use App\BookStore\Domain\ValueObject\BookDescription;
+use App\BookStore\Domain\ValueObject\BookId;
+use App\BookStore\Domain\ValueObject\BookName;
+use App\BookStore\Domain\ValueObject\Price;
 use App\BookStore\Infrastructure\ApiPlatform\Resource\BookResource;
+use App\Tests\BookStore\DummyFactory\DummyBookFactory;
 use Symfony\Component\Uid\Uuid;
 
 final class BookCrudTest extends ApiTestCase
@@ -20,7 +26,7 @@ final class BookCrudTest extends ApiTestCase
         $bookRepository = static::getContainer()->get(BookRepositoryInterface::class);
 
         for ($i = 0; $i < 100; ++$i) {
-            $bookRepository->add(new Book('name', 'description', 'author', 'content', 1000));
+            $bookRepository->add(DummyBookFactory::createBook());
         }
 
         $client->request('GET', '/api/books');
@@ -45,9 +51,9 @@ final class BookCrudTest extends ApiTestCase
         /** @var BookRepositoryInterface $BookRepository */
         $bookRepository = static::getContainer()->get(BookRepositoryInterface::class);
 
-        $bookRepository->add(new Book('name', 'description', 'authorOne', 'content', 1000));
-        $bookRepository->add(new Book('name', 'description', 'authorOne', 'content', 1000));
-        $bookRepository->add(new Book('name', 'description', 'authorTwo', 'content', 1000));
+        $bookRepository->add(DummyBookFactory::createBook(author: 'authorOne'));
+        $bookRepository->add(DummyBookFactory::createBook(author: 'authorOne'));
+        $bookRepository->add(DummyBookFactory::createBook(author: 'authorTwo'));
 
         $client->request('GET', '/api/books?author=authorOne');
 
@@ -70,7 +76,13 @@ final class BookCrudTest extends ApiTestCase
         /** @var BookRepositoryInterface $BookRepository */
         $bookRepository = static::getContainer()->get(BookRepositoryInterface::class);
 
-        $book = new Book('name', 'description', 'author', 'content', 1000);
+        $book = DummyBookFactory::createBook(
+            name: 'name',
+            description: 'description',
+            author: 'author',
+            content: 'content',
+            price: 1000,
+        );
         $bookRepository->add($book);
 
         $client->request('GET', sprintf('/api/books/%s', (string) $book->id));
@@ -112,17 +124,17 @@ final class BookCrudTest extends ApiTestCase
             'price' => 1000,
         ]);
 
-        $id = Uuid::fromString(str_replace('/api/books/', '', $response->toArray()['@id']));
+        $id = new BookId(Uuid::fromString(str_replace('/api/books/', '', $response->toArray()['@id'])));
 
         $book = static::getContainer()->get(BookRepositoryInterface::class)->ofId($id);
 
         static::assertNotNull($book);
         static::assertEquals($id, $book->id);
-        static::assertSame('name', $book->name);
-        static::assertSame('description', $book->description);
-        static::assertSame('author', $book->author);
-        static::assertSame('content', $book->content);
-        static::assertSame(1000, $book->price);
+        static::assertEquals(new BookName('name'), $book->name);
+        static::assertEquals(new BookDescription('description'), $book->description);
+        static::assertEquals(new Author('author'), $book->author);
+        static::assertEquals(new BookContent('content'), $book->content);
+        static::assertEquals(new Price(1000), $book->price);
     }
 
     public function testCannotCreateBookWithoutValidPayload(): void
@@ -173,7 +185,7 @@ final class BookCrudTest extends ApiTestCase
         /** @var BookRepositoryInterface $bookRepository */
         $bookRepository = static::getContainer()->get(BookRepositoryInterface::class);
 
-        $book = new Book('name', 'description', 'author', 'content', 1000);
+        $book = DummyBookFactory::createBook();
         $bookRepository->add($book);
 
         $client->request('PUT', sprintf('/api/books/%s', (string) $book->id), [
@@ -200,11 +212,11 @@ final class BookCrudTest extends ApiTestCase
         $updatedBook = $bookRepository->ofId($book->id);
 
         static::assertNotNull($book);
-        static::assertSame('newName', $updatedBook->name);
-        static::assertSame('newDescription', $updatedBook->description);
-        static::assertSame('newAuthor', $updatedBook->author);
-        static::assertSame('newContent', $updatedBook->content);
-        static::assertSame(2000, $updatedBook->price);
+        static::assertEquals(new BookName('newName'), $updatedBook->name);
+        static::assertEquals(new BookDescription('newDescription'), $updatedBook->description);
+        static::assertEquals(new Author('newAuthor'), $updatedBook->author);
+        static::assertEquals(new BookContent('newContent'), $updatedBook->content);
+        static::assertEquals(new Price(2000), $updatedBook->price);
     }
 
     public function testPartiallyUpdateBook(): void
@@ -214,7 +226,7 @@ final class BookCrudTest extends ApiTestCase
         /** @var BookRepositoryInterface $bookRepository */
         $bookRepository = static::getContainer()->get(BookRepositoryInterface::class);
 
-        $book = new Book('name', 'description', 'author', 'content', 1000);
+        $book = DummyBookFactory::createBook(name: 'name', description: 'description');
         $bookRepository->add($book);
 
         $client->request('PATCH', sprintf('/api/books/%s', (string) $book->id), [
@@ -236,7 +248,8 @@ final class BookCrudTest extends ApiTestCase
         $updatedBook = $bookRepository->ofId($book->id);
 
         static::assertNotNull($book);
-        static::assertSame('newName', $updatedBook->name);
+        static::assertEquals(new BookName('newName'), $updatedBook->name);
+        static::assertEquals(new BookDescription('description'), $updatedBook->description);
     }
 
     public function testDeleteBook(): void
@@ -246,7 +259,7 @@ final class BookCrudTest extends ApiTestCase
         /** @var BookRepositoryInterface $bookRepository */
         $bookRepository = static::getContainer()->get(BookRepositoryInterface::class);
 
-        $book = new Book('name', 'description', 'author', 'content', 1000);
+        $book = DummyBookFactory::createBook();
         $bookRepository->add($book);
 
         $response = $client->request('DELETE', sprintf('/api/books/%s', (string) $book->id));

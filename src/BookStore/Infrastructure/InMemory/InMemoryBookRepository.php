@@ -6,8 +6,9 @@ namespace App\BookStore\Infrastructure\InMemory;
 
 use App\BookStore\Domain\Model\Book;
 use App\BookStore\Domain\Repository\BookRepositoryInterface;
+use App\BookStore\Domain\ValueObject\Author;
+use App\BookStore\Domain\ValueObject\BookId;
 use App\Shared\Infrastructure\InMemory\InMemoryRepository;
-use Symfony\Component\Uid\Uuid;
 
 final class InMemoryBookRepository extends InMemoryRepository implements BookRepositoryInterface
 {
@@ -21,14 +22,14 @@ final class InMemoryBookRepository extends InMemoryRepository implements BookRep
         unset($this->entities[(string) $book->id]);
     }
 
-    public function ofId(Uuid $id): ?Book
+    public function ofId(BookId $id): ?Book
     {
         return $this->entities[(string) $id] ?? null;
     }
 
-    public function withAuthor(string $author): static
+    public function withAuthor(Author $author): static
     {
-        return $this->filter(fn (Book $book) => $book->author === $author);
+        return $this->filter(fn (Book $book) => $book->author->isEqualTo($author));
     }
 
     public function withCheapestsFirst(): static

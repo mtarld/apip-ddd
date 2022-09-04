@@ -109,6 +109,13 @@ final class BookResource
 
     public static function fromModel(Book $book): static
     {
-        return new self($book->id, $book->name, $book->description, $book->author, $book->content, $book->price);
+        return new self(
+            $book->id->value,
+            $book->name->value,
+            $book->description->value,
+            $book->author->value,
+            $book->content->value,
+            $book->price->value,
+        );
     }
 }
