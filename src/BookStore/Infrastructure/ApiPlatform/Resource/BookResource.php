@@ -115,7 +115,7 @@ final class BookResource
             $book->description->value,
             $book->author->value,
             $book->content->value,
-            $book->price->value,
+            $book->price->amount,
         );
     }
 }

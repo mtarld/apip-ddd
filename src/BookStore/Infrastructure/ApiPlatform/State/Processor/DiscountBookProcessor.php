@@ -10,6 +10,7 @@ use App\BookStore\Application\Command\DiscountBookCommand;
 use App\BookStore\Application\Query\FindBookQuery;
 use App\BookStore\Domain\Model\Book;
 use App\BookStore\Domain\ValueObject\BookId;
+use App\BookStore\Domain\ValueObject\Discount;
 use App\BookStore\Infrastructure\ApiPlatform\Payload\DiscountBookPayload;
 use App\BookStore\Infrastructure\ApiPlatform\Resource\BookResource;
 use App\Shared\Application\Command\CommandBusInterface;
@@ -33,7 +34,7 @@ final class DiscountBookProcessor implements ProcessorInterface
 
         $command = new DiscountBookCommand(
             new BookId($bookResource->id),
-            $data->discountPercentage
+            new Discount($data->discountPercentage),
         );
 
         $this->commandBus->dispatch($command);

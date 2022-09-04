@@ -11,12 +11,19 @@ use Webmozart\Assert\Assert;
 final class Price
 {
     #[ORM\Column(name: 'price', type: 'integer', options: ['unsigned' => true])]
-    public readonly int $value;
+    public readonly int $amount;
 
-    public function __construct(int $value)
+    public function __construct(int $amount)
     {
-        Assert::natural($value);
+        Assert::natural($amount);
 
-        $this->value = $value;
+        $this->amount = $amount;
+    }
+
+    public function applyDiscount(Discount $discount): static
+    {
+        $amount = $this->amount - ($this->amount * $discount->percentage / 100);
+
+        return new static($amount);
     }
 }
