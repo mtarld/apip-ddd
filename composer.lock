@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1a89b67fd3b0d6243b44796cfe92b162",
+    "content-hash": "a88034f8cbc21573f9d39348651cc425",
     "packages": [
         {
             "name": "api-platform/core",
@@ -7007,6 +7007,95 @@
             "time": "2022-03-02T22:36:06+00:00"
         },
         {
+            "name": "friendsofphp/php-cs-fixer",
+            "version": "v3.11.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
+                "reference": "7dcdea3f2f5f473464e835be9be55283ff8cfdc3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/7dcdea3f2f5f473464e835be9be55283ff8cfdc3",
+                "reference": "7dcdea3f2f5f473464e835be9be55283ff8cfdc3",
+                "shasum": ""
+            },
+            "require": {
+                "composer/semver": "^3.2",
+                "composer/xdebug-handler": "^3.0.3",
+                "doctrine/annotations": "^1.13",
+                "ext-json": "*",
+                "ext-tokenizer": "*",
+                "php": "^7.4 || ^8.0",
+                "sebastian/diff": "^4.0",
+                "symfony/console": "^5.4 || ^6.0",
+                "symfony/event-dispatcher": "^5.4 || ^6.0",
+                "symfony/filesystem": "^5.4 || ^6.0",
+                "symfony/finder": "^5.4 || ^6.0",
+                "symfony/options-resolver": "^5.4 || ^6.0",
+                "symfony/polyfill-mbstring": "^1.23",
+                "symfony/polyfill-php80": "^1.25",
+                "symfony/polyfill-php81": "^1.25",
+                "symfony/process": "^5.4 || ^6.0",
+                "symfony/stopwatch": "^5.4 || ^6.0"
+            },
+            "require-dev": {
+                "justinrainbow/json-schema": "^5.2",
+                "keradus/cli-executor": "^1.5",
+                "mikey179/vfsstream": "^1.6.10",
+                "php-coveralls/php-coveralls": "^2.5.2",
+                "php-cs-fixer/accessible-object": "^1.1",
+                "php-cs-fixer/phpunit-constraint-isidenticalstring": "^1.2",
+                "php-cs-fixer/phpunit-constraint-xmlmatchesxsd": "^1.2.1",
+                "phpspec/prophecy": "^1.15",
+                "phpspec/prophecy-phpunit": "^2.0",
+                "phpunit/phpunit": "^9.5",
+                "phpunitgoodpractices/polyfill": "^1.5",
+                "phpunitgoodpractices/traits": "^1.9.1",
+                "symfony/phpunit-bridge": "^6.0",
+                "symfony/yaml": "^5.4 || ^6.0"
+            },
+            "suggest": {
+                "ext-dom": "For handling output formats in XML",
+                "ext-mbstring": "For handling non-UTF8 characters."
+            },
+            "bin": [
+                "php-cs-fixer"
+            ],
+            "type": "application",
+            "autoload": {
+                "psr-4": {
+                    "PhpCsFixer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Dariusz Rumiński",
+                    "email": "dariusz.ruminski@gmail.com"
+                }
+            ],
+            "description": "A tool to automatically fix PHP code style",
+            "support": {
+                "issues": "https://github.com/FriendsOfPHP/PHP-CS-Fixer/issues",
+                "source": "https://github.com/FriendsOfPHP/PHP-CS-Fixer/tree/v3.11.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/keradus",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-09-01T18:24:51+00:00"
+        },
+        {
             "name": "justinrainbow/json-schema",
             "version": "5.2.12",
             "source": {
@@ -9305,6 +9394,73 @@
             "time": "2022-04-22T07:30:54+00:00"
         },
         {
+            "name": "symfony/options-resolver",
+            "version": "v6.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/options-resolver.git",
+                "reference": "a3016f5442e28386ded73c43a32a5b68586dd1c4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/options-resolver/zipball/a3016f5442e28386ded73c43a32a5b68586dd1c4",
+                "reference": "a3016f5442e28386ded73c43a32a5b68586dd1c4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1",
+                "symfony/deprecation-contracts": "^2.1|^3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\OptionsResolver\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Provides an improved replacement for the array_replace PHP function",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "config",
+                "configuration",
+                "options"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/options-resolver/tree/v6.1.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2022-02-25T11:15:52+00:00"
+        },
+        {
             "name": "symfony/phpunit-bridge",
             "version": "v6.1.3",
             "source": {
@@ -9386,6 +9542,146 @@
                 }
             ],
             "time": "2022-07-28T13:40:41+00:00"
+        },
+        {
+            "name": "symfony/polyfill-php81",
+            "version": "v1.26.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-php81.git",
+                "reference": "13f6d1271c663dc5ae9fb843a8f16521db7687a1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-php81/zipball/13f6d1271c663dc5ae9fb843a8f16521db7687a1",
+                "reference": "13f6d1271c663dc5ae9fb843a8f16521db7687a1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.26-dev"
+                },
+                "thanks": {
+                    "name": "symfony/polyfill",
+                    "url": "https://github.com/symfony/polyfill"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Php81\\": ""
+                },
+                "classmap": [
+                    "Resources/stubs"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony polyfill backporting some PHP 8.1+ features to lower PHP versions",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "polyfill",
+                "portable",
+                "shim"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/polyfill-php81/tree/v1.26.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2022-05-24T11:49:31+00:00"
+        },
+        {
+            "name": "symfony/process",
+            "version": "v6.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/process.git",
+                "reference": "a6506e99cfad7059b1ab5cab395854a0a0c21292"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/process/zipball/a6506e99cfad7059b1ab5cab395854a0a0c21292",
+                "reference": "a6506e99cfad7059b1ab5cab395854a0a0c21292",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Process\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Executes commands in sub-processes",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/process/tree/v6.1.3"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2022-06-27T17:24:16+00:00"
         },
         {
             "name": "symfony/stopwatch",

@@ -13,6 +13,7 @@ use Webmozart\Assert\Assert;
 
 /**
  * @template T of object
+ *
  * @implements RepositoryInterface<T>
  */
 abstract class DoctrineRepository implements RepositoryInterface

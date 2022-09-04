@@ -51,7 +51,7 @@ final class DoctrinePaginatorTest extends TestCase
         yield [1, -1, 3];
     }
 
-    private function createPaginatorStub(int $firstResult, int $maxResults, int $totalItems): Stub & Paginator
+    private function createPaginatorStub(int $firstResult, int $maxResults, int $totalItems): Stub&Paginator
     {
         $em = $this->createStub(EntityManagerInterface::class);
         $em->method('getConfiguration')->willReturn($this->createStub(Configuration::class));

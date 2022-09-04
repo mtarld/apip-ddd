@@ -8,6 +8,7 @@ use ApiPlatform\State\Pagination\PaginatorInterface;
 
 /**
  * @template T of object
+ *
  * @implements \IteratorAggregate<T>
  */
 final class Paginator implements PaginatorInterface, \IteratorAggregate

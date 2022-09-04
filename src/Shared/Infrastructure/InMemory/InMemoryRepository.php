@@ -10,6 +10,7 @@ use Webmozart\Assert\Assert;
 
 /**
  * @template T of object
+ *
  * @implements RepositoryInterface<T>
  */
 abstract class InMemoryRepository implements RepositoryInterface

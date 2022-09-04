@@ -6,6 +6,7 @@ namespace App\Shared\Domain\Repository;
 
 /**
  * @template T of object
+ *
  * @extends \IteratorAggregate<T>
  */
 interface PaginatorInterface extends \IteratorAggregate, \Countable

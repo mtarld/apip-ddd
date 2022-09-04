@@ -9,6 +9,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * @template T of object
+ *
  * @implements PaginatorInterface<T>
  */
 final class DoctrinePaginator implements PaginatorInterface

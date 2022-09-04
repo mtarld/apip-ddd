@@ -9,6 +9,7 @@ use Webmozart\Assert\Assert;
 
 /**
  * @template T of object
+ *
  * @implements PaginatorInterface<T>
  */
 final class InMemoryPaginator implements PaginatorInterface
