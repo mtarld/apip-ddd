@@ -10,6 +10,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         'mapping' => [
             'paths' => [
                 '%kernel.project_dir%/src/BookStore/Infrastructure/ApiPlatform/Resource/',
+                '%kernel.project_dir%/src/Subscription/Entity/',
             ],
         ],
         'patch_formats' => [

@@ -22,7 +22,7 @@ final class BookCrudTest extends ApiTestCase
     {
         $client = static::createClient();
 
-        /** @var BookRepositoryInterface $BookRepository */
+        /** @var BookRepositoryInterface $bookRepository */
         $bookRepository = static::getContainer()->get(BookRepositoryInterface::class);
 
         for ($i = 0; $i < 100; ++$i) {
@@ -48,7 +48,7 @@ final class BookCrudTest extends ApiTestCase
     {
         $client = static::createClient();
 
-        /** @var BookRepositoryInterface $BookRepository */
+        /** @var BookRepositoryInterface $bookRepository */
         $bookRepository = static::getContainer()->get(BookRepositoryInterface::class);
 
         $bookRepository->add(DummyBookFactory::createBook(author: 'authorOne'));
@@ -73,7 +73,7 @@ final class BookCrudTest extends ApiTestCase
     {
         $client = static::createClient();
 
-        /** @var BookRepositoryInterface $BookRepository */
+        /** @var BookRepositoryInterface $bookRepository */
         $bookRepository = static::getContainer()->get(BookRepositoryInterface::class);
 
         $book = DummyBookFactory::createBook(
