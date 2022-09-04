@@ -149,6 +149,18 @@
     "psr/log": {
         "version": "3.0.0"
     },
+    "qossmic/deptrac-shim": {
+        "version": "0.24",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "0.19",
+            "ref": "3c3daab46226c37fc14e10faf81df737a3039d96"
+        },
+        "files": [
+            "deptrac.yaml"
+        ]
+    },
     "symfony/asset": {
         "version": "v6.0.3"
     },

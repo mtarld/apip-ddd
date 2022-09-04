@@ -1,0 +1,24 @@
+parameters:
+    paths: [ ./src ]
+
+    layers:
+        - name: BookStore
+          collectors:
+              - type: directory
+                regex: src/BookStore/.*
+
+        - name: Shared
+          collectors:
+              - type: directory
+                regex: src/Shared/.*
+
+        - name: Vendors
+          collectors:
+              - { type: className, regex: ^ApiPlatform\\ }
+              - { type: className, regex: ^Symfony\\ }
+              - { type: className, regex: ^Doctrine\\ }
+              - { type: className, regex: ^Webmozart\\ }
+
+    ruleset:
+        BookStore: [ Shared, Vendors ]
+        Shared: [ Vendors ]

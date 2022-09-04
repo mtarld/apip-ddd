@@ -94,14 +94,13 @@ psalm:
 phpunit:
 	@$(EXEC) bin/phpunit
 
-# TODO
-# Run layers depedencies analysis
-# deptrac:
-# 	@echo "\n\e[7mChecking DDD layers...\e[0m"
-# 	@$(EXEC) tools/vendor/bin/deptrac analyze --fail-on-uncovered --report-uncovered --no-progress --cache-file tools/.deptrac_ddd.cache tools/depfile_ddd.yaml
-#
-# 	@echo "\n\e[7mChecking Bounded context layers...\e[0m"
-# 	@$(EXEC) tools/vendor/bin/deptrac analyze --fail-on-uncovered --report-uncovered --no-progress --cache-file tools/.deptrac_bc.cache tools/depfile_bc.yaml
+## Run layers depedencies analysis
+deptrac:
+	@echo "\n\e[7mChecking Bounded contexts...\e[0m"
+	@$(EXEC) vendor/bin/deptrac analyze --fail-on-uncovered --report-uncovered --no-progress --cache-file .deptrac_bc.cache --config-file deptrac_bc.yaml
+
+	@echo "\n\e[7mChecking Hexagonal layers...\e[0m"
+	@$(EXEC) vendor/bin/deptrac analyze --fail-on-uncovered --report-uncovered --no-progress --cache-file .deptrac_hexa.cache --config-file deptrac_hexa.yaml
 
 ## Run either static analysis and tests
 ci: php-cs-fixer psalm phpunit
