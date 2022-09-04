@@ -9,6 +9,7 @@ use App\BookStore\Domain\ValueObject\BookContent;
 use App\BookStore\Domain\ValueObject\BookDescription;
 use App\BookStore\Domain\ValueObject\BookId;
 use App\BookStore\Domain\ValueObject\BookName;
+use App\BookStore\Domain\ValueObject\Discount;
 use App\BookStore\Domain\ValueObject\Price;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -35,5 +36,12 @@ class Book
         public Price $price,
     ) {
         $this->id = new BookId();
+    }
+
+    public function applyDiscount(Discount $discount): static
+    {
+        $this->price = $this->price->applyDiscount($discount);
+
+        return $this;
     }
 }

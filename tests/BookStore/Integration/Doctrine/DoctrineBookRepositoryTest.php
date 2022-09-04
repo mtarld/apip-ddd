@@ -105,7 +105,7 @@ final class DoctrineBookRepositoryTest extends KernelTestCase
 
         $prices = [];
         foreach ($repository->withCheapestsFirst() as $book) {
-            $prices[] = $book->price->value;
+            $prices[] = $book->price->amount;
         }
         static::assertSame([1, 2, 3], $prices);
     }

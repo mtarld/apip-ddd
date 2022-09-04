@@ -49,7 +49,7 @@ final class DoctrineBookRepository extends DoctrineRepository implements BookRep
     public function withCheapestsFirst(): static
     {
         return $this->filter(static function (QueryBuilder $qb): void {
-            $qb->orderBy(sprintf('%s.price.value', self::ALIAS), 'ASC');
+            $qb->orderBy(sprintf('%s.price.amount', self::ALIAS), 'ASC');
         });
     }
 }
