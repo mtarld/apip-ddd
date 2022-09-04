@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\BookStore\Application\Query;
 
 use App\BookStore\Domain\Repository\BookRepositoryInterface;
-use App\BookStore\Domain\ValueObject\Author;
 use App\Shared\Application\Query\QueryHandlerInterface;
 
 final class FindBooksQueryHandler implements QueryHandlerInterface
@@ -19,7 +18,7 @@ final class FindBooksQueryHandler implements QueryHandlerInterface
         $bookRepository = $this->bookRepository;
 
         if (null !== $query->author) {
-            $bookRepository = $bookRepository->withAuthor(new Author($query->author));
+            $bookRepository = $bookRepository->withAuthor($query->author);
         }
 
         if (null !== $query->page && null !== $query->itemsPerPage) {

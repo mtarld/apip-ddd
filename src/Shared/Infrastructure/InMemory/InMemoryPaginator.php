@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace App\Shared\Infrastructure\InMemory;
 
 use App\Shared\Domain\Repository\PaginatorInterface;
+use Webmozart\Assert\Assert;
 
 final class InMemoryPaginator implements PaginatorInterface
 {
-    private int $offset;
-    private int $limit;
-    private int $lastPage;
+    private readonly int $offset;
+    private readonly int $limit;
+    private readonly int $lastPage;
 
     public function __construct(
         private iterable $items,
@@ -18,8 +19,12 @@ final class InMemoryPaginator implements PaginatorInterface
         private int $currentPage,
         private int $itemsPerPage,
     ) {
+        Assert::natural($totalItems);
+        Assert::positiveInteger($currentPage);
+        Assert::positiveInteger($itemsPerPage);
+
         $this->offset = ($currentPage - 1) * $itemsPerPage;
-        $this->limit = $this->offset + $itemsPerPage;
+        $this->limit = $itemsPerPage;
         $this->lastPage = (int) max(1, ceil($totalItems / $itemsPerPage));
     }
 

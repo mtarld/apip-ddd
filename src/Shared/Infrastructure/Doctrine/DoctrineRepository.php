@@ -41,7 +41,11 @@ abstract class DoctrineRepository implements RepositoryInterface
 
     public function count(): int
     {
-        return $this->paginator()->count();
+        if (null !== $paginator = $this->paginator()) {
+            return count($paginator);
+        }
+
+        return count($this->queryBuilder->getQuery()->getResult());
     }
 
     public function paginator(): ?PaginatorInterface
@@ -50,7 +54,7 @@ abstract class DoctrineRepository implements RepositoryInterface
             return null;
         }
 
-        $firstResult = $this->page * $this->itemsPerPage;
+        $firstResult = ($this->page - 1) * $this->itemsPerPage;
         $maxResults = $this->itemsPerPage;
 
         $repository = $this->filter(static function (QueryBuilder $qb) use ($firstResult, $maxResults) {
@@ -75,7 +79,7 @@ abstract class DoctrineRepository implements RepositoryInterface
         Assert::positiveInteger($itemsPerPage);
 
         $cloned = clone $this;
-        $cloned->page = $page - 1;
+        $cloned->page = $page;
         $cloned->itemsPerPage = $itemsPerPage;
 
         return $cloned;

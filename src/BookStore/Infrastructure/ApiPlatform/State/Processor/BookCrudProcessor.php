@@ -11,7 +11,12 @@ use App\BookStore\Application\Command\CreateBookCommand;
 use App\BookStore\Application\Command\DeleteBookCommand;
 use App\BookStore\Application\Command\UpdateBookCommand;
 use App\BookStore\Domain\Model\Book;
+use App\BookStore\Domain\ValueObject\Author;
+use App\BookStore\Domain\ValueObject\BookContent;
+use App\BookStore\Domain\ValueObject\BookDescription;
 use App\BookStore\Domain\ValueObject\BookId;
+use App\BookStore\Domain\ValueObject\BookName;
+use App\BookStore\Domain\ValueObject\Price;
 use App\BookStore\Infrastructure\ApiPlatform\Resource\BookResource;
 use App\Shared\Application\Command\CommandBusInterface;
 use Webmozart\Assert\Assert;
@@ -34,15 +39,21 @@ final class BookCrudProcessor implements ProcessorInterface
         }
 
         $command = !isset($uriVariables['id'])
-            ? new CreateBookCommand($data->name, $data->description, $data->author, $data->content, $data->price)
-        : new UpdateBookCommand(
-            new BookId($data->id),
-            $data->name,
-            $data->description,
-            $data->author,
-            $data->content,
-            $data->price,
-        )
+            ? new CreateBookCommand(
+                new BookName($data->name),
+                new BookDescription($data->description),
+                new Author($data->author),
+                new BookContent($data->content),
+                new Price($data->price),
+            )
+            : new UpdateBookCommand(
+                new BookId($data->id),
+                new BookName($data->name),
+                new BookDescription($data->description),
+                new Author($data->author),
+                new BookContent($data->content),
+                new Price($data->price),
+            )
         ;
 
         /** @var Book $model */
