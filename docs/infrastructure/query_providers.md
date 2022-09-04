@@ -25,7 +25,7 @@ As there is one provider per query, each provider must be scoped to handle its r
 This could be done like the following:
 ```php
 use App\Application\[BoundedContext]\Query\MyQuery;
-use App\Infrastructure\Shared\ApiPlatform\Metadata\QueryOperation;
+use App\Shared\Infrastructure\ApiPlatform\Metadata\QueryOperation;
 
 public function supports(string $resourceClass, array $identifiers = [], ?string $operationName = null, array $context = []): bool
 {

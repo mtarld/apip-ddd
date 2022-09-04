@@ -1,0 +1,114 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\BookStore\Infrastructure\ApiPlatform\Resource;
+
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use App\BookStore\Application\Command\AnonymizeBooksCommand;
+use App\BookStore\Domain\Model\Book;
+use App\BookStore\Infrastructure\ApiPlatform\OpenApi\AuthorFilter;
+use App\BookStore\Infrastructure\ApiPlatform\Payload\DiscountBookPayload;
+use App\BookStore\Infrastructure\ApiPlatform\State\Processor\AnonymizeBooksProcessor;
+use App\BookStore\Infrastructure\ApiPlatform\State\Processor\BookCrudProcessor;
+use App\BookStore\Infrastructure\ApiPlatform\State\Processor\DiscountBookProcessor;
+use App\BookStore\Infrastructure\ApiPlatform\State\Provider\BookCrudProvider;
+use App\BookStore\Infrastructure\ApiPlatform\State\Provider\CheapestBooksProvider;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Validator\Constraints as Assert;
+
+#[ApiResource(
+    shortName: 'Book',
+    operations: [
+        // queries
+        new GetCollection(
+            '/books/cheapest.{_format}',
+            provider: CheapestBooksProvider::class,
+            paginationEnabled: false,
+            openapiContext: ['summary' => 'Find cheapest Book resources.'],
+        ),
+
+        // commands
+        new Post(
+            '/books/anonymize.{_format}',
+            input: AnonymizeBooksCommand::class,
+            processor: AnonymizeBooksProcessor::class,
+            output: false,
+            status: 202,
+            openapiContext: ['summary' => 'Anonymize author of every Book resources.'],
+        ),
+        new Post(
+            '/books/{id}/discount.{_format}',
+            input: DiscountBookPayload::class,
+            provider: BookCrudProvider::class,
+            processor: DiscountBookProcessor::class,
+            openapiContext: ['summary' => 'Apply a discount percentage on a Book resource.'],
+        ),
+
+        // basic crud
+        new GetCollection(
+            provider: BookCrudProvider::class,
+            filters: [AuthorFilter::class],
+        ),
+        new Get(
+            provider: BookCrudProvider::class,
+        ),
+        new Post(
+            validationContext: ['groups' => ['create']],
+            processor: BookCrudProcessor::class,
+        ),
+        new Put(
+            provider: BookCrudProvider::class,
+            processor: BookCrudProcessor::class
+        ),
+        new Patch(
+            provider: BookCrudProvider::class,
+            processor: BookCrudProcessor::class,
+        ),
+        new Delete(
+            provider: BookCrudProvider::class,
+            processor: BookCrudProcessor::class,
+        ),
+    ],
+)]
+final class BookResource
+{
+    public function __construct(
+        #[ApiProperty(identifier: true, readable: false, writable: false)]
+        public ?Uuid $id = null,
+
+        #[Assert\NotNull(groups: ['create'])]
+        #[Assert\Length(min: 1, max: 255, groups: ['create', 'Default'])]
+        public ?string $name = null,
+
+        #[Assert\NotNull(groups: ['create'])]
+        #[Assert\Length(min: 1, max: 1023, groups: ['create', 'Default'])]
+        public ?string $description = null,
+
+        #[Assert\NotNull(groups: ['create'])]
+        #[Assert\Length(min: 1, max: 255, groups: ['create', 'Default'])]
+        public ?string $author = null,
+
+        #[Assert\NotNull(groups: ['create'])]
+        #[Assert\Length(min: 1, max: 65535, groups: ['create', 'Default'])]
+        public ?string $content = null,
+
+        #[Assert\NotNull(groups: ['create'])]
+        #[Assert\PositiveOrZero(groups: ['create', 'Default'])]
+        public ?int $price = null,
+    ) {
+        $this->id = $id ?? Uuid::v4();
+    }
+
+    public static function fromModel(Book $book): static
+    {
+        return new self($book->id, $book->name, $book->description, $book->author, $book->content, $book->price);
+    }
+}

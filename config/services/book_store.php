@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-use App\Domain\BookStore\Repository\BookRepositoryInterface;
-use App\Infrastructure\BookStore\ApiPlatform\State\Processor\AnonymizeBooksProcessor;
-use App\Infrastructure\BookStore\ApiPlatform\State\Processor\BookCrudProcessor;
-use App\Infrastructure\BookStore\ApiPlatform\State\Provider\BookCrudProvider;
-use App\Infrastructure\BookStore\ApiPlatform\State\Processor\DiscountBookProcessor;
-use App\Infrastructure\BookStore\ApiPlatform\State\Provider\CheapestBooksProvider;
-use App\Infrastructure\BookStore\Doctrine\DoctrineBookRepository;
+use App\BookStore\Domain\Repository\BookRepositoryInterface;
+use App\BookStore\Infrastructure\ApiPlatform\State\Processor\AnonymizeBooksProcessor;
+use App\BookStore\Infrastructure\ApiPlatform\State\Processor\BookCrudProcessor;
+use App\BookStore\Infrastructure\ApiPlatform\State\Processor\DiscountBookProcessor;
+use App\BookStore\Infrastructure\ApiPlatform\State\Provider\BookCrudProvider;
+use App\BookStore\Infrastructure\ApiPlatform\State\Provider\CheapestBooksProvider;
+use App\BookStore\Infrastructure\Doctrine\DoctrineBookRepository;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -18,9 +18,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->autowire()
         ->autoconfigure();
 
-    $services->load('App\\Domain\\BookStore\\', __DIR__.'/../../src/Domain/BookStore');
-    $services->load('App\\Application\\BookStore\\', __DIR__.'/../../src/Application/BookStore');
-    $services->load('App\\Infrastructure\\BookStore\\', __DIR__.'/../../src/Infrastructure/BookStore');
+    $services->load('App\\BookStore\\', __DIR__.'/../../src/BookStore');
 
     // providers
     $services->set(CheapestBooksProvider::class)
@@ -48,4 +46,3 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(BookRepositoryInterface::class)
         ->class(DoctrineBookRepository::class);
 };
-
