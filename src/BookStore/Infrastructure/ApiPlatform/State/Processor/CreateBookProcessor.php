@@ -24,9 +24,20 @@ final class CreateBookProcessor implements ProcessorInterface
     ) {
     }
 
+    /**
+     * @param mixed $data
+     *
+     * @return BookResource
+     */
     public function process($data, Operation $operation, array $uriVariables = [], array $context = []): mixed
     {
         Assert::isInstanceOf($data, BookResource::class);
+
+        Assert::notNull($data->name);
+        Assert::notNull($data->description);
+        Assert::notNull($data->author);
+        Assert::notNull($data->content);
+        Assert::notNull($data->price);
 
         $command = new CreateBookCommand(
             new BookName($data->name),

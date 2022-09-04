@@ -25,17 +25,22 @@ final class UpdateBookProcessor implements ProcessorInterface
     ) {
     }
 
+    /**
+     * @param mixed $data
+     *
+     * @return BookResource
+     */
     public function process($data, Operation $operation, array $uriVariables = [], array $context = []): mixed
     {
         Assert::isInstanceOf($data, BookResource::class);
 
         $command = new UpdateBookCommand(
             new BookId($data->id),
-            new BookName($data->name),
-            new BookDescription($data->description),
-            new Author($data->author),
-            new BookContent($data->content),
-            new Price($data->price),
+            null !== $data->name ? new BookName($data->name) : null,
+            null !== $data->description ? new BookDescription($data->description) : null,
+            null !== $data->author ? new Author($data->author) : null,
+            null !== $data->content ? new BookContent($data->content) : null,
+            null !== $data->price ? new Price($data->price) : null,
         );
 
         /** @var Book $model */

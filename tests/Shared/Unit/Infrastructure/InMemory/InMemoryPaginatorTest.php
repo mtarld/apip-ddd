@@ -17,7 +17,7 @@ final class InMemoryPaginatorTest extends TestCase
         $items = [1, 2, 3];
 
         $paginator = new InMemoryPaginator(
-            items: $items,
+            items: new \ArrayIterator($items),
             totalItems: count($items),
             currentPage: 1,
             itemsPerPage: $itemsPerPage,
@@ -41,7 +41,7 @@ final class InMemoryPaginatorTest extends TestCase
         $items = [1, 2, 3];
 
         $paginator = new InMemoryPaginator(
-            items: $items,
+            items: new \ArrayIterator($items),
             totalItems: count($items),
             currentPage: $currentPage,
             itemsPerPage: $itemsPerPage,

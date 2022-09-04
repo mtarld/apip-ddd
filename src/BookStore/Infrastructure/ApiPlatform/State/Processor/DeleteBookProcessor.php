@@ -19,6 +19,11 @@ final class DeleteBookProcessor implements ProcessorInterface
     ) {
     }
 
+    /**
+     * @param mixed $data
+     *
+     * @return null
+     */
     public function process($data, Operation $operation, array $uriVariables = [], array $context = []): mixed
     {
         Assert::isInstanceOf($data, BookResource::class);

@@ -101,6 +101,7 @@
         "symfony/http-client": "6.1.*",
         "symfony/phpunit-bridge": "^6.1",
         "symfony/stopwatch": "6.1.*",
-        "symfony/web-profiler-bundle": "6.1.*"
+        "symfony/web-profiler-bundle": "6.1.*",
+        "vimeo/psalm": "^4.27"
     }
 }

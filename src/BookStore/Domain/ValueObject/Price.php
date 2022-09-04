@@ -15,14 +15,14 @@ final class Price
 
     public function __construct(int $amount)
     {
-        Assert::natural($amount);
+        Assert::greaterThanEq($amount, 0);
 
         $this->amount = $amount;
     }
 
     public function applyDiscount(Discount $discount): static
     {
-        $amount = $this->amount - ($this->amount * $discount->percentage / 100);
+        $amount = (int) ($this->amount - ($this->amount * $discount->percentage / 100));
 
         return new static($amount);
     }

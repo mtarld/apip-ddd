@@ -27,7 +27,7 @@ final class MessengerCommandBus implements CommandBusInterface
             /** @var array{0: \Throwable} $exceptions */
             $exceptions = $e->getNestedExceptions();
 
-            throw current($exceptions);
+            throw $exceptions[0];
         }
     }
 }

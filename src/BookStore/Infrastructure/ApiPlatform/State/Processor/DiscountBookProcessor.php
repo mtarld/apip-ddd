@@ -25,6 +25,11 @@ final class DiscountBookProcessor implements ProcessorInterface
     ) {
     }
 
+    /**
+     * @param mixed $data
+     *
+     * @return BookResource
+     */
     public function process($data, Operation $operation, array $uriVariables = [], array $context = []): mixed
     {
         Assert::isInstanceOf($data, DiscountBookPayload::class);

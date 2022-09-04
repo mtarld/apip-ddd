@@ -12,6 +12,9 @@ use App\Shared\Infrastructure\Doctrine\DoctrineRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 
+/**
+ * @extends DoctrineRepository<Book>
+ */
 final class DoctrineBookRepository extends DoctrineRepository implements BookRepositoryInterface
 {
     private const ENTITY_CLASS = Book::class;

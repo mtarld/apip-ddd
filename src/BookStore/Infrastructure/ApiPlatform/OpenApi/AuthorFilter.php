@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\BookStore\Infrastructure\ApiPlatform\OpenApi;
 
-use ApiPlatform\Core\Api\FilterInterface;
+use ApiPlatform\Api\FilterInterface;
 use Symfony\Component\PropertyInfo\Type;
 
 final class AuthorFilter implements FilterInterface

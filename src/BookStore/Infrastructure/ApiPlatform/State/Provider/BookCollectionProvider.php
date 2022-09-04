@@ -23,10 +23,11 @@ final class BookCollectionProvider implements ProviderInterface
     }
 
     /**
-     * @return Paginator<BookResource>|array<BookResource>
+     * @return Paginator<BookResource>|list<BookResource>
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
+        /** @var string|null $author */
         $author = $context['filters']['author'] ?? null;
         $offset = $limit = null;
 
@@ -45,7 +46,7 @@ final class BookCollectionProvider implements ProviderInterface
 
         if (null !== $paginator = $models->paginator()) {
             $resources = new Paginator(
-                $resources,
+                new \ArrayIterator($resources),
                 (float) $paginator->getCurrentPage(),
                 (float) $paginator->getItemsPerPage(),
                 (float) $paginator->getLastPage(),

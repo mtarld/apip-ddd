@@ -17,9 +17,18 @@ interface RepositoryInterface extends \IteratorAggregate, \Countable
 
     public function count(): int;
 
+    /**
+     * @return PaginatorInterface<T>|null
+     */
     public function paginator(): ?PaginatorInterface;
 
+    /**
+     * @return static<T>
+     */
     public function withPagination(int $page, int $itemsPerPage): static;
 
+    /**
+     * @return static<T>
+     */
     public function withoutPagination(): static;
 }
