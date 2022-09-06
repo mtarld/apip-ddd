@@ -6,7 +6,6 @@ namespace App\Shared\Infrastructure\Symfony;
 
 use App\Shared\Application\Command\CommandHandlerInterface;
 use App\Shared\Application\Query\QueryHandlerInterface;
-use App\Shared\Infrastructure\Symfony\DependencyInjection\Compiler\ClearNativeProviderAndProcessorsCompilerPass;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -39,7 +38,5 @@ final class Kernel extends BaseKernel
 
         $container->registerForAutoconfiguration(CommandHandlerInterface::class)
             ->addTag('messenger.message_handler', ['bus' => 'command.bus']);
-
-        $container->addCompilerPass(new ClearNativeProviderAndProcessorsCompilerPass());
     }
 }

@@ -28,6 +28,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                         'dir' => '%kernel.project_dir%/src/Shared/Domain',
                         'prefix' => 'App\Shared\Domain',
                     ],
+                    'Subscription' => [
+                        'is_bundle' => false,
+                        'type' => 'attribute',
+                        'dir' => '%kernel.project_dir%/src/Subscription/Entity',
+                        'prefix' => 'App\Subscription\Entity',
+                    ],
                 ],
             ],
         ],
