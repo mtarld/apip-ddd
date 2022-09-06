@@ -11,6 +11,11 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Webmozart\Assert\Assert;
 
+/**
+ * @template T of object
+ *
+ * @implements RepositoryInterface<T>
+ */
 abstract class DoctrineRepository implements RepositoryInterface
 {
     private ?int $page = null;
@@ -45,7 +50,10 @@ abstract class DoctrineRepository implements RepositoryInterface
             return count($paginator);
         }
 
-        return count($this->queryBuilder->getQuery()->getResult());
+        return (int) (clone $this->queryBuilder)
+            ->select('count(1)')
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     public function paginator(): ?PaginatorInterface
@@ -61,7 +69,10 @@ abstract class DoctrineRepository implements RepositoryInterface
             $qb->setFirstResult($firstResult)->setMaxResults($maxResults);
         });
 
-        return new DoctrinePaginator(new Paginator($repository->queryBuilder->getQuery()));
+        /** @var Paginator<T> $paginator */
+        $paginator = new Paginator($repository->queryBuilder->getQuery());
+
+        return new DoctrinePaginator($paginator);
     }
 
     public function withoutPagination(): static
@@ -85,6 +96,9 @@ abstract class DoctrineRepository implements RepositoryInterface
         return $cloned;
     }
 
+    /**
+     * @return static<T>
+     */
     protected function filter(callable $filter): static
     {
         $cloned = clone $this;
@@ -98,7 +112,7 @@ abstract class DoctrineRepository implements RepositoryInterface
         return clone $this->queryBuilder;
     }
 
-    protected function __clone(): void
+    protected function __clone()
     {
         $this->queryBuilder = clone $this->queryBuilder;
     }

@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace App\Shared\Domain\ValueObject;
 
 use Doctrine\ORM\Mapping as ORM;
-use Stringable;
 use Symfony\Component\Uid\AbstractUid;
 use Symfony\Component\Uid\Uuid;
 
-abstract class AggregateRootId implements Stringable
+abstract class AggregateRootId implements \Stringable
 {
     #[ORM\Id]
     #[ORM\Column(name: 'id', type: 'uuid')]

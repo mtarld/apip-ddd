@@ -8,8 +8,16 @@ use App\Shared\Domain\Repository\PaginatorInterface;
 use App\Shared\Domain\Repository\RepositoryInterface;
 use Webmozart\Assert\Assert;
 
+/**
+ * @template T of object
+ *
+ * @implements RepositoryInterface<T>
+ */
 abstract class InMemoryRepository implements RepositoryInterface
 {
+    /**
+     * @var array<string, T>
+     */
     protected array $entities = [];
 
     protected ?int $page = null;
@@ -53,7 +61,12 @@ abstract class InMemoryRepository implements RepositoryInterface
             return null;
         }
 
-        return new InMemoryPaginator($this->entities, count($this->entities), $this->page, $this->itemsPerPage);
+        return new InMemoryPaginator(
+            new \ArrayIterator($this->entities),
+            count($this->entities),
+            $this->page,
+            $this->itemsPerPage,
+        );
     }
 
     public function count(): int
@@ -65,6 +78,11 @@ abstract class InMemoryRepository implements RepositoryInterface
         return count($this->entities);
     }
 
+    /**
+     * @param callable(mixed, mixed=): bool $filter
+     *
+     * @return static<T>
+     */
     protected function filter(callable $filter): static
     {
         $cloned = clone $this;

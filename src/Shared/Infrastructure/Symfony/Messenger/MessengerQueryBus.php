@@ -27,7 +27,7 @@ final class MessengerQueryBus implements QueryBusInterface
             /** @var array{0: \Throwable} $exceptions */
             $exceptions = $e->getNestedExceptions();
 
-            throw current($exceptions);
+            throw $exceptions[0];
         }
     }
 }

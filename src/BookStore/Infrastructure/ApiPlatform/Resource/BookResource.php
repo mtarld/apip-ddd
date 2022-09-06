@@ -24,6 +24,7 @@ use App\BookStore\Infrastructure\ApiPlatform\State\Processor\UpdateBookProcessor
 use App\BookStore\Infrastructure\ApiPlatform\State\Provider\BookCollectionProvider;
 use App\BookStore\Infrastructure\ApiPlatform\State\Provider\BookItemProvider;
 use App\BookStore\Infrastructure\ApiPlatform\State\Provider\CheapestBooksProvider;
+use Symfony\Component\Uid\AbstractUid;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -85,7 +86,7 @@ final class BookResource
 {
     public function __construct(
         #[ApiProperty(identifier: true, readable: false, writable: false)]
-        public ?Uuid $id = null,
+        public ?AbstractUid $id = null,
         #[Assert\NotNull(groups: ['create'])]
         #[Assert\Length(min: 1, max: 255, groups: ['create', 'Default'])]
         public ?string $name = null,

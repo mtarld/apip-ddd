@@ -93,14 +93,17 @@
         }
     },
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.11",
         "justinrainbow/json-schema": "^5.2",
         "phpunit/phpunit": "^9.5",
+        "qossmic/deptrac-shim": "^0.24.0",
         "symfony/browser-kit": "6.1.*",
         "symfony/css-selector": "6.1.*",
         "symfony/debug-bundle": "6.1.*",
         "symfony/http-client": "6.1.*",
         "symfony/phpunit-bridge": "^6.1",
         "symfony/stopwatch": "6.1.*",
-        "symfony/web-profiler-bundle": "6.1.*"
+        "symfony/web-profiler-bundle": "6.1.*",
+        "vimeo/psalm": "^4.27"
     }
 }

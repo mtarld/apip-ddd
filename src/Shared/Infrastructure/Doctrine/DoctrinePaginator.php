@@ -7,20 +7,34 @@ namespace App\Shared\Infrastructure\Doctrine;
 use App\Shared\Domain\Repository\PaginatorInterface;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
+/**
+ * @template T of object
+ *
+ * @implements PaginatorInterface<T>
+ */
 final class DoctrinePaginator implements PaginatorInterface
 {
-    private ?int $firstResult;
-    private ?int $maxResults;
+    private readonly int $firstResult;
+    private readonly int $maxResults;
 
+    /**
+     * @param Paginator<T> $paginator
+     */
     public function __construct(
-        private Paginator $paginator
+        private readonly Paginator $paginator,
     ) {
-        $this->firstResult = $paginator->getQuery()->getFirstResult();
-        $this->maxResults = $paginator->getQuery()->getMaxResults();
-
-        if (null === $this->firstResult || null === $this->maxResults) {
-            throw new \InvalidArgumentException('Missing firstResult and maxResults from the query.');
+        $firstResult = $paginator->getQuery()->getFirstResult();
+        if (null === $firstResult) {
+            throw new \InvalidArgumentException('Missing firstResult from the query.');
         }
+
+        $maxResults = $paginator->getQuery()->getMaxResults();
+        if (null === $maxResults) {
+            throw new \InvalidArgumentException('Missing maxResults from the query.');
+        }
+
+        $this->firstResult = $firstResult;
+        $this->maxResults = $maxResults;
     }
 
     public function getItemsPerPage(): int
@@ -56,6 +70,9 @@ final class DoctrinePaginator implements PaginatorInterface
         return iterator_count($this->getIterator());
     }
 
+    /**
+     * @return \Traversable<T>
+     */
     public function getIterator(): \Traversable
     {
         return $this->paginator->getIterator();

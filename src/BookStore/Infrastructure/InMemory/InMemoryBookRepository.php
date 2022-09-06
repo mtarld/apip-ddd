@@ -10,6 +10,9 @@ use App\BookStore\Domain\ValueObject\Author;
 use App\BookStore\Domain\ValueObject\BookId;
 use App\Shared\Infrastructure\InMemory\InMemoryRepository;
 
+/**
+ * @extends InMemoryRepository<Book>
+ */
 final class InMemoryBookRepository extends InMemoryRepository implements BookRepositoryInterface
 {
     public function add(Book $book): void
@@ -35,7 +38,7 @@ final class InMemoryBookRepository extends InMemoryRepository implements BookRep
     public function withCheapestsFirst(): static
     {
         $cloned = clone $this;
-        usort($cloned->entities, fn (Book $a, Book $b) => $a->price <=> $b->price);
+        uasort($cloned->entities, fn (Book $a, Book $b) => $a->price <=> $b->price);
 
         return $cloned;
     }

@@ -8,15 +8,16 @@ use ApiPlatform\State\Pagination\PaginatorInterface;
 
 /**
  * @template T of object
+ *
  * @implements \IteratorAggregate<T>
  */
 final class Paginator implements PaginatorInterface, \IteratorAggregate
 {
     /**
-     * @param iterable<T>
+     * @param \Traversable<T> $items
      */
     public function __construct(
-        private iterable $items,
+        private \Traversable $items,
         private float $currentPage,
         private float $itemsPerPage,
         private float $lastPage,
@@ -54,6 +55,6 @@ final class Paginator implements PaginatorInterface, \IteratorAggregate
      */
     public function getIterator(): \Traversable
     {
-        return new \ArrayIterator($this->items);
+        return $this->items;
     }
 }

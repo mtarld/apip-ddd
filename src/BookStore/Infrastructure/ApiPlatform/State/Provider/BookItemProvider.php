@@ -11,6 +11,7 @@ use App\BookStore\Domain\Model\Book;
 use App\BookStore\Domain\ValueObject\BookId;
 use App\BookStore\Infrastructure\ApiPlatform\Resource\BookResource;
 use App\Shared\Application\Query\QueryBusInterface;
+use Symfony\Component\Uid\Uuid;
 
 final class BookItemProvider implements ProviderInterface
 {
@@ -24,8 +25,11 @@ final class BookItemProvider implements ProviderInterface
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
+        /** @var string $id */
+        $id = $uriVariables['id'];
+
         /** @var Book|null $model */
-        $model = $this->queryBus->ask(new FindBookQuery(new BookId($uriVariables['id'])));
+        $model = $this->queryBus->ask(new FindBookQuery(new BookId(Uuid::fromString($id))));
 
         return null !== $model ? BookResource::fromModel($model) : null;
     }
