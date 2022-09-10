@@ -25,7 +25,6 @@ use App\BookStore\Infrastructure\ApiPlatform\State\Provider\BookCollectionProvid
 use App\BookStore\Infrastructure\ApiPlatform\State\Provider\BookItemProvider;
 use App\BookStore\Infrastructure\ApiPlatform\State\Provider\CheapestBooksProvider;
 use Symfony\Component\Uid\AbstractUid;
-use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
@@ -103,7 +102,6 @@ final class BookResource
         #[Assert\PositiveOrZero(groups: ['create', 'Default'])]
         public ?int $price = null,
     ) {
-        $this->id = $id ?? Uuid::v4();
     }
 
     public static function fromModel(Book $book): static
