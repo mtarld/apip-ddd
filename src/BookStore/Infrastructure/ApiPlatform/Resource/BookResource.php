@@ -33,32 +33,32 @@ use Symfony\Component\Validator\Constraints as Assert;
         // queries
         new GetCollection(
             '/books/cheapest.{_format}',
-            provider: CheapestBooksProvider::class,
-            paginationEnabled: false,
             openapiContext: ['summary' => 'Find cheapest Book resources.'],
+            paginationEnabled: false,
+            provider: CheapestBooksProvider::class,
         ),
 
         // commands
         new Post(
             '/books/anonymize.{_format}',
-            input: AnonymizeBooksCommand::class,
-            processor: AnonymizeBooksProcessor::class,
-            output: false,
             status: 202,
             openapiContext: ['summary' => 'Anonymize author of every Book resources.'],
+            input: AnonymizeBooksCommand::class,
+            output: false,
+            processor: AnonymizeBooksProcessor::class,
         ),
         new Post(
             '/books/{id}/discount.{_format}',
+            openapiContext: ['summary' => 'Apply a discount percentage on a Book resource.'],
             input: DiscountBookPayload::class,
             provider: BookItemProvider::class,
             processor: DiscountBookProcessor::class,
-            openapiContext: ['summary' => 'Apply a discount percentage on a Book resource.'],
         ),
 
         // basic crud
         new GetCollection(
-            provider: BookCollectionProvider::class,
             filters: [AuthorFilter::class],
+            provider: BookCollectionProvider::class,
         ),
         new Get(
             provider: BookItemProvider::class,
