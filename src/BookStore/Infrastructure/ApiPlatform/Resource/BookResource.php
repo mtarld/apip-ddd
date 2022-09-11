@@ -86,18 +86,23 @@ final class BookResource
     public function __construct(
         #[ApiProperty(identifier: true, readable: false, writable: false)]
         public ?AbstractUid $id = null,
+
         #[Assert\NotNull(groups: ['create'])]
         #[Assert\Length(min: 1, max: 255, groups: ['create', 'Default'])]
         public ?string $name = null,
+
         #[Assert\NotNull(groups: ['create'])]
         #[Assert\Length(min: 1, max: 1023, groups: ['create', 'Default'])]
         public ?string $description = null,
+
         #[Assert\NotNull(groups: ['create'])]
         #[Assert\Length(min: 1, max: 255, groups: ['create', 'Default'])]
         public ?string $author = null,
+
         #[Assert\NotNull(groups: ['create'])]
         #[Assert\Length(min: 1, max: 65535, groups: ['create', 'Default'])]
         public ?string $content = null,
+
         #[Assert\NotNull(groups: ['create'])]
         #[Assert\PositiveOrZero(groups: ['create', 'Default'])]
         public ?int $price = null,
