@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     operations: [
-        new Get(),
+        new Get(), // TODO remove me when fixed in API Platform
         new Post(),
         new Delete(),
     ],
@@ -24,7 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Subscription
 {
     public function __construct(
-        #[ApiProperty(identifier: true, readable: false, writable: false)]
+        #[ApiProperty(readable: false, writable: false)]
         #[ORM\Id]
         #[ORM\Column(type: 'uuid', unique: true)]
         #[ORM\GeneratedValue(strategy: 'CUSTOM')]
