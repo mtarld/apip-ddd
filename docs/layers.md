@@ -1,3 +1,0 @@
-# Layers
-[Back](../README.md)
-
