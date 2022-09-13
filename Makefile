@@ -42,7 +42,7 @@ database:
 
 ## Install the whole dev environment
 install:
-	# @$(DC) build
+	@$(DC) build
 	@$(MAKE) start -s
 	@$(MAKE) vendor -s
 	@$(MAKE) db-reset -s
@@ -82,7 +82,7 @@ db-reset: db-create db-update
 #################################
 Tests:
 
-## Run codestyle analysis
+## Run codestyle static analysis
 php-cs-fixer:
 	@$(EXEC) vendor/bin/php-cs-fixer fix --dry-run --diff
 
@@ -90,22 +90,22 @@ php-cs-fixer:
 psalm:
 	@$(EXEC) vendor/bin/psalm --show-info=true
 
+## Run code depedencies static analysis
+deptrac:
+	@echo "\n${YELLOW}Checking Bounded contexts...${RESET}"
+	@$(EXEC) vendor/bin/deptrac analyze --fail-on-uncovered --report-uncovered --no-progress --cache-file .deptrac_bc.cache --config-file deptrac_bc.yaml
+
+	@echo "\n${YELLOW}Checking Hexagonal layers...${RESET}"
+	@$(EXEC) vendor/bin/deptrac analyze --fail-on-uncovered --report-uncovered --no-progress --cache-file .deptrac_hexa.cache --config-file deptrac_hexa.yaml
+
 ## Run phpunit tests
 phpunit:
 	@$(EXEC) bin/phpunit
 
-## Run layers depedencies analysis
-deptrac:
-	@echo "\n\e[7mChecking Bounded contexts...\e[0m"
-	@$(EXEC) vendor/bin/deptrac analyze --fail-on-uncovered --report-uncovered --no-progress --cache-file .deptrac_bc.cache --config-file deptrac_bc.yaml
-
-	@echo "\n\e[7mChecking Hexagonal layers...\e[0m"
-	@$(EXEC) vendor/bin/deptrac analyze --fail-on-uncovered --report-uncovered --no-progress --cache-file .deptrac_hexa.cache --config-file deptrac_hexa.yaml
-
 ## Run either static analysis and tests
-ci: php-cs-fixer psalm phpunit
+ci: php-cs-fixer psalm deptrac phpunit
 
-.PHONY: php-cs-fixer psalm phpunit ci
+.PHONY: php-cs-fixer psalm deptrac phpunit ci
 
 #################################
 Tools:
