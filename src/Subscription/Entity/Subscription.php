@@ -7,7 +7,6 @@ namespace App\Subscription\Entity;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
-use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
@@ -15,7 +14,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     operations: [
-        new Get(),
         new Post(),
         new Delete(),
     ],
@@ -24,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Subscription
 {
     public function __construct(
-        #[ApiProperty(identifier: true, readable: false, writable: false)]
+        #[ApiProperty(readable: false, writable: false)]
         #[ORM\Id]
         #[ORM\Column(type: 'uuid', unique: true)]
         #[ORM\GeneratedValue(strategy: 'CUSTOM')]

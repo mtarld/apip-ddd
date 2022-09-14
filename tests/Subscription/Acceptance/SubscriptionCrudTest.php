@@ -41,29 +41,6 @@ final class SubscriptionCrudTest extends ApiTestCase
         static::$connection->executeStatement('TRUNCATE subscription');
     }
 
-    public function testReturnSubscription(): void
-    {
-        $client = static::createClient();
-
-        /** @var EntityManagerInterface $em */
-        $em = static::getContainer()->get(EntityManagerInterface::class);
-        $repository = $em->getRepository(Subscription::class);
-
-        $subscription = DummySubscriptionFactory::createSubscription(email: 'foo@bar.com');
-
-        $em->persist($subscription);
-        $em->flush();
-
-        $client->request('GET', sprintf('/api/subscriptions/%s', (string) $subscription->id));
-
-        static::assertResponseIsSuccessful();
-        static::assertMatchesResourceItemJsonSchema(Subscription::class);
-
-        static::assertJsonContains([
-            'email' => 'foo@bar.com',
-        ]);
-    }
-
     public function testCreateSubscription(): void
     {
         $client = static::createClient();
