@@ -10,7 +10,7 @@ use App\Shared\Application\Command\CommandHandlerInterface;
 
 final class CreateBookCommandHandler implements CommandHandlerInterface
 {
-    public function __construct(private BookRepositoryInterface $bookRepository)
+    public function __construct(private readonly BookRepositoryInterface $bookRepository)
     {
     }
 
@@ -24,7 +24,7 @@ final class CreateBookCommandHandler implements CommandHandlerInterface
             $command->price,
         );
 
-        $this->bookRepository->add($book);
+        $this->bookRepository->save($book);
 
         return $book;
     }

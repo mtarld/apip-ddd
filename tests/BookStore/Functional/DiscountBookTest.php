@@ -31,7 +31,7 @@ final class DiscountBookTest extends KernelTestCase
         $commandBus = static::getContainer()->get(CommandBusInterface::class);
 
         $book = DummyBookFactory::createBook(price: $initialAmount);
-        $bookRepository->add($book);
+        $bookRepository->save($book);
 
         $commandBus->dispatch(new DiscountBookCommand($book->id, new Discount($discount)));
 

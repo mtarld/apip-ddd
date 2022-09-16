@@ -26,7 +26,7 @@ final class BookCrudTest extends ApiTestCase
         $bookRepository = static::getContainer()->get(BookRepositoryInterface::class);
 
         for ($i = 0; $i < 100; ++$i) {
-            $bookRepository->add(DummyBookFactory::createBook());
+            $bookRepository->save(DummyBookFactory::createBook());
         }
 
         $client->request('GET', '/api/books');
@@ -51,9 +51,9 @@ final class BookCrudTest extends ApiTestCase
         /** @var BookRepositoryInterface $bookRepository */
         $bookRepository = static::getContainer()->get(BookRepositoryInterface::class);
 
-        $bookRepository->add(DummyBookFactory::createBook(author: 'authorOne'));
-        $bookRepository->add(DummyBookFactory::createBook(author: 'authorOne'));
-        $bookRepository->add(DummyBookFactory::createBook(author: 'authorTwo'));
+        $bookRepository->save(DummyBookFactory::createBook(author: 'authorOne'));
+        $bookRepository->save(DummyBookFactory::createBook(author: 'authorOne'));
+        $bookRepository->save(DummyBookFactory::createBook(author: 'authorTwo'));
 
         $client->request('GET', '/api/books?author=authorOne');
 
@@ -83,7 +83,7 @@ final class BookCrudTest extends ApiTestCase
             content: 'content',
             price: 1000,
         );
-        $bookRepository->add($book);
+        $bookRepository->save($book);
 
         $client->request('GET', sprintf('/api/books/%s', (string) $book->id));
 
@@ -186,7 +186,7 @@ final class BookCrudTest extends ApiTestCase
         $bookRepository = static::getContainer()->get(BookRepositoryInterface::class);
 
         $book = DummyBookFactory::createBook();
-        $bookRepository->add($book);
+        $bookRepository->save($book);
 
         $client->request('PUT', sprintf('/api/books/%s', (string) $book->id), [
             'json' => [
@@ -227,7 +227,7 @@ final class BookCrudTest extends ApiTestCase
         $bookRepository = static::getContainer()->get(BookRepositoryInterface::class);
 
         $book = DummyBookFactory::createBook(name: 'name', description: 'description');
-        $bookRepository->add($book);
+        $bookRepository->save($book);
 
         $client->request('PATCH', sprintf('/api/books/%s', (string) $book->id), [
             'headers' => [
@@ -260,7 +260,7 @@ final class BookCrudTest extends ApiTestCase
         $bookRepository = static::getContainer()->get(BookRepositoryInterface::class);
 
         $book = DummyBookFactory::createBook();
-        $bookRepository->add($book);
+        $bookRepository->save($book);
 
         $response = $client->request('DELETE', sprintf('/api/books/%s', (string) $book->id));
 

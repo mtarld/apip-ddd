@@ -11,7 +11,7 @@ use App\Shared\Application\Command\CommandHandlerInterface;
 
 final class UpdateBookCommandHandler implements CommandHandlerInterface
 {
-    public function __construct(private BookRepositoryInterface $bookRepository)
+    public function __construct(private readonly BookRepositoryInterface $bookRepository)
     {
     }
 
@@ -28,8 +28,7 @@ final class UpdateBookCommandHandler implements CommandHandlerInterface
         $book->content = $command->content ?? $book->content;
         $book->price = $command->price ?? $book->price;
 
-        $this->bookRepository->remove($book);
-        $this->bookRepository->add($book);
+        $this->bookRepository->save($book);
 
         return $book;
     }
