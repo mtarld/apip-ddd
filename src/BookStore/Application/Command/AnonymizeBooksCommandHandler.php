@@ -21,8 +21,7 @@ final class AnonymizeBooksCommandHandler implements CommandHandlerInterface
         foreach ($books as $book) {
             $book->author = new Author($command->anonymizedName);
 
-            $this->bookRepository->remove($book);
-            $this->bookRepository->add($book);
+            $this->bookRepository->save($book);
         }
     }
 }

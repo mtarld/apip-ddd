@@ -38,7 +38,7 @@ final class UpdateBookTest extends KernelTestCase
             price: 1000,
         );
 
-        $bookRepository->add($initialBook);
+        $bookRepository->save($initialBook);
 
         $commandBus->dispatch(new UpdateBookCommand(
             $initialBook->id,

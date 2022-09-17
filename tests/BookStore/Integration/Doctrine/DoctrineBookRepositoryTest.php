@@ -41,7 +41,7 @@ final class DoctrineBookRepositoryTest extends KernelTestCase
         static::$connection->executeStatement('TRUNCATE book');
     }
 
-    public function testAdd(): void
+    public function testSave(): void
     {
         /** @var DoctrineBookRepository $repository */
         $repository = static::getContainer()->get(DoctrineBookRepository::class);
@@ -49,7 +49,7 @@ final class DoctrineBookRepositoryTest extends KernelTestCase
         static::assertEmpty($repository);
 
         $book = DummyBookFactory::createBook();
-        $repository->add($book);
+        $repository->save($book);
 
         static::assertCount(1, $repository);
     }
@@ -60,7 +60,7 @@ final class DoctrineBookRepositoryTest extends KernelTestCase
         $repository = static::getContainer()->get(DoctrineBookRepository::class);
 
         $book = DummyBookFactory::createBook();
-        $repository->add($book);
+        $repository->save($book);
 
         static::assertCount(1, $repository);
 
@@ -76,7 +76,7 @@ final class DoctrineBookRepositoryTest extends KernelTestCase
         static::assertEmpty($repository);
 
         $book = DummyBookFactory::createBook();
-        $repository->add($book);
+        $repository->save($book);
 
         static::assertSame($book, $repository->ofId($book->id));
     }
@@ -86,9 +86,9 @@ final class DoctrineBookRepositoryTest extends KernelTestCase
         /** @var DoctrineBookRepository $repository */
         $repository = static::getContainer()->get(DoctrineBookRepository::class);
 
-        $repository->add(DummyBookFactory::createBook(author: 'authorOne'));
-        $repository->add(DummyBookFactory::createBook(author: 'authorOne'));
-        $repository->add(DummyBookFactory::createBook(author: 'authorTwo'));
+        $repository->save(DummyBookFactory::createBook(author: 'authorOne'));
+        $repository->save(DummyBookFactory::createBook(author: 'authorOne'));
+        $repository->save(DummyBookFactory::createBook(author: 'authorTwo'));
 
         static::assertCount(2, $repository->withAuthor(new Author('authorOne')));
         static::assertCount(1, $repository->withAuthor(new Author('authorTwo')));
@@ -99,9 +99,9 @@ final class DoctrineBookRepositoryTest extends KernelTestCase
         /** @var DoctrineBookRepository $repository */
         $repository = static::getContainer()->get(DoctrineBookRepository::class);
 
-        $repository->add(DummyBookFactory::createBook(price: 1));
-        $repository->add(DummyBookFactory::createBook(price: 3));
-        $repository->add(DummyBookFactory::createBook(price: 2));
+        $repository->save(DummyBookFactory::createBook(price: 1));
+        $repository->save(DummyBookFactory::createBook(price: 3));
+        $repository->save(DummyBookFactory::createBook(price: 2));
 
         $prices = [];
         foreach ($repository->withCheapestsFirst() as $book) {
@@ -144,7 +144,7 @@ final class DoctrineBookRepositoryTest extends KernelTestCase
             DummyBookFactory::createBook(),
         ];
         foreach ($books as $book) {
-            $repository->add($book);
+            $repository->save($book);
         }
 
         $i = 0;
@@ -167,7 +167,7 @@ final class DoctrineBookRepositoryTest extends KernelTestCase
         ];
 
         foreach ($books as $book) {
-            $repository->add($book);
+            $repository->save($book);
         }
 
         $repository = $repository->withPagination(1, 2);
@@ -202,7 +202,7 @@ final class DoctrineBookRepositoryTest extends KernelTestCase
             DummyBookFactory::createBook(),
         ];
         foreach ($books as $book) {
-            $repository->add($book);
+            $repository->save($book);
         }
 
         static::assertCount(count($books), $repository);

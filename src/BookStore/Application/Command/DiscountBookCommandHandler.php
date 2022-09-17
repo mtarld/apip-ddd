@@ -10,7 +10,7 @@ use App\Shared\Application\Command\CommandHandlerInterface;
 
 final class DiscountBookCommandHandler implements CommandHandlerInterface
 {
-    public function __construct(private BookRepositoryInterface $bookRepository)
+    public function __construct(private readonly BookRepositoryInterface $bookRepository)
     {
     }
 
@@ -23,7 +23,6 @@ final class DiscountBookCommandHandler implements CommandHandlerInterface
 
         $book->applyDiscount($command->discount);
 
-        $this->bookRepository->remove($book);
-        $this->bookRepository->add($book);
+        $this->bookRepository->save($book);
     }
 }

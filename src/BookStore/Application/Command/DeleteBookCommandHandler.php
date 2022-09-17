@@ -9,7 +9,7 @@ use App\Shared\Application\Command\CommandHandlerInterface;
 
 final class DeleteBookCommandHandler implements CommandHandlerInterface
 {
-    public function __construct(private BookRepositoryInterface $bookRepository)
+    public function __construct(private readonly BookRepositoryInterface $bookRepository)
     {
     }
 

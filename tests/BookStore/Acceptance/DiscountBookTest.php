@@ -20,7 +20,7 @@ final class DiscountBookTest extends ApiTestCase
         $bookRepository = static::getContainer()->get(BookRepositoryInterface::class);
 
         $book = DummyBookFactory::createBook(price: 1000);
-        $bookRepository->add($book);
+        $bookRepository->save($book);
 
         $client->request('POST', sprintf('/api/books/%s/discount', (string) $book->id), [
             'json' => [
@@ -43,7 +43,7 @@ final class DiscountBookTest extends ApiTestCase
         $bookRepository = static::getContainer()->get(BookRepositoryInterface::class);
 
         $book = DummyBookFactory::createBook(price: 1000);
-        $bookRepository->add($book);
+        $bookRepository->save($book);
 
         $client->request('POST', sprintf('/api/books/%s/discount', (string) $book->id), [
             'json' => [
