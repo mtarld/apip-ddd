@@ -13,11 +13,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 final class AnonymizeBooksTest extends KernelTestCase
 {
-    protected function setUp(): void
-    {
-        static::bootKernel();
-    }
-
     public function testAnonymizeAuthorOfBooks(): void
     {
         /** @var BookRepositoryInterface $bookRepository */

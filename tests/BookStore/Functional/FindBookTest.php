@@ -12,11 +12,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 final class FindBookTest extends KernelTestCase
 {
-    protected function setUp(): void
-    {
-        static::bootKernel();
-    }
-
     public function testFindBook(): void
     {
         /** @var BookRepositoryInterface $bookRepository */

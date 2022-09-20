@@ -12,11 +12,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 final class DeleteBookTest extends KernelTestCase
 {
-    protected function setUp(): void
-    {
-        static::bootKernel();
-    }
-
     public function testDeleteBook(): void
     {
         /** @var BookRepositoryInterface $bookRepository */

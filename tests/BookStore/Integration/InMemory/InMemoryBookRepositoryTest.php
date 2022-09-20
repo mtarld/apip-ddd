@@ -12,11 +12,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 final class InMemoryBookRepositoryTest extends KernelTestCase
 {
-    protected function setUp(): void
-    {
-        static::bootKernel();
-    }
-
     public function testAdd(): void
     {
         /** @var InMemoryBookRepository $repository */

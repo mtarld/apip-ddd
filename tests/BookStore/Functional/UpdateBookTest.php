@@ -17,11 +17,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 final class UpdateBookTest extends KernelTestCase
 {
-    protected function setUp(): void
-    {
-        static::bootKernel();
-    }
-
     public function testUpdateBook(): void
     {
         /** @var BookRepositoryInterface $bookRepository */

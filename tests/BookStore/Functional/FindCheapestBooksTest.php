@@ -13,11 +13,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 final class FindCheapestBooksTest extends KernelTestCase
 {
-    protected function setUp(): void
-    {
-        static::bootKernel();
-    }
-
     public function testReturnOnlyTheCheapestBooks(): void
     {
         /** @var BookRepositoryInterface $bookRepository */
