@@ -1,7 +1,6 @@
 {
     "type": "project",
     "license": "proprietary",
-    "minimum-stability": "dev",
     "prefer-stable": true,
     "authors": [
       {
@@ -13,7 +12,7 @@
         "php": ">=8.1",
         "ext-ctype": "*",
         "ext-iconv": "*",
-        "api-platform/core": "dev-main",
+        "api-platform/core": "^3.0",
         "doctrine/annotations": "^1.0",
         "doctrine/doctrine-bundle": "^2.5",
         "doctrine/orm": "^2.11",

@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "675802821b79b4e404896d9234b41b42",
+    "content-hash": "bb7928cb56af6a57c2d047d499ee0adf",
     "packages": [
         {
             "name": "api-platform/core",
-            "version": "dev-main",
+            "version": "v3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/api-platform/core.git",
-                "reference": "ec8fc2daf2d723027c9528a9b3bf79c0e15cdff6"
+                "reference": "205f59f65f74de82fba07a170f8e6462eaaa8294"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/api-platform/core/zipball/ec8fc2daf2d723027c9528a9b3bf79c0e15cdff6",
-                "reference": "ec8fc2daf2d723027c9528a9b3bf79c0e15cdff6",
+                "url": "https://api.github.com/repos/api-platform/core/zipball/205f59f65f74de82fba07a170f8e6462eaaa8294",
+                "reference": "205f59f65f74de82fba07a170f8e6462eaaa8294",
                 "shasum": ""
             },
             "require": {
@@ -122,7 +122,6 @@
                 "symfony/web-profiler-bundle": "To use the data collector.",
                 "webonyx/graphql-php": "To support GraphQL."
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -163,7 +162,7 @@
             ],
             "support": {
                 "issues": "https://github.com/api-platform/core/issues",
-                "source": "https://github.com/api-platform/core/tree/main"
+                "source": "https://github.com/api-platform/core/tree/v3.0.0"
             },
             "funding": [
                 {
@@ -171,7 +170,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-09-14T07:32:11+00:00"
+            "time": "2022-09-14T14:31:30+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -8208,16 +8207,16 @@
         },
         {
             "name": "sebastian/comparator",
-            "version": "4.0.7",
+            "version": "4.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/comparator.git",
-                "reference": "7fa545db548c90bdebeb9da0583001a252be5578"
+                "reference": "fa0f136dd2334583309d32b62544682ee972b51a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/7fa545db548c90bdebeb9da0583001a252be5578",
-                "reference": "7fa545db548c90bdebeb9da0583001a252be5578",
+                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/fa0f136dd2334583309d32b62544682ee972b51a",
+                "reference": "fa0f136dd2334583309d32b62544682ee972b51a",
                 "shasum": ""
             },
             "require": {
@@ -8270,7 +8269,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/comparator/issues",
-                "source": "https://github.com/sebastianbergmann/comparator/tree/4.0.7"
+                "source": "https://github.com/sebastianbergmann/comparator/tree/4.0.8"
             },
             "funding": [
                 {
@@ -8278,7 +8277,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-09-14T06:33:43+00:00"
+            "time": "2022-09-14T12:41:17+00:00"
         },
         {
             "name": "sebastian/complexity",
@@ -10092,10 +10091,8 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "dev",
-    "stability-flags": {
-        "api-platform/core": 20
-    },
+    "minimum-stability": "stable",
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
