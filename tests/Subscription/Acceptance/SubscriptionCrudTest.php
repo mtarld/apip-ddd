@@ -22,8 +22,6 @@ final class SubscriptionCrudTest extends ApiTestCase
     {
         parent::setUpBeforeClass();
 
-        static::bootKernel();
-
         static::$connection = static::getContainer()->get(Connection::class);
 
         (new Application(static::$kernel))
@@ -37,7 +35,6 @@ final class SubscriptionCrudTest extends ApiTestCase
 
     protected function setUp(): void
     {
-        static::bootKernel();
         static::$connection->executeStatement('TRUNCATE subscription');
     }
 

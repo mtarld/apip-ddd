@@ -14,11 +14,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 final class DiscountBookTest extends KernelTestCase
 {
-    protected function setUp(): void
-    {
-        static::bootKernel();
-    }
-
     /**
      * @dataProvider applyADiscountOnBookDataProvider
      */
