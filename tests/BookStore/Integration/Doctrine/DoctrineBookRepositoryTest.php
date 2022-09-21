@@ -9,6 +9,7 @@ use App\BookStore\Infrastructure\Doctrine\DoctrineBookRepository;
 use App\Shared\Infrastructure\Doctrine\DoctrinePaginator;
 use App\Tests\BookStore\DummyFactory\DummyBookFactory;
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -75,7 +76,9 @@ final class DoctrineBookRepositoryTest extends KernelTestCase
         $book = DummyBookFactory::createBook();
         $repository->save($book);
 
-        static::assertSame($book, $repository->ofId($book->id));
+        static::getContainer()->get(EntityManagerInterface::class)->clear();
+
+        static::assertEquals($book, $repository->ofId($book->id));
     }
 
     public function testWithAuthor(): void
