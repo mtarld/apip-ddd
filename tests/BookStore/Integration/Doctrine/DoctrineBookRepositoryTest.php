@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\BookStore\Integration\Doctrine;
 
+use App\BookStore\Domain\Model\Book;
 use App\BookStore\Domain\ValueObject\Author;
 use App\BookStore\Infrastructure\Doctrine\DoctrineBookRepository;
 use App\Shared\Infrastructure\Doctrine\DoctrinePaginator;
@@ -78,7 +79,7 @@ final class DoctrineBookRepositoryTest extends KernelTestCase
 
         static::getContainer()->get(EntityManagerInterface::class)->clear();
 
-        static::assertEquals($book, $repository->ofId($book->id));
+        static::assertEquals($book, $repository->ofId($book->id()));
     }
 
     public function testWithAuthor(): void
@@ -104,8 +105,9 @@ final class DoctrineBookRepositoryTest extends KernelTestCase
         $repository->save(DummyBookFactory::createBook(price: 2));
 
         $prices = [];
+        /** @var Book $book */
         foreach ($repository->withCheapestsFirst() as $book) {
-            $prices[] = $book->price->amount;
+            $prices[] = $book->price()->amount;
         }
         static::assertSame([1, 2, 3], $prices);
     }

@@ -36,18 +36,18 @@ final class UpdateBookTest extends KernelTestCase
         $bookRepository->save($initialBook);
 
         $commandBus->dispatch(new UpdateBookCommand(
-            $initialBook->id,
+            $initialBook->id(),
             name: new BookName('newName'),
             content: new BookContent('newContent'),
             price: new Price(2000),
         ));
 
-        $book = $bookRepository->ofId($initialBook->id);
+        $book = $bookRepository->ofId($initialBook->id());
 
-        static::assertEquals(new BookName('newName'), $book->name);
-        static::assertEquals(new BookDescription('description'), $book->description);
-        static::assertEquals(new Author('author'), $book->author);
-        static::assertEquals(new BookContent('newContent'), $book->content);
-        static::assertEquals(new Price(2000), $book->price);
+        static::assertEquals(new BookName('newName'), $book->name());
+        static::assertEquals(new BookDescription('description'), $book->description());
+        static::assertEquals(new Author('author'), $book->author());
+        static::assertEquals(new BookContent('newContent'), $book->content());
+        static::assertEquals(new Price(2000), $book->price());
     }
 }

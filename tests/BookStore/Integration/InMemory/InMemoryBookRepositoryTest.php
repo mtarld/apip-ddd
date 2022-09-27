@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\BookStore\Integration\InMemory;
 
+use App\BookStore\Domain\Model\Book;
 use App\BookStore\Domain\ValueObject\Author;
 use App\BookStore\Infrastructure\InMemory\InMemoryBookRepository;
 use App\Shared\Infrastructure\InMemory\InMemoryPaginator;
@@ -49,7 +50,7 @@ final class InMemoryBookRepositoryTest extends KernelTestCase
         $book = DummyBookFactory::createBook();
         $repository->save($book);
 
-        static::assertSame($book, $repository->ofId($book->id));
+        static::assertSame($book, $repository->ofId($book->id()));
     }
 
     public function testWithAuthor(): void
@@ -75,8 +76,9 @@ final class InMemoryBookRepositoryTest extends KernelTestCase
         $repository->save(DummyBookFactory::createBook(price: 2));
 
         $prices = [];
+        /** @var Book $book */
         foreach ($repository->withCheapestsFirst() as $book) {
-            $prices[] = $book->price->amount;
+            $prices[] = $book->price()->amount;
         }
         static::assertSame([1, 2, 3], $prices);
     }

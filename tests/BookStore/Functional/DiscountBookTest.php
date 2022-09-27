@@ -28,9 +28,9 @@ final class DiscountBookTest extends KernelTestCase
         $book = DummyBookFactory::createBook(price: $initialAmount);
         $bookRepository->save($book);
 
-        $commandBus->dispatch(new DiscountBookCommand($book->id, new Discount($discount)));
+        $commandBus->dispatch(new DiscountBookCommand($book->id(), new Discount($discount)));
 
-        static::assertEquals(new Price($expectedAmount), $bookRepository->ofId($book->id)->price);
+        static::assertEquals(new Price($expectedAmount), $bookRepository->ofId($book->id())->price());
     }
 
     public function applyADiscountOnBookDataProvider(): iterable

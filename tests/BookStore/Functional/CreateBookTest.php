@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\BookStore\Functional;
 
 use App\BookStore\Application\Command\CreateBookCommand;
+use App\BookStore\Domain\Model\Book;
 use App\BookStore\Domain\Repository\BookRepositoryInterface;
 use App\BookStore\Domain\ValueObject\Author;
 use App\BookStore\Domain\ValueObject\BookContent;
@@ -36,12 +37,13 @@ final class CreateBookTest extends KernelTestCase
 
         static::assertCount(1, $bookRepository);
 
+        /** @var Book $book */
         $book = array_values(iterator_to_array($bookRepository))[0];
 
-        static::assertEquals(new BookName('name'), $book->name);
-        static::assertEquals(new BookDescription('description'), $book->description);
-        static::assertEquals(new Author('author'), $book->author);
-        static::assertEquals(new BookContent('content'), $book->content);
-        static::assertEquals(new Price(1000), $book->price);
+        static::assertEquals(new BookName('name'), $book->name());
+        static::assertEquals(new BookDescription('description'), $book->description());
+        static::assertEquals(new Author('author'), $book->author());
+        static::assertEquals(new BookContent('content'), $book->content());
+        static::assertEquals(new Price(1000), $book->price());
     }
 }
