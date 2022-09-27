@@ -17,25 +17,39 @@ use Doctrine\ORM\Mapping as ORM;
 class Book
 {
     #[ORM\Embedded(columnPrefix: false)]
-    public BookId $id;
+    private readonly BookId $id;
 
     public function __construct(
         #[ORM\Embedded(columnPrefix: false)]
-        public BookName $name,
+        private BookName $name,
 
         #[ORM\Embedded(columnPrefix: false)]
-        public BookDescription $description,
+        private BookDescription $description,
 
         #[ORM\Embedded(columnPrefix: false)]
-        public Author $author,
+        private Author $author,
 
         #[ORM\Embedded(columnPrefix: false)]
-        public BookContent $content,
+        private BookContent $content,
 
         #[ORM\Embedded(columnPrefix: false)]
-        public Price $price,
+        private Price $price,
     ) {
         $this->id = new BookId();
+    }
+
+    public function update(
+        ?BookName $name = null,
+        ?BookDescription $description = null,
+        ?Author $author = null,
+        ?BookContent $content = null,
+        ?Price $price = null
+    ): void {
+        $this->name = $name ?? $this->name;
+        $this->description = $description ?? $this->description;
+        $this->author = $author ?? $this->author;
+        $this->content = $content ?? $this->content;
+        $this->price = $price ?? $this->price;
     }
 
     public function applyDiscount(Discount $discount): static
@@ -43,5 +57,35 @@ class Book
         $this->price = $this->price->applyDiscount($discount);
 
         return $this;
+    }
+
+    public function id(): BookId
+    {
+        return $this->id;
+    }
+
+    public function name(): BookName
+    {
+        return $this->name;
+    }
+
+    public function description(): BookDescription
+    {
+        return $this->description;
+    }
+
+    public function author(): Author
+    {
+        return $this->author;
+    }
+
+    public function content(): BookContent
+    {
+        return $this->content;
+    }
+
+    public function price(): Price
+    {
+        return $this->price;
     }
 }

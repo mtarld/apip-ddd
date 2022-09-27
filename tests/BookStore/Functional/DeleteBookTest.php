@@ -25,7 +25,7 @@ final class DeleteBookTest extends KernelTestCase
 
         static::assertCount(1, $bookRepository);
 
-        $commandBus->dispatch(new DeleteBookCommand($book->id));
+        $commandBus->dispatch(new DeleteBookCommand($book->id()));
 
         static::assertEmpty($bookRepository);
     }

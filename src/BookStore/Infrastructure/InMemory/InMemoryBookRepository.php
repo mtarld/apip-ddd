@@ -17,12 +17,12 @@ final class InMemoryBookRepository extends InMemoryRepository implements BookRep
 {
     public function save(Book $book): void
     {
-        $this->entities[(string) $book->id] = $book;
+        $this->entities[(string) $book->id()] = $book;
     }
 
     public function remove(Book $book): void
     {
-        unset($this->entities[(string) $book->id]);
+        unset($this->entities[(string) $book->id()]);
     }
 
     public function ofId(BookId $id): ?Book
@@ -32,13 +32,13 @@ final class InMemoryBookRepository extends InMemoryRepository implements BookRep
 
     public function withAuthor(Author $author): static
     {
-        return $this->filter(fn (Book $book) => $book->author->isEqualTo($author));
+        return $this->filter(fn (Book $book) => $book->author()->isEqualTo($author));
     }
 
     public function withCheapestsFirst(): static
     {
         $cloned = clone $this;
-        uasort($cloned->entities, fn (Book $a, Book $b) => $a->price <=> $b->price);
+        uasort($cloned->entities, fn (Book $a, Book $b) => $a->price() <=> $b->price());
 
         return $cloned;
     }

@@ -32,7 +32,7 @@ final class AnonymizeBooksTest extends ApiTestCase
         static::assertEmpty($response->getContent());
 
         foreach ($bookRepository as $book) {
-            self::assertEquals(new Author('anon.'), $book->author);
+            self::assertEquals(new Author('anon.'), $book->author());
         }
     }
 }

@@ -22,7 +22,7 @@ final class DiscountBookTest extends ApiTestCase
         $book = DummyBookFactory::createBook(price: 1000);
         $bookRepository->save($book);
 
-        $client->request('POST', sprintf('/api/books/%s/discount', (string) $book->id), [
+        $client->request('POST', sprintf('/api/books/%s/discount', $book->id()), [
             'json' => [
                 'discountPercentage' => 20,
             ],
@@ -32,7 +32,7 @@ final class DiscountBookTest extends ApiTestCase
         static::assertMatchesResourceItemJsonSchema(BookResource::class);
         static::assertJsonContains(['price' => 800]);
 
-        static::assertEquals(new Price(800), $bookRepository->ofId($book->id)->price);
+        static::assertEquals(new Price(800), $bookRepository->ofId($book->id())->price());
     }
 
     public function testValidateDiscountAmount(): void
@@ -45,7 +45,7 @@ final class DiscountBookTest extends ApiTestCase
         $book = DummyBookFactory::createBook(price: 1000);
         $bookRepository->save($book);
 
-        $client->request('POST', sprintf('/api/books/%s/discount', (string) $book->id), [
+        $client->request('POST', sprintf('/api/books/%s/discount', $book->id()), [
             'json' => [
                 'discountPercentage' => 200,
             ],
@@ -58,6 +58,6 @@ final class DiscountBookTest extends ApiTestCase
             ],
         ]);
 
-        static::assertEquals(new Price(1000), $bookRepository->ofId($book->id)->price);
+        static::assertEquals(new Price(1000), $bookRepository->ofId($book->id())->price());
     }
 }

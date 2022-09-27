@@ -22,11 +22,13 @@ final class UpdateBookCommandHandler implements CommandHandlerInterface
             throw new MissingBookException($command->id);
         }
 
-        $book->name = $command->name ?? $book->name;
-        $book->description = $command->description ?? $book->description;
-        $book->author = $command->author ?? $book->author;
-        $book->content = $command->content ?? $book->content;
-        $book->price = $command->price ?? $book->price;
+        $book->update(
+            name: $command->name,
+            description: $command->description,
+            author: $command->author,
+            content: $command->content,
+            price: $command->price,
+        );
 
         $this->bookRepository->save($book);
 

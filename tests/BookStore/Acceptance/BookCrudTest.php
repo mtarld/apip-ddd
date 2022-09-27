@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\BookStore\Acceptance;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
+use App\BookStore\Domain\Model\Book;
 use App\BookStore\Domain\Repository\BookRepositoryInterface;
 use App\BookStore\Domain\ValueObject\Author;
 use App\BookStore\Domain\ValueObject\BookContent;
@@ -85,7 +86,7 @@ final class BookCrudTest extends ApiTestCase
         );
         $bookRepository->save($book);
 
-        $client->request('GET', sprintf('/api/books/%s', (string) $book->id));
+        $client->request('GET', sprintf('/api/books/%s', (string) $book->id()));
 
         static::assertResponseIsSuccessful();
         static::assertMatchesResourceItemJsonSchema(BookResource::class);
@@ -126,15 +127,16 @@ final class BookCrudTest extends ApiTestCase
 
         $id = new BookId(Uuid::fromString(str_replace('/api/books/', '', $response->toArray()['@id'])));
 
+        /** @var Book $book */
         $book = static::getContainer()->get(BookRepositoryInterface::class)->ofId($id);
 
         static::assertNotNull($book);
-        static::assertEquals($id, $book->id);
-        static::assertEquals(new BookName('name'), $book->name);
-        static::assertEquals(new BookDescription('description'), $book->description);
-        static::assertEquals(new Author('author'), $book->author);
-        static::assertEquals(new BookContent('content'), $book->content);
-        static::assertEquals(new Price(1000), $book->price);
+        static::assertEquals($id, $book->id());
+        static::assertEquals(new BookName('name'), $book->name());
+        static::assertEquals(new BookDescription('description'), $book->description());
+        static::assertEquals(new Author('author'), $book->author());
+        static::assertEquals(new BookContent('content'), $book->content());
+        static::assertEquals(new Price(1000), $book->price());
     }
 
     public function testCannotCreateBookWithoutValidPayload(): void
@@ -188,7 +190,7 @@ final class BookCrudTest extends ApiTestCase
         $book = DummyBookFactory::createBook();
         $bookRepository->save($book);
 
-        $client->request('PUT', sprintf('/api/books/%s', (string) $book->id), [
+        $client->request('PUT', sprintf('/api/books/%s', $book->id()), [
             'json' => [
                 'name' => 'newName',
                 'description' => 'newDescription',
@@ -209,14 +211,14 @@ final class BookCrudTest extends ApiTestCase
             'price' => 2000,
         ]);
 
-        $updatedBook = $bookRepository->ofId($book->id);
+        $updatedBook = $bookRepository->ofId($book->id());
 
         static::assertNotNull($book);
-        static::assertEquals(new BookName('newName'), $updatedBook->name);
-        static::assertEquals(new BookDescription('newDescription'), $updatedBook->description);
-        static::assertEquals(new Author('newAuthor'), $updatedBook->author);
-        static::assertEquals(new BookContent('newContent'), $updatedBook->content);
-        static::assertEquals(new Price(2000), $updatedBook->price);
+        static::assertEquals(new BookName('newName'), $updatedBook->name());
+        static::assertEquals(new BookDescription('newDescription'), $updatedBook->description());
+        static::assertEquals(new Author('newAuthor'), $updatedBook->author());
+        static::assertEquals(new BookContent('newContent'), $updatedBook->content());
+        static::assertEquals(new Price(2000), $updatedBook->price());
     }
 
     public function testPartiallyUpdateBook(): void
@@ -229,7 +231,7 @@ final class BookCrudTest extends ApiTestCase
         $book = DummyBookFactory::createBook(name: 'name', description: 'description');
         $bookRepository->save($book);
 
-        $client->request('PATCH', sprintf('/api/books/%s', (string) $book->id), [
+        $client->request('PATCH', sprintf('/api/books/%s', $book->id()), [
             'headers' => [
                 'Content-Type' => 'application/merge-patch+json',
             ],
@@ -245,11 +247,11 @@ final class BookCrudTest extends ApiTestCase
             'name' => 'newName',
         ]);
 
-        $updatedBook = $bookRepository->ofId($book->id);
+        $updatedBook = $bookRepository->ofId($book->id());
 
         static::assertNotNull($book);
-        static::assertEquals(new BookName('newName'), $updatedBook->name);
-        static::assertEquals(new BookDescription('description'), $updatedBook->description);
+        static::assertEquals(new BookName('newName'), $updatedBook->name());
+        static::assertEquals(new BookDescription('description'), $updatedBook->description());
     }
 
     public function testDeleteBook(): void
@@ -262,11 +264,11 @@ final class BookCrudTest extends ApiTestCase
         $book = DummyBookFactory::createBook();
         $bookRepository->save($book);
 
-        $response = $client->request('DELETE', sprintf('/api/books/%s', (string) $book->id));
+        $response = $client->request('DELETE', sprintf('/api/books/%s', $book->id()));
 
         static::assertResponseIsSuccessful();
         static::assertEmpty($response->getContent());
 
-        static::assertNull($bookRepository->ofId($book->id));
+        static::assertNull($bookRepository->ofId($book->id()));
     }
 }
