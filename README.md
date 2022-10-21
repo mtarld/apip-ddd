@@ -3,7 +3,7 @@
 An example project of **Domain Driven Design** using **API Platform 3** and following the **hexagonal architecture**.
 
 This example has been explained during the [API Platform conference 2022](https://api-platform.com/con/2022/conferences/domain-driven-design-with-api-platform-3/)
-([slides](https://slides.com/mathiasarlaud/apip-con-ddd-api-p-3), video).
+([slides](https://slides.com/mathiasarlaud/apip-con-ddd-api-p-3), [video](https://www.youtube.com/watch?v=SSQal3Msi9g)).
 
 ## Getting started
 If you want to try to use and tweak that example, you can follow these steps:
