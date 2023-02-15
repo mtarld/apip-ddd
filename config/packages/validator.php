@@ -10,4 +10,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'email_validation_mode' => 'html5',
         ],
     ]);
+    if ('test' === $containerConfigurator->env()) {
+        $containerConfigurator->extension('framework', [
+            'validation' => [
+                'not_compromised_password' => false,
+            ],
+        ]);
+    }
 };

@@ -70,9 +70,6 @@ final class DoctrinePaginator implements PaginatorInterface
         return iterator_count($this->getIterator());
     }
 
-    /**
-     * @return \Traversable<T>
-     */
     public function getIterator(): \Traversable
     {
         return $this->paginator->getIterator();

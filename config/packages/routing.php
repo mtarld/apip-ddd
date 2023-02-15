@@ -6,6 +6,15 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->extension('framework', [
-        'router' => ['utf8' => true],
+        'router' => [
+            'utf8' => true,
+        ],
     ]);
+    if ('prod' === $containerConfigurator->env()) {
+        $containerConfigurator->extension('framework', [
+            'router' => [
+                'strict_requirements' => null,
+            ],
+        ]);
+    }
 };

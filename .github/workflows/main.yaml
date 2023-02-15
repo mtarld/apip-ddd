@@ -9,7 +9,7 @@ jobs:
         name: PHP-CS-Fixer
         steps:
             - name: Checkout
-              uses: actions/checkout@v2
+              uses: actions/checkout@v3
 
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
@@ -25,19 +25,19 @@ jobs:
         name: Psalm
         steps:
             -   name: Checkout
-                uses: actions/checkout@v2
+                uses: actions/checkout@v3
 
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
               with:
-                  php-version: '8.1'
+                  php-version: '8.2'
 
             - name: Get composer cache directory
               id: composercache
               run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
             - name: Cache dependencies
-              uses: actions/cache@v2
+              uses: actions/cache@v3
               with:
                   path: ${{ steps.composercache.outputs.dir }}
                   key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
@@ -54,19 +54,19 @@ jobs:
         name: Deptrac bounded contexts
         steps:
             -   name: Checkout
-                uses: actions/checkout@v2
+                uses: actions/checkout@v3
 
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
               with:
-                  php-version: '8.1'
+                  php-version: '8.2'
 
             - name: Get composer cache directory
               id: composercache
               run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
             - name: Cache dependencies
-              uses: actions/cache@v2
+              uses: actions/cache@v3
               with:
                   path: ${{ steps.composercache.outputs.dir }}
                   key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
@@ -83,19 +83,19 @@ jobs:
         name: Deptrac hexagonal
         steps:
             -   name: Checkout
-                uses: actions/checkout@v2
+                uses: actions/checkout@v3
 
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
               with:
-                  php-version: '8.1'
+                  php-version: '8.2'
 
             - name: Get composer cache directory
               id: composercache
               run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
             - name: Cache dependencies
-              uses: actions/cache@v2
+              uses: actions/cache@v3
               with:
                   path: ${{ steps.composercache.outputs.dir }}
                   key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
@@ -116,7 +116,7 @@ jobs:
                 image: postgres:13-alpine
                 env:
                     POSTGRES_USER: symfony
-                    POSTGRES_PASSWORD: ChangeMe
+                    POSTGRES_PASSWORD: '!ChangeMe!'
                 options: >-
                     --health-cmd pg_isready
                     --health-interval 10s
@@ -127,19 +127,19 @@ jobs:
 
         steps:
             - name: Checkout
-              uses: actions/checkout@v2
+              uses: actions/checkout@v3
 
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
               with:
-                  php-version: '8.1'
+                  php-version: '8.2'
 
             - name: Get composer cache directory
               id: composercache
               run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
             - name: Cache dependencies
-              uses: actions/cache@v2
+              uses: actions/cache@v3
               with:
                   path: ${{ steps.composercache.outputs.dir }}
                   key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
@@ -151,4 +151,4 @@ jobs:
             - name: Run tests
               run: bin/phpunit
               env:
-                  DATABASE_URL: 'postgresql://symfony:ChangeMe@localhost:5432/app_test?serverVersion=13&charset=utf8'
+                  DATABASE_URL: 'postgresql://symfony:!ChangeMe!@localhost:5432/app_test?serverVersion=15&charset=utf8'

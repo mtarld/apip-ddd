@@ -7,12 +7,13 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->extension('security', [
-        'enable_authenticator_manager' => true,
         'password_hashers' => [
             PasswordAuthenticatedUserInterface::class => 'auto',
         ],
         'providers' => [
-            'users_in_memory' => ['memory' => null],
+                'users_in_memory' => [
+                    'memory' => null,
+                ],
         ],
         'firewalls' => [
             'dev' => [
@@ -26,4 +27,16 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ],
         'access_control' => null,
     ]);
+    if ('test' === $containerConfigurator->env()) {
+        $containerConfigurator->extension('security', [
+            'password_hashers' => [
+                PasswordAuthenticatedUserInterface::class => [
+                    'algorithm' => 'auto',
+                    'cost' => 4,
+                    'time_cost' => 3,
+                    'memory_cost' => 10,
+                ],
+            ],
+        ]);
+    }
 };

@@ -13,6 +13,9 @@ use App\BookStore\Infrastructure\ApiPlatform\Resource\BookResource;
 use App\Shared\Application\Query\QueryBusInterface;
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * @implements ProviderInterface<BookResource>
+ */
 final class BookItemProvider implements ProviderInterface
 {
     public function __construct(

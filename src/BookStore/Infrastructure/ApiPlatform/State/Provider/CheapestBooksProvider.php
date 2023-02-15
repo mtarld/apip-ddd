@@ -11,6 +11,9 @@ use App\BookStore\Domain\Repository\BookRepositoryInterface;
 use App\BookStore\Infrastructure\ApiPlatform\Resource\BookResource;
 use App\Shared\Application\Query\QueryBusInterface;
 
+/**
+ * @implements ProviderInterface<BookResource>
+ */
 final class CheapestBooksProvider implements ProviderInterface
 {
     public function __construct(private QueryBusInterface $queryBus)

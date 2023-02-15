@@ -7,7 +7,7 @@ namespace App\Shared\Domain\Repository;
 /**
  * @template T of object
  *
- * @implements \IteratorAggregate<T>
+ * @extends \IteratorAggregate<array-key, T>
  */
 interface RepositoryInterface extends \IteratorAggregate, \Countable
 {
