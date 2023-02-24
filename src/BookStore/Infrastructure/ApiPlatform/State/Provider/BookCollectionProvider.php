@@ -14,6 +14,9 @@ use App\BookStore\Infrastructure\ApiPlatform\Resource\BookResource;
 use App\Shared\Application\Query\QueryBusInterface;
 use App\Shared\Infrastructure\ApiPlatform\State\Paginator;
 
+/**
+ * @implements ProviderInterface<BookResource>
+ */
 final class BookCollectionProvider implements ProviderInterface
 {
     public function __construct(

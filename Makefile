@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-DC = docker-compose
+DC = docker compose
 EXEC = $(DC) exec php
 COMPOSER = $(EXEC) composer
 
@@ -57,7 +57,7 @@ start:
 
 ## Stop the project
 stop:
-	@$(DC) kill
+	@$(DC) stop
 	@$(DC) rm -v --force
 
 .PHONY: php database install vendor start stop

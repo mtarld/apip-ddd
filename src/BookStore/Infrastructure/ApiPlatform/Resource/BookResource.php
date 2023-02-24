@@ -69,7 +69,8 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Put(
             provider: BookItemProvider::class,
-            processor: UpdateBookProcessor::class
+            processor: UpdateBookProcessor::class,
+            extraProperties: ['standard_put' => true],
         ),
         new Patch(
             provider: BookItemProvider::class,

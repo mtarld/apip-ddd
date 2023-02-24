@@ -61,9 +61,6 @@ final class InMemoryPaginator implements PaginatorInterface
         return iterator_count($this->getIterator());
     }
 
-    /**
-     * @return \Traversable<T>
-     */
     public function getIterator(): \Traversable
     {
         if ($this->currentPage > $this->lastPage) {

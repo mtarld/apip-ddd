@@ -33,9 +33,10 @@ final class UpdateBookProcessor implements ProcessorInterface
     public function process($data, Operation $operation, array $uriVariables = [], array $context = []): mixed
     {
         Assert::isInstanceOf($data, BookResource::class);
+        Assert::isInstanceOf($context['previous_data'], BookResource::class);
 
         $command = new UpdateBookCommand(
-            new BookId($data->id),
+            new BookId($context['previous_data']->id),
             null !== $data->name ? new BookName($data->name) : null,
             null !== $data->description ? new BookDescription($data->description) : null,
             null !== $data->author ? new Author($data->author) : null,

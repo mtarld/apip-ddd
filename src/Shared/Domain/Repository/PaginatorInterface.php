@@ -7,7 +7,7 @@ namespace App\Shared\Domain\Repository;
 /**
  * @template T of object
  *
- * @extends \IteratorAggregate<T>
+ * @extends \IteratorAggregate<array-key, T>
  */
 interface PaginatorInterface extends \IteratorAggregate, \Countable
 {
