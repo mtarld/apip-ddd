@@ -21,7 +21,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->autowire()
         ->autoconfigure();
 
-    $services->load('App\\BookStore\\', __DIR__.'/../../src/BookStore');
+    $services->load('App\\BookStore\\', dirname(__DIR__, 2).'/src/BookStore');
 
     // providers
     $services->set(CheapestBooksProvider::class)

@@ -11,5 +11,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->autowire()
         ->autoconfigure();
 
-    $services->load('App\\Subscription\\', __DIR__.'/../../src/Subscription');
+    $services->load('App\\Subscription\\', dirname(__DIR__, 2).'/src/Subscription');
 };
