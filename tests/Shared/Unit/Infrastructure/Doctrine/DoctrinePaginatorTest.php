@@ -23,7 +23,7 @@ final class DoctrinePaginatorTest extends TestCase
         static::assertSame($currentPage, $paginator->getCurrentPage());
     }
 
-    public function getCurrentPageDataProvider(): iterable
+    public static function getCurrentPageDataProvider(): iterable
     {
         yield [1, 0, 1, 3];
         yield [2, 1, 1, 3];
@@ -41,7 +41,7 @@ final class DoctrinePaginatorTest extends TestCase
         static::assertSame($lastPage, $paginator->getLastPage());
     }
 
-    public function getLastPageDataProvider(): iterable
+    public static function getLastPageDataProvider(): iterable
     {
         yield [3, 1, 3];
         yield [2, 2, 3];

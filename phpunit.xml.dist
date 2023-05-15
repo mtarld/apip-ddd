@@ -7,36 +7,37 @@
   bootstrap="tests/bootstrap.php"
   convertDeprecationsToExceptions="false"
   >
-<php>
-  <ini name="display_errors" value="1" />
-  <ini name="error_reporting" value="-1" />
-  <server name="APP_ENV" value="test" force="true" />
-  <server name="KERNEL_CLASS" value="App\Shared\Infrastructure\Symfony\Kernel" />
-  <server name="SHELL_VERBOSITY" value="-1" />
-  <server name="SYMFONY_PHPUNIT_REMOVE" value="" />
-  <server name="SYMFONY_PHPUNIT_VERSION" value="9.5" />
-</php>
 
-<testsuites>
-  <testsuite name="BookStore">
-    <directory>tests/BookStore</directory>
-  </testsuite>
-  <testsuite name="Shared">
-    <directory>tests/Shared</directory>
-  </testsuite>
-  <testsuite name="Subscription">
-    <directory>tests/Subscription</directory>
-  </testsuite>
-</testsuites>
+  <php>
+    <ini name="display_errors" value="1" />
+    <ini name="error_reporting" value="-1" />
+    <server name="APP_ENV" value="test" force="true" />
+    <server name="KERNEL_CLASS" value="App\Shared\Infrastructure\Symfony\Kernel" />
+    <server name="SHELL_VERBOSITY" value="-1" />
+    <server name="SYMFONY_PHPUNIT_REMOVE" value="" />
+    <server name="SYMFONY_PHPUNIT_VERSION" value="9.5" />
+  </php>
 
-<coverage processUncoveredFiles="true">
-  <include>
-    <directory suffix=".php">src</directory>
-  </include>
-</coverage>
+  <testsuites>
+    <testsuite name="BookStore">
+      <directory>tests/BookStore</directory>
+    </testsuite>
+    <testsuite name="Shared">
+      <directory>tests/Shared</directory>
+    </testsuite>
+    <testsuite name="Subscription">
+      <directory>tests/Subscription</directory>
+    </testsuite>
+  </testsuites>
 
-<listeners>
-  <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
-</listeners>
+  <coverage processUncoveredFiles="true">
+    <include>
+      <directory suffix=".php">src</directory>
+    </include>
+  </coverage>
+
+  <listeners>
+    <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
+  </listeners>
 
 </phpunit>

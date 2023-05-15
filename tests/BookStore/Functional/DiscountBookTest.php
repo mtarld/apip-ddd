@@ -33,7 +33,7 @@ final class DiscountBookTest extends KernelTestCase
         static::assertEquals(new Price($expectedAmount), $bookRepository->ofId($book->id())->price());
     }
 
-    public function applyADiscountOnBookDataProvider(): iterable
+    public static function applyADiscountOnBookDataProvider(): iterable
     {
         yield [100, 0, 100];
         yield [100, 20, 80];
