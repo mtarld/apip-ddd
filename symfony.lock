@@ -134,7 +134,7 @@
             "config/services.php",
             "public/index.php",
             "src/Controller/.gitignore",
-            "src/Kernel.php"
+            "src/Shared/Infrastructure/Symfony/Kernel.php"
         ]
     },
     "symfony/messenger": {

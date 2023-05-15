@@ -11,6 +11,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->autowire()
         ->autoconfigure();
 
-    $services->load('App\\Shared\\', __DIR__.'/../../src/Shared')
-        ->exclude([__DIR__.'/../../src/Shared/Infrastructure/Kernel.php']);
+    $services->load('App\\Shared\\', dirname(__DIR__, 2).'/src/Shared')
+        ->exclude([dirname(__DIR__, 2).'/src/Shared/Infrastructure/Symfony/Kernel.php']);
 };
