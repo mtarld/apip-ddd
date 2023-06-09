@@ -23,10 +23,7 @@ final class BookItemProvider implements ProviderInterface
     ) {
     }
 
-    /**
-     * @return BookResource|null
-     */
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): ?BookResource
     {
         /** @var string $id */
         $id = $uriVariables['id'];

@@ -16,6 +16,7 @@ return (new PhpCsFixer\Config())
             'sort_algorithm' => 'alpha',
         ],
         'declare_strict_types' => true,
+        'nullable_type_declaration_for_default_null_value' => false,
     ])
     ->setRiskyAllowed(true)
     ->setFinder($finder)
