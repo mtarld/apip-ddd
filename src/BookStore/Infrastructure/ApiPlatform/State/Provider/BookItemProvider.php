@@ -16,7 +16,7 @@ use Symfony\Component\Uid\Uuid;
 /**
  * @implements ProviderInterface<BookResource>
  */
-final class BookItemProvider implements ProviderInterface
+final readonly class BookItemProvider implements ProviderInterface
 {
     public function __construct(
         private QueryBusInterface $queryBus,

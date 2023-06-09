@@ -8,9 +8,9 @@ use App\BookStore\Domain\Exception\MissingBookException;
 use App\BookStore\Domain\Repository\BookRepositoryInterface;
 use App\Shared\Application\Command\CommandHandlerInterface;
 
-final class DiscountBookCommandHandler implements CommandHandlerInterface
+final readonly class DiscountBookCommandHandler implements CommandHandlerInterface
 {
-    public function __construct(private readonly BookRepositoryInterface $bookRepository)
+    public function __construct(private BookRepositoryInterface $bookRepository)
     {
     }
 

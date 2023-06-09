@@ -17,7 +17,7 @@ use App\Shared\Application\Command\CommandBusInterface;
 use App\Shared\Application\Query\QueryBusInterface;
 use Webmozart\Assert\Assert;
 
-final class DiscountBookProcessor implements ProcessorInterface
+final readonly class DiscountBookProcessor implements ProcessorInterface
 {
     public function __construct(
         private CommandBusInterface $commandBus,

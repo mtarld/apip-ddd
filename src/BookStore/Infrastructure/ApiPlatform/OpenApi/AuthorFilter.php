@@ -7,7 +7,7 @@ namespace App\BookStore\Infrastructure\ApiPlatform\OpenApi;
 use ApiPlatform\Api\FilterInterface;
 use Symfony\Component\PropertyInfo\Type;
 
-final class AuthorFilter implements FilterInterface
+final readonly class AuthorFilter implements FilterInterface
 {
     public function getDescription(string $resourceClass): array
     {

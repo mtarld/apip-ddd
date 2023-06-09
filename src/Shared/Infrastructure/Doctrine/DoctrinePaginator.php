@@ -12,16 +12,16 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
  *
  * @implements PaginatorInterface<T>
  */
-final class DoctrinePaginator implements PaginatorInterface
+final readonly class DoctrinePaginator implements PaginatorInterface
 {
-    private readonly int $firstResult;
-    private readonly int $maxResults;
+    private int $firstResult;
+    private int $maxResults;
 
     /**
      * @param Paginator<T> $paginator
      */
     public function __construct(
-        private readonly Paginator $paginator,
+        private Paginator $paginator,
     ) {
         $firstResult = $paginator->getQuery()->getFirstResult();
         $maxResults = $paginator->getQuery()->getMaxResults();

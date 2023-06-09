@@ -7,12 +7,12 @@ namespace App\BookStore\Application\Query;
 use App\BookStore\Domain\ValueObject\Author;
 use App\Shared\Application\Query\QueryInterface;
 
-final class FindBooksQuery implements QueryInterface
+final readonly class FindBooksQuery implements QueryInterface
 {
     public function __construct(
-        public readonly ?Author $author = null,
-        public readonly ?int $page = null,
-        public readonly ?int $itemsPerPage = null,
+        public ?Author $author = null,
+        public ?int $page = null,
+        public ?int $itemsPerPage = null,
     ) {
     }
 }

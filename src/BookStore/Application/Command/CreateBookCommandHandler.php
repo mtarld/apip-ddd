@@ -8,7 +8,7 @@ use App\BookStore\Domain\Model\Book;
 use App\BookStore\Domain\Repository\BookRepositoryInterface;
 use App\Shared\Application\Command\CommandHandlerInterface;
 
-final class CreateBookCommandHandler implements CommandHandlerInterface
+final readonly class CreateBookCommandHandler implements CommandHandlerInterface
 {
     public function __construct(private readonly BookRepositoryInterface $bookRepository)
     {

@@ -12,7 +12,7 @@ use App\BookStore\Infrastructure\ApiPlatform\Resource\BookResource;
 use App\Shared\Application\Command\CommandBusInterface;
 use Webmozart\Assert\Assert;
 
-final class DeleteBookProcessor implements ProcessorInterface
+final readonly class DeleteBookProcessor implements ProcessorInterface
 {
     public function __construct(
         private CommandBusInterface $commandBus,

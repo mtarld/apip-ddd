@@ -7,7 +7,7 @@ namespace App\BookStore\Application\Query;
 use App\BookStore\Domain\Repository\BookRepositoryInterface;
 use App\Shared\Application\Query\QueryHandlerInterface;
 
-final class FindBooksQueryHandler implements QueryHandlerInterface
+final readonly class FindBooksQueryHandler implements QueryHandlerInterface
 {
     public function __construct(private BookRepositoryInterface $bookRepository)
     {

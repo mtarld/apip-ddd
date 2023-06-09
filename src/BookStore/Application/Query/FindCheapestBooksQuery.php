@@ -6,9 +6,9 @@ namespace App\BookStore\Application\Query;
 
 use App\Shared\Application\Query\QueryInterface;
 
-final class FindCheapestBooksQuery implements QueryInterface
+final readonly class FindCheapestBooksQuery implements QueryInterface
 {
-    public function __construct(public readonly int $size = 10)
+    public function __construct(public int $size = 10)
     {
     }
 }

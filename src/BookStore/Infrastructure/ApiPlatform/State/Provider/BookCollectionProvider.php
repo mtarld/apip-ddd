@@ -17,7 +17,7 @@ use App\Shared\Infrastructure\ApiPlatform\State\Paginator;
 /**
  * @implements ProviderInterface<BookResource>
  */
-final class BookCollectionProvider implements ProviderInterface
+final readonly class BookCollectionProvider implements ProviderInterface
 {
     public function __construct(
         private QueryBusInterface $queryBus,
