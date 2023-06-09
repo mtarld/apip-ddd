@@ -12,20 +12,20 @@ use Webmozart\Assert\Assert;
  *
  * @implements PaginatorInterface<T>
  */
-final class InMemoryPaginator implements PaginatorInterface
+final readonly class InMemoryPaginator implements PaginatorInterface
 {
-    private readonly int $offset;
-    private readonly int $limit;
-    private readonly int $lastPage;
+    private int $offset;
+    private int $limit;
+    private int $lastPage;
 
     /**
      * @param \Traversable<T> $items
      */
     public function __construct(
-        private readonly \Traversable $items,
-        private readonly int $totalItems,
-        private readonly int $currentPage,
-        private readonly int $itemsPerPage,
+        private \Traversable $items,
+        private int $totalItems,
+        private int $currentPage,
+        private int $itemsPerPage,
     ) {
         Assert::greaterThanEq($totalItems, 0);
         Assert::positiveInteger($currentPage);

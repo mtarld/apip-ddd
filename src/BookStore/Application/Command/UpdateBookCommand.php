@@ -12,15 +12,15 @@ use App\BookStore\Domain\ValueObject\BookName;
 use App\BookStore\Domain\ValueObject\Price;
 use App\Shared\Application\Command\CommandInterface;
 
-final class UpdateBookCommand implements CommandInterface
+final readonly class UpdateBookCommand implements CommandInterface
 {
     public function __construct(
-        public readonly BookId $id,
-        public readonly ?BookName $name = null,
-        public readonly ?BookDescription $description = null,
-        public readonly ?Author $author = null,
-        public readonly ?BookContent $content = null,
-        public readonly ?Price $price = null,
+        public BookId $id,
+        public ?BookName $name = null,
+        public ?BookDescription $description = null,
+        public ?Author $author = null,
+        public ?BookContent $content = null,
+        public ?Price $price = null,
     ) {
     }
 }

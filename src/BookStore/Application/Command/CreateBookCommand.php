@@ -11,14 +11,14 @@ use App\BookStore\Domain\ValueObject\BookName;
 use App\BookStore\Domain\ValueObject\Price;
 use App\Shared\Application\Command\CommandInterface;
 
-final class CreateBookCommand implements CommandInterface
+final readonly class CreateBookCommand implements CommandInterface
 {
     public function __construct(
-        public readonly BookName $name,
-        public readonly BookDescription $description,
-        public readonly Author $author,
-        public readonly BookContent $content,
-        public readonly Price $price,
+        public BookName $name,
+        public BookDescription $description,
+        public Author $author,
+        public BookContent $content,
+        public Price $price,
     ) {
     }
 }

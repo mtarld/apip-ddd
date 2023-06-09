@@ -8,7 +8,7 @@ use App\BookStore\Domain\Model\Book;
 use App\BookStore\Domain\Repository\BookRepositoryInterface;
 use App\Shared\Application\Query\QueryHandlerInterface;
 
-final class FindBookQueryHandler implements QueryHandlerInterface
+final readonly class FindBookQueryHandler implements QueryHandlerInterface
 {
     public function __construct(private BookRepositoryInterface $repository)
     {

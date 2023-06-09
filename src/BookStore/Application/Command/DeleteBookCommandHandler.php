@@ -7,9 +7,9 @@ namespace App\BookStore\Application\Command;
 use App\BookStore\Domain\Repository\BookRepositoryInterface;
 use App\Shared\Application\Command\CommandHandlerInterface;
 
-final class DeleteBookCommandHandler implements CommandHandlerInterface
+final readonly class DeleteBookCommandHandler implements CommandHandlerInterface
 {
-    public function __construct(private readonly BookRepositoryInterface $bookRepository)
+    public function __construct(private BookRepositoryInterface $bookRepository)
     {
     }
 

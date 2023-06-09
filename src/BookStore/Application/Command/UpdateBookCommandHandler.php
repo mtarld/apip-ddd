@@ -9,9 +9,9 @@ use App\BookStore\Domain\Model\Book;
 use App\BookStore\Domain\Repository\BookRepositoryInterface;
 use App\Shared\Application\Command\CommandHandlerInterface;
 
-final class UpdateBookCommandHandler implements CommandHandlerInterface
+final readonly class UpdateBookCommandHandler implements CommandHandlerInterface
 {
-    public function __construct(private readonly BookRepositoryInterface $bookRepository)
+    public function __construct(private BookRepositoryInterface $bookRepository)
     {
     }
 

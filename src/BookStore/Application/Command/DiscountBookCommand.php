@@ -8,11 +8,11 @@ use App\BookStore\Domain\ValueObject\BookId;
 use App\BookStore\Domain\ValueObject\Discount;
 use App\Shared\Application\Command\CommandInterface;
 
-final class DiscountBookCommand implements CommandInterface
+final readonly class DiscountBookCommand implements CommandInterface
 {
     public function __construct(
-        public readonly BookId $id,
-        public readonly Discount $discount,
+        public BookId $id,
+        public Discount $discount,
     ) {
     }
 }

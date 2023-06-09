@@ -18,7 +18,7 @@ use App\BookStore\Infrastructure\ApiPlatform\Resource\BookResource;
 use App\Shared\Application\Command\CommandBusInterface;
 use Webmozart\Assert\Assert;
 
-final class UpdateBookProcessor implements ProcessorInterface
+final readonly class UpdateBookProcessor implements ProcessorInterface
 {
     public function __construct(
         private CommandBusInterface $commandBus,

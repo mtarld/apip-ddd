@@ -8,7 +8,7 @@ use App\BookStore\Domain\Repository\BookRepositoryInterface;
 use App\BookStore\Domain\ValueObject\Author;
 use App\Shared\Application\Command\CommandHandlerInterface;
 
-final class AnonymizeBooksCommandHandler implements CommandHandlerInterface
+final readonly class AnonymizeBooksCommandHandler implements CommandHandlerInterface
 {
     public function __construct(private BookRepositoryInterface $bookRepository)
     {
