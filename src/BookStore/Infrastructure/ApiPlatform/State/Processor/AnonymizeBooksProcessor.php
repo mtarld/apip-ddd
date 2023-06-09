@@ -17,12 +17,7 @@ final class AnonymizeBooksProcessor implements ProcessorInterface
     ) {
     }
 
-    /**
-     * @param mixed $data
-     *
-     * @return null
-     */
-    public function process($data, Operation $operation, array $uriVariables = [], array $context = []): mixed
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): null
     {
         Assert::isInstanceOf($data, AnonymizeBooksCommand::class);
 

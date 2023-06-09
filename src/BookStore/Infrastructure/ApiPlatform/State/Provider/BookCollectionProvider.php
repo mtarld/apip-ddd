@@ -28,7 +28,7 @@ final class BookCollectionProvider implements ProviderInterface
     /**
      * @return Paginator<BookResource>|list<BookResource>
      */
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): Paginator|array
     {
         /** @var string|null $author */
         $author = $context['filters']['author'] ?? null;

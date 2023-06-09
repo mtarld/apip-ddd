@@ -23,7 +23,7 @@ final class CheapestBooksProvider implements ProviderInterface
     /**
      * @return list<BookResource>
      */
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
     {
         /** @var BookRepositoryInterface $models */
         $models = $this->queryBus->ask(new FindCheapestBooksQuery());
