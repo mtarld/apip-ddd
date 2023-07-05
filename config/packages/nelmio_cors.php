@@ -19,6 +19,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'max_age' => 3600,
             ],
             'paths' => ['^/' => null],
-        ]
+        ],
     );
 };

@@ -10,7 +10,9 @@ $finder = (new PhpCsFixer\Finder())
 return (new PhpCsFixer\Config())
     ->setRules([
         '@Symfony' => true,
-        'trailing_comma_in_multiline' => true,
+        'trailing_comma_in_multiline' => [
+            'elements' => ['arguments', 'arrays', 'match', 'parameters'],
+        ],
         'ordered_imports' => [
             'imports_order' => ['class', 'function', 'const'],
             'sort_algorithm' => 'alpha',
