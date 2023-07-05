@@ -20,7 +20,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'php_errors' => [
                 'log' => 4096,
             ],
-        ]
+        ],
     );
     if ('test' === $containerConfigurator->env()) {
         $containerConfigurator->extension('framework', [

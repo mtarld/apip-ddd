@@ -20,7 +20,7 @@ final readonly class AnonymizeBooksCommandHandler implements CommandHandlerInter
 
         foreach ($books as $book) {
             $book->update(
-                author: new Author($command->anonymizedName)
+                author: new Author($command->anonymizedName),
             );
 
             $this->bookRepository->save($book);

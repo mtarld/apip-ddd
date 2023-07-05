@@ -43,7 +43,7 @@ class Book
         ?BookDescription $description = null,
         ?Author $author = null,
         ?BookContent $content = null,
-        ?Price $price = null
+        ?Price $price = null,
     ): void {
         $this->name = $name ?? $this->name;
         $this->description = $description ?? $this->description;
