@@ -21,7 +21,7 @@ final class DeleteBookTest extends KernelTestCase
         $commandBus = static::getContainer()->get(CommandBusInterface::class);
 
         $book = DummyBookFactory::createBook();
-        $bookRepository->save($book);
+        $bookRepository->add($book);
 
         static::assertCount(1, $bookRepository);
 

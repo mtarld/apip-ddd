@@ -22,7 +22,7 @@ final class FindCheapestBooksTest extends KernelTestCase
         $queryBus = static::getContainer()->get(QueryBusInterface::class);
 
         for ($i = 0; $i < 5; ++$i) {
-            $bookRepository->save(DummyBookFactory::createBook());
+            $bookRepository->add(DummyBookFactory::createBook());
         }
 
         $cheapestBooks = $queryBus->ask(new FindCheapestBooksQuery(3));
@@ -40,7 +40,7 @@ final class FindCheapestBooksTest extends KernelTestCase
 
         $prices = [2000, 1000, 3000];
         foreach ($prices as $price) {
-            $bookRepository->save(DummyBookFactory::createBook(price: $price));
+            $bookRepository->add(DummyBookFactory::createBook(price: $price));
         }
 
         $cheapestBooks = $queryBus->ask(new FindCheapestBooksQuery(3));

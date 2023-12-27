@@ -19,7 +19,7 @@ final class AnonymizeBooksTest extends ApiTestCase
         $bookRepository = static::getContainer()->get(BookRepositoryInterface::class);
 
         for ($i = 0; $i < 10; ++$i) {
-            $bookRepository->save(DummyBookFactory::createBook(author: sprintf('author_%d', $i)));
+            $bookRepository->add(DummyBookFactory::createBook(author: sprintf('author_%d', $i)));
         }
 
         $response = $client->request('POST', '/api/books/anonymize', [

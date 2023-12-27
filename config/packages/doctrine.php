@@ -10,6 +10,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         [
             'dbal' => [
                 'url' => '%env(resolve:DATABASE_URL)%',
+                'use_savepoints' => true,
             ],
             'orm' => [
                 'report_fields_where_declared' => true,

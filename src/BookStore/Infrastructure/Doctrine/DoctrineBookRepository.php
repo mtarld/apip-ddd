@@ -25,7 +25,7 @@ final class DoctrineBookRepository extends DoctrineRepository implements BookRep
         parent::__construct($em, self::ENTITY_CLASS, self::ALIAS);
     }
 
-    public function save(Book $book): void
+    public function add(Book $book): void
     {
         $this->em->persist($book);
     }

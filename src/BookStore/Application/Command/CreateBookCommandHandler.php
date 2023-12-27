@@ -25,7 +25,7 @@ final readonly class CreateBookCommandHandler
             $command->price,
         );
 
-        $this->bookRepository->save($book);
+        $this->bookRepository->add($book);
 
         return $book;
     }

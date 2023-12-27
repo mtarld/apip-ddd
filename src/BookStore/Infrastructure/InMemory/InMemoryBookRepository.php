@@ -15,7 +15,7 @@ use App\Shared\Infrastructure\InMemory\InMemoryRepository;
  */
 final class InMemoryBookRepository extends InMemoryRepository implements BookRepositoryInterface
 {
-    public function save(Book $book): void
+    public function add(Book $book): void
     {
         $this->entities[(string) $book->id()] = $book;
     }
