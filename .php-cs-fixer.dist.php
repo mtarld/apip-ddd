@@ -19,6 +19,9 @@ return (new PhpCsFixer\Config())
         ],
         'declare_strict_types' => true,
         'nullable_type_declaration_for_default_null_value' => false,
+        'phpdoc_to_comment' => [
+            'ignored_tags' => ['var'],
+        ],
     ])
     ->setRiskyAllowed(true)
     ->setFinder($finder)

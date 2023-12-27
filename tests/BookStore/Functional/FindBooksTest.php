@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Tests\BookStore\Functional;
 
 use App\BookStore\Application\Query\FindBooksQuery;
-use App\BookStore\Domain\Model\Book;
 use App\BookStore\Domain\Repository\BookRepositoryInterface;
 use App\BookStore\Domain\ValueObject\Author;
 use App\Shared\Application\Query\QueryBusInterface;
@@ -56,7 +55,6 @@ final class FindBooksTest extends KernelTestCase
 
         static::assertCount(3, $bookRepository);
 
-        /** @var Book[] $books */
         $books = $queryBus->ask(new FindBooksQuery(author: new Author('authorOne')));
 
         static::assertCount(2, $books);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\BookStore\Application\Command;
 
+use App\BookStore\Domain\Model\Book;
 use App\BookStore\Domain\ValueObject\Author;
 use App\BookStore\Domain\ValueObject\BookContent;
 use App\BookStore\Domain\ValueObject\BookDescription;
@@ -12,6 +13,9 @@ use App\BookStore\Domain\ValueObject\BookName;
 use App\BookStore\Domain\ValueObject\Price;
 use App\Shared\Application\Command\CommandInterface;
 
+/**
+ * @implements CommandInterface<Book>
+ */
 final readonly class UpdateBookCommand implements CommandInterface
 {
     public function __construct(

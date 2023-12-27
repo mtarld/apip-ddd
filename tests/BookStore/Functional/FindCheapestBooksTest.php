@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Tests\BookStore\Functional;
 
 use App\BookStore\Application\Query\FindCheapestBooksQuery;
-use App\BookStore\Domain\Model\Book;
 use App\BookStore\Domain\Repository\BookRepositoryInterface;
 use App\BookStore\Domain\ValueObject\Price;
 use App\Shared\Application\Query\QueryBusInterface;
@@ -44,7 +43,6 @@ final class FindCheapestBooksTest extends KernelTestCase
             $bookRepository->save(DummyBookFactory::createBook(price: $price));
         }
 
-        /** @var Book[] $cheapestBooks */
         $cheapestBooks = $queryBus->ask(new FindCheapestBooksQuery(3));
 
         $sortedPrices = [1000, 2000, 3000];

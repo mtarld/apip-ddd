@@ -19,9 +19,17 @@ final class MessengerQueryBus implements QueryBusInterface
         $this->messageBus = $queryBus;
     }
 
+    /**
+     * @template T
+     *
+     * @param QueryInterface<T> $query
+     *
+     * @return T
+     */
     public function ask(QueryInterface $query): mixed
     {
         try {
+            /** @var T */
             return $this->handle($query);
         } catch (HandlerFailedException $e) {
             if ($exception = current($e->getWrappedExceptions())) {

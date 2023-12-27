@@ -7,7 +7,6 @@ namespace App\BookStore\Infrastructure\ApiPlatform\State\Processor;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\BookStore\Application\Command\UpdateBookCommand;
-use App\BookStore\Domain\Model\Book;
 use App\BookStore\Domain\ValueObject\Author;
 use App\BookStore\Domain\ValueObject\BookContent;
 use App\BookStore\Domain\ValueObject\BookDescription;
@@ -44,7 +43,6 @@ final readonly class UpdateBookProcessor implements ProcessorInterface
             null !== $data->price ? new Price($data->price) : null,
         );
 
-        /** @var Book $model */
         $model = $this->commandBus->dispatch($command);
 
         return BookResource::fromModel($model);

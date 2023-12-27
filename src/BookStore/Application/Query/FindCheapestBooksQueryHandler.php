@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\BookStore\Application\Query;
 
 use App\BookStore\Domain\Repository\BookRepositoryInterface;
-use App\Shared\Application\Query\QueryHandlerInterface;
+use App\Shared\Application\Query\AsQueryHandler;
 
-final readonly class FindCheapestBooksQueryHandler implements QueryHandlerInterface
+#[AsQueryHandler]
+final readonly class FindCheapestBooksQueryHandler
 {
     public function __construct(private BookRepositoryInterface $bookRepository)
     {

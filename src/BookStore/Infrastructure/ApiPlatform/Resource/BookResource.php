@@ -110,7 +110,7 @@ final class BookResource
     ) {
     }
 
-    public static function fromModel(Book $book): static
+    public static function fromModel(Book $book): self
     {
         return new self(
             $book->id()->value,

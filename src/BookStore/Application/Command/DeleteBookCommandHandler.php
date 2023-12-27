@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\BookStore\Application\Command;
 
 use App\BookStore\Domain\Repository\BookRepositoryInterface;
-use App\Shared\Application\Command\CommandHandlerInterface;
+use App\Shared\Application\Command\AsCommandHandler;
 
-final readonly class DeleteBookCommandHandler implements CommandHandlerInterface
+#[AsCommandHandler]
+final readonly class DeleteBookCommandHandler
 {
     public function __construct(private BookRepositoryInterface $bookRepository)
     {

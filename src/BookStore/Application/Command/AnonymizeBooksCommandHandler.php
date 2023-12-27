@@ -6,9 +6,10 @@ namespace App\BookStore\Application\Command;
 
 use App\BookStore\Domain\Repository\BookRepositoryInterface;
 use App\BookStore\Domain\ValueObject\Author;
-use App\Shared\Application\Command\CommandHandlerInterface;
+use App\Shared\Application\Command\AsCommandHandler;
 
-final readonly class AnonymizeBooksCommandHandler implements CommandHandlerInterface
+#[AsCommandHandler]
+final readonly class AnonymizeBooksCommandHandler
 {
     public function __construct(private BookRepositoryInterface $bookRepository)
     {

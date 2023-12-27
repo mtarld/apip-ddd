@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Shared\Application\Command;
 
+/**
+ * @template T
+ */
 interface CommandInterface
 {
 }

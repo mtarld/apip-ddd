@@ -8,7 +8,6 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\BookStore\Application\Command\DiscountBookCommand;
 use App\BookStore\Application\Query\FindBookQuery;
-use App\BookStore\Domain\Model\Book;
 use App\BookStore\Domain\ValueObject\BookId;
 use App\BookStore\Domain\ValueObject\Discount;
 use App\BookStore\Infrastructure\ApiPlatform\Payload\DiscountBookPayload;
@@ -42,7 +41,6 @@ final readonly class DiscountBookProcessor implements ProcessorInterface
 
         $this->commandBus->dispatch($command);
 
-        /** @var Book $model */
         $model = $this->queryBus->ask(new FindBookQuery($command->id));
 
         return BookResource::fromModel($model);

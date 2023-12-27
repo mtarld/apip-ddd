@@ -7,7 +7,6 @@ namespace App\BookStore\Infrastructure\ApiPlatform\State\Provider;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\BookStore\Application\Query\FindCheapestBooksQuery;
-use App\BookStore\Domain\Repository\BookRepositoryInterface;
 use App\BookStore\Infrastructure\ApiPlatform\Resource\BookResource;
 use App\Shared\Application\Query\QueryBusInterface;
 
@@ -25,7 +24,6 @@ final readonly class CheapestBooksProvider implements ProviderInterface
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
     {
-        /** @var BookRepositoryInterface $models */
         $models = $this->queryBus->ask(new FindCheapestBooksQuery());
 
         $resources = [];

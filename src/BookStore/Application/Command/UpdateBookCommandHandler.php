@@ -7,9 +7,10 @@ namespace App\BookStore\Application\Command;
 use App\BookStore\Domain\Exception\MissingBookException;
 use App\BookStore\Domain\Model\Book;
 use App\BookStore\Domain\Repository\BookRepositoryInterface;
-use App\Shared\Application\Command\CommandHandlerInterface;
+use App\Shared\Application\Command\AsCommandHandler;
 
-final readonly class UpdateBookCommandHandler implements CommandHandlerInterface
+#[AsCommandHandler]
+final readonly class UpdateBookCommandHandler
 {
     public function __construct(private BookRepositoryInterface $bookRepository)
     {
