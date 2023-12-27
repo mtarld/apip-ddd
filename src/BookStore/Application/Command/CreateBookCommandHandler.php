@@ -11,7 +11,7 @@ use App\Shared\Application\Command\AsCommandHandler;
 #[AsCommandHandler]
 final readonly class CreateBookCommandHandler
 {
-    public function __construct(private readonly BookRepositoryInterface $bookRepository)
+    public function __construct(private BookRepositoryInterface $bookRepository)
     {
     }
 

@@ -31,8 +31,6 @@ final readonly class UpdateBookCommandHandler
             price: $command->price,
         );
 
-        $this->bookRepository->save($book);
-
         return $book;
     }
 }

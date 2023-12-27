@@ -28,13 +28,11 @@ final class DoctrineBookRepository extends DoctrineRepository implements BookRep
     public function save(Book $book): void
     {
         $this->em->persist($book);
-        $this->em->flush();
     }
 
     public function remove(Book $book): void
     {
         $this->em->remove($book);
-        $this->em->flush();
     }
 
     public function ofId(BookId $id): ?Book
