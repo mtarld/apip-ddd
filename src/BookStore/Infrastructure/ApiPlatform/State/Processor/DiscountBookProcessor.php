@@ -17,6 +17,9 @@ use App\Shared\Application\Command\CommandBusInterface;
 use App\Shared\Application\Query\QueryBusInterface;
 use Webmozart\Assert\Assert;
 
+/**
+ * @implements ProcessorInterface<BookResource>
+ */
 final readonly class DiscountBookProcessor implements ProcessorInterface
 {
     public function __construct(
@@ -29,7 +32,7 @@ final readonly class DiscountBookProcessor implements ProcessorInterface
     {
         Assert::isInstanceOf($data, DiscountBookPayload::class);
 
-        $bookResource = $context['previous_data'];
+        $bookResource = $context['previous_data'] ?? null;
         Assert::isInstanceOf($bookResource, BookResource::class);
 
         $command = new DiscountBookCommand(

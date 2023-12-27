@@ -18,6 +18,9 @@ use App\BookStore\Infrastructure\ApiPlatform\Resource\BookResource;
 use App\Shared\Application\Command\CommandBusInterface;
 use Webmozart\Assert\Assert;
 
+/**
+ * @implements ProcessorInterface<BookResource>
+ */
 final readonly class UpdateBookProcessor implements ProcessorInterface
 {
     public function __construct(
@@ -28,10 +31,12 @@ final readonly class UpdateBookProcessor implements ProcessorInterface
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): BookResource
     {
         Assert::isInstanceOf($data, BookResource::class);
-        Assert::isInstanceOf($context['previous_data'], BookResource::class);
+
+        $bookResource = $context['previous_data'] ?? null;
+        Assert::isInstanceOf($bookResource, BookResource::class);
 
         $command = new UpdateBookCommand(
-            new BookId($context['previous_data']->id),
+            new BookId($bookResource->id),
             null !== $data->name ? new BookName($data->name) : null,
             null !== $data->description ? new BookDescription($data->description) : null,
             null !== $data->author ? new Author($data->author) : null,

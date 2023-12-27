@@ -10,6 +10,9 @@ use App\BookStore\Application\Command\AnonymizeBooksCommand;
 use App\Shared\Application\Command\CommandBusInterface;
 use Webmozart\Assert\Assert;
 
+/**
+ * @implements ProcessorInterface<null>
+ */
 final readonly class AnonymizeBooksProcessor implements ProcessorInterface
 {
     public function __construct(
