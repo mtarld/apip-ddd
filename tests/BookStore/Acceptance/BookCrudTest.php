@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Tests\BookStore\Acceptance;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
-use App\BookStore\Domain\Model\Book;
 use App\BookStore\Domain\Repository\BookRepositoryInterface;
 use App\BookStore\Domain\ValueObject\Author;
 use App\BookStore\Domain\ValueObject\BookContent;
@@ -127,7 +126,6 @@ final class BookCrudTest extends ApiTestCase
 
         $id = new BookId(Uuid::fromString(str_replace('/api/books/', '', $response->toArray()['@id'])));
 
-        /** @var Book $book */
         $book = static::getContainer()->get(BookRepositoryInterface::class)->ofId($id);
 
         static::assertNotNull($book);

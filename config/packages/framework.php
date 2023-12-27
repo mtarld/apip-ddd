@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\BookStore\Domain\Exception\MissingBookException;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -19,6 +20,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ],
             'php_errors' => [
                 'log' => 4096,
+            ],
+            'exceptions' => [
+                MissingBookException::class => [
+                    'status_code' => 404,
+                ],
             ],
         ],
     );

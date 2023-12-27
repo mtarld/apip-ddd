@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Shared\Infrastructure\Symfony;
 
-use App\Shared\Application\Command\CommandHandlerInterface;
-use App\Shared\Application\Query\QueryHandlerInterface;
+use App\Shared\Application\Command\AsCommandHandler;
+use App\Shared\Application\Query\AsQueryHandler;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
@@ -33,10 +34,12 @@ final class Kernel extends BaseKernel
 
     protected function build(ContainerBuilder $container): void
     {
-        $container->registerForAutoconfiguration(QueryHandlerInterface::class)
-            ->addTag('messenger.message_handler', ['bus' => 'query.bus']);
+        $container->registerAttributeForAutoconfiguration(AsQueryHandler::class, static function (ChildDefinition $definition): void {
+            $definition->addTag('messenger.message_handler', ['bus' => 'query.bus']);
+        });
 
-        $container->registerForAutoconfiguration(CommandHandlerInterface::class)
-            ->addTag('messenger.message_handler', ['bus' => 'command.bus']);
+        $container->registerAttributeForAutoconfiguration(AsCommandHandler::class, static function (ChildDefinition $definition): void {
+            $definition->addTag('messenger.message_handler', ['bus' => 'command.bus']);
+        });
     }
 }
