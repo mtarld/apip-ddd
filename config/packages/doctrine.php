@@ -12,6 +12,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'url' => '%env(resolve:DATABASE_URL)%',
             ],
             'orm' => [
+                'report_fields_where_declared' => true,
                 'auto_generate_proxy_classes' => true,
                 'enable_lazy_ghost_objects' => true,
                 'naming_strategy' => 'doctrine.orm.naming_strategy.underscore_number_aware',

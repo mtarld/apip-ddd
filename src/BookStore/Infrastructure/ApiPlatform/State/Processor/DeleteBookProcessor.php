@@ -12,6 +12,9 @@ use App\BookStore\Infrastructure\ApiPlatform\Resource\BookResource;
 use App\Shared\Application\Command\CommandBusInterface;
 use Webmozart\Assert\Assert;
 
+/**
+ * @implements ProcessorInterface<null>
+ */
 final readonly class DeleteBookProcessor implements ProcessorInterface
 {
     public function __construct(

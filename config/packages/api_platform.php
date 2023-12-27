@@ -13,6 +13,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 '%kernel.project_dir%/src/Subscription/Entity/',
             ],
         ],
+        'formats' => [
+            'json' => ['application/json'],
+            'jsonld' => ['application/ld+json'],
+        ],
         'patch_formats' => [
             'json' => ['application/merge-patch+json'],
         ],
@@ -26,5 +30,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             // In that way, this exception won't be raised anymore as payload will be validated (see DiscountBookPayload).
             InvalidArgumentException::class => 422,
         ],
+        'keep_legacy_inflector' => false,
     ]);
 };

@@ -17,6 +17,9 @@ use App\BookStore\Infrastructure\ApiPlatform\Resource\BookResource;
 use App\Shared\Application\Command\CommandBusInterface;
 use Webmozart\Assert\Assert;
 
+/**
+ * @implements ProcessorInterface<BookResource>
+ */
 final readonly class CreateBookProcessor implements ProcessorInterface
 {
     public function __construct(

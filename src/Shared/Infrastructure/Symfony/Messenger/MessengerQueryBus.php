@@ -24,10 +24,11 @@ final class MessengerQueryBus implements QueryBusInterface
         try {
             return $this->handle($query);
         } catch (HandlerFailedException $e) {
-            /** @var array{0: \Throwable} $exceptions */
-            $exceptions = $e->getNestedExceptions();
+            if ($exception = current($e->getWrappedExceptions())) {
+                throw $exception;
+            }
 
-            throw $exceptions[0];
+            throw $e;
         }
     }
 }
