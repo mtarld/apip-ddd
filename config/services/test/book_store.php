@@ -5,7 +5,6 @@ declare(strict_types=1);
 use App\BookStore\Domain\Repository\BookRepositoryInterface;
 use App\BookStore\Infrastructure\Doctrine\DoctrineBookRepository;
 use App\BookStore\Infrastructure\InMemory\InMemoryBookRepository;
-use App\Shared\Infrastructure\Symfony\Messenger\NullMiddleware;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -24,7 +23,4 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(DoctrineBookRepository::class)
         ->public();
-
-    $services->set('messenger.middleware.doctrine_transaction')
-        ->class(NullMiddleware::class);
 };
