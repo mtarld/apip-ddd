@@ -23,8 +23,6 @@ final readonly class AnonymizeBooksCommandHandler
             $book->update(
                 author: new Author($command->anonymizedName),
             );
-
-            $this->bookRepository->save($book);
         }
     }
 }

@@ -14,7 +14,7 @@ use App\Shared\Domain\Repository\RepositoryInterface;
  */
 interface BookRepositoryInterface extends RepositoryInterface
 {
-    public function save(Book $book): void;
+    public function add(Book $book): void;
 
     public function remove(Book $book): void;
 

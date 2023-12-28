@@ -20,7 +20,7 @@ final class InMemoryBookRepositoryTest extends KernelTestCase
         static::assertEmpty($repository);
 
         $book = DummyBookFactory::createBook();
-        $repository->save($book);
+        $repository->add($book);
 
         static::assertCount(1, $repository);
     }
@@ -31,7 +31,7 @@ final class InMemoryBookRepositoryTest extends KernelTestCase
         $repository = static::getContainer()->get(InMemoryBookRepository::class);
 
         $book = DummyBookFactory::createBook();
-        $repository->save($book);
+        $repository->add($book);
 
         static::assertCount(1, $repository);
 
@@ -47,7 +47,7 @@ final class InMemoryBookRepositoryTest extends KernelTestCase
         static::assertEmpty($repository);
 
         $book = DummyBookFactory::createBook();
-        $repository->save($book);
+        $repository->add($book);
 
         static::assertSame($book, $repository->ofId($book->id()));
     }
@@ -57,9 +57,9 @@ final class InMemoryBookRepositoryTest extends KernelTestCase
         /** @var InMemoryBookRepository $repository */
         $repository = static::getContainer()->get(InMemoryBookRepository::class);
 
-        $repository->save(DummyBookFactory::createBook(author: 'authorOne'));
-        $repository->save(DummyBookFactory::createBook(author: 'authorOne'));
-        $repository->save(DummyBookFactory::createBook(author: 'authorTwo'));
+        $repository->add(DummyBookFactory::createBook(author: 'authorOne'));
+        $repository->add(DummyBookFactory::createBook(author: 'authorOne'));
+        $repository->add(DummyBookFactory::createBook(author: 'authorTwo'));
 
         static::assertCount(2, $repository->withAuthor(new Author('authorOne')));
         static::assertCount(1, $repository->withAuthor(new Author('authorTwo')));
@@ -70,9 +70,9 @@ final class InMemoryBookRepositoryTest extends KernelTestCase
         /** @var InMemoryBookRepository $repository */
         $repository = static::getContainer()->get(InMemoryBookRepository::class);
 
-        $repository->save(DummyBookFactory::createBook(price: 1));
-        $repository->save(DummyBookFactory::createBook(price: 3));
-        $repository->save(DummyBookFactory::createBook(price: 2));
+        $repository->add(DummyBookFactory::createBook(price: 1));
+        $repository->add(DummyBookFactory::createBook(price: 3));
+        $repository->add(DummyBookFactory::createBook(price: 2));
 
         $prices = [];
         foreach ($repository->withCheapestsFirst() as $book) {
@@ -115,7 +115,7 @@ final class InMemoryBookRepositoryTest extends KernelTestCase
             DummyBookFactory::createBook(),
         ];
         foreach ($books as $book) {
-            $repository->save($book);
+            $repository->add($book);
         }
 
         $i = 0;
@@ -137,7 +137,7 @@ final class InMemoryBookRepositoryTest extends KernelTestCase
             DummyBookFactory::createBook(),
         ];
         foreach ($books as $book) {
-            $repository->save($book);
+            $repository->add($book);
         }
 
         $repository = $repository->withPagination(1, 2);
@@ -172,7 +172,7 @@ final class InMemoryBookRepositoryTest extends KernelTestCase
             DummyBookFactory::createBook(),
         ];
         foreach ($books as $book) {
-            $repository->save($book);
+            $repository->add($book);
         }
 
         static::assertCount(count($books), $repository);

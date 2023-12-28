@@ -23,7 +23,5 @@ final readonly class DiscountBookCommandHandler
         }
 
         $book->applyDiscount($command->discount);
-
-        $this->bookRepository->save($book);
     }
 }

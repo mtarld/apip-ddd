@@ -11,7 +11,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         'messenger' => [
             'default_bus' => 'command.bus',
             'buses' => [
-                'command.bus' => [],
+                'command.bus' => 'test' === $containerConfigurator->env() ? [] : [
+                    'middleware' => [
+                        'messenger.middleware.doctrine_transaction',
+                    ],
+                ],
                 'query.bus' => [],
             ],
             'transports' => [

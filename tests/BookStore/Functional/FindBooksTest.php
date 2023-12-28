@@ -30,7 +30,7 @@ final class FindBooksTest extends KernelTestCase
         ];
 
         foreach ($initialBooks as $book) {
-            $bookRepository->save($book);
+            $bookRepository->add($book);
         }
 
         $books = $queryBus->ask(new FindBooksQuery());
@@ -49,9 +49,9 @@ final class FindBooksTest extends KernelTestCase
         /** @var QueryBusInterface $queryBus */
         $queryBus = static::getContainer()->get(QueryBusInterface::class);
 
-        $bookRepository->save(DummyBookFactory::createBook(author: 'authorOne'));
-        $bookRepository->save(DummyBookFactory::createBook(author: 'authorOne'));
-        $bookRepository->save(DummyBookFactory::createBook(author: 'authorTwo'));
+        $bookRepository->add(DummyBookFactory::createBook(author: 'authorOne'));
+        $bookRepository->add(DummyBookFactory::createBook(author: 'authorOne'));
+        $bookRepository->add(DummyBookFactory::createBook(author: 'authorTwo'));
 
         static::assertCount(3, $bookRepository);
 
@@ -80,7 +80,7 @@ final class FindBooksTest extends KernelTestCase
         ];
 
         foreach ($initialBooks as $book) {
-            $bookRepository->save($book);
+            $bookRepository->add($book);
         }
 
         $books = $queryBus->ask(new FindBooksQuery(page: 2, itemsPerPage: 2));

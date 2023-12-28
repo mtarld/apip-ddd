@@ -22,7 +22,7 @@ final class AnonymizeBooksTest extends KernelTestCase
         $commandBus = static::getContainer()->get(CommandBusInterface::class);
 
         for ($i = 0; $i < 10; ++$i) {
-            $bookRepository->save(DummyBookFactory::createBook(author: sprintf('author_%d', $i)));
+            $bookRepository->add(DummyBookFactory::createBook(author: sprintf('author_%d', $i)));
         }
 
         $commandBus->dispatch(new AnonymizeBooksCommand('anon.'));
