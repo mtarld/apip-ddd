@@ -11,9 +11,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             PasswordAuthenticatedUserInterface::class => 'auto',
         ],
         'providers' => [
-                'users_in_memory' => [
-                    'memory' => null,
-                ],
+            'users_in_memory' => [
+                'memory' => null,
+            ],
         ],
         'firewalls' => [
             'dev' => [
