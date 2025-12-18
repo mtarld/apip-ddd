@@ -37,9 +37,6 @@ final class InMemoryBookRepository extends InMemoryRepository implements BookRep
 
     public function withCheapestsFirst(): static
     {
-        $cloned = clone $this;
-        uasort($cloned->entities, fn (Book $a, Book $b) => $a->price() <=> $b->price());
-
-        return $cloned;
+        return $this->sort(['price' => 'asc']);
     }
 }

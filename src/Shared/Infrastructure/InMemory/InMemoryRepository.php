@@ -6,6 +6,7 @@ namespace App\Shared\Infrastructure\InMemory;
 
 use App\Shared\Domain\Repository\PaginatorInterface;
 use App\Shared\Domain\Repository\RepositoryInterface;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Webmozart\Assert\Assert;
 
 /**
@@ -87,6 +88,33 @@ abstract class InMemoryRepository implements RepositoryInterface
     {
         $cloned = clone $this;
         $cloned->entities = array_filter($cloned->entities, $filter);
+
+        return $cloned;
+    }
+
+    /**
+     * @param array<string, string> $criteria
+     * @return $this
+     */
+    protected function sort(array $criteria): static
+    {
+        $cloned = clone $this;
+
+        $accessor = PropertyAccess::createPropertyAccessor();
+
+        uasort($cloned->entities, function (object $a, object $b) use ($criteria, $accessor): int {
+            foreach ($criteria as $field => $direction) {
+                $aValue = $accessor->getValue($a, $field);
+                $bValue = $accessor->getValue($b, $field);
+
+                $comparison = $aValue <=> $bValue;
+                if (0 !== $comparison) {
+                    return 'asc' === $direction ? $comparison : -$comparison;
+                }
+            }
+
+            return 0;
+        });
 
         return $cloned;
     }
