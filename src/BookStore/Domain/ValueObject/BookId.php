@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\BookStore\Domain\ValueObject;
 
-use App\Shared\Domain\ValueObject\AggregateRootId;
+use App\Shared\Domain\ValueObject\Identifier;
+use App\Shared\Domain\ValueObject\Identity;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Embeddable]
-final class BookId implements \Stringable
+final class BookId implements Identifier
 {
-    use AggregateRootId;
+    use Identity;
 }

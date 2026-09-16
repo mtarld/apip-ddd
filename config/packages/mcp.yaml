@@ -1,0 +1,17 @@
+mcp:
+    servers:
+        bookstore:
+            name: 'apip-ddd bookstore'
+            description: 'The BookStore bounded context, exposed as MCP tools.'
+            version: '1.0.0'
+            transports:
+                http: true
+            http:
+                path: /mcp
+            registry:
+                tools: ['*']
+
+api_platform:
+    mcp:
+        enabled: true
+        format: jsonld

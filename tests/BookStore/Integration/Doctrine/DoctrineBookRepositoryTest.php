@@ -4,215 +4,63 @@ declare(strict_types=1);
 
 namespace App\Tests\BookStore\Integration\Doctrine;
 
-use App\BookStore\Domain\ValueObject\Author;
+use App\BookStore\Domain\Repository\BookRepositoryInterface;
+use App\BookStore\Domain\ValueObject\AuthorId;
+use App\BookStore\Domain\ValueObject\Discount;
 use App\BookStore\Infrastructure\Doctrine\DoctrineBookRepository;
-use App\Shared\Infrastructure\Doctrine\DoctrinePaginator;
-use App\Tests\BookStore\DummyFactory\DummyBookFactory;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\NullOutput;
+use App\Tests\BookStore\Factory\BookFactory;
+use App\Tests\BookStore\Integration\BookRepositoryTestCase;
+use Doctrine\ORM\OptimisticLockException;
 
-final class DoctrineBookRepositoryTest extends KernelTestCase
+final class DoctrineBookRepositoryTest extends BookRepositoryTestCase
 {
-    private static EntityManagerInterface $em;
+    use RunsAgainstDoctrine;
 
-    public static function setUpBeforeClass(): void
+    public function testIdsByAuthorHydratesNoBook(): void
     {
-        static::bootKernel();
+        $target = new AuthorId();
 
-        (new Application(static::$kernel))
-            ->find('doctrine:database:create')
-            ->run(new ArrayInput(['--if-not-exists' => true]), new NullOutput());
+        $repository = $this->repository();
+        for ($i = 0; $i < 3; ++$i) {
+            $repository->add(BookFactory::create(authorId: $target));
+        }
+        $this->persist();
+        $this->detach();
 
-        (new Application(static::$kernel))
-            ->find('doctrine:schema:update')
-            ->run(new ArrayInput(['--force' => true]), new NullOutput());
+        self::assertCount(3, \iterator_to_array($repository->idsByAuthor($target), false));
+
+        self::assertSame(0, self::$em->getUnitOfWork()->size());
     }
 
-    protected function setUp(): void
+    public function testAConcurrentWriteLosesInsteadOfSilentlyWinning(): void
     {
-        static::$em = static::getContainer()->get(EntityManagerInterface::class);
-        static::$em->getConnection()->executeStatement('TRUNCATE book');
-    }
+        $repository = $this->repository();
 
-    public function testSave(): void
-    {
-        /** @var DoctrineBookRepository $repository */
-        $repository = static::getContainer()->get(DoctrineBookRepository::class);
-
-        static::assertEmpty($repository);
-
-        $book = DummyBookFactory::createBook();
+        $book = BookFactory::create(price: 1000);
         $repository->add($book);
-        self::$em->flush();
+        $this->persist();
 
-        static::assertCount(1, $repository);
+        self::$em->getConnection()->executeStatement(
+            'UPDATE book SET price = 500, version = version + 1 WHERE id = ?',
+            [(string) $book->id],
+        );
+
+        $book->applyDiscount(new Discount(10));
+
+        $this->expectException(OptimisticLockException::class);
+        $this->persist();
     }
 
-    public function testRemove(): void
+    protected function repository(): BookRepositoryInterface
     {
-        /** @var DoctrineBookRepository $repository */
-        $repository = static::getContainer()->get(DoctrineBookRepository::class);
-
-        $book = DummyBookFactory::createBook();
-        $repository->add($book);
-        self::$em->flush();
-
-        static::assertCount(1, $repository);
-
-        $repository->remove($book);
-        self::$em->flush();
-
-        static::assertEmpty($repository);
+        return self::getContainer()->get(DoctrineBookRepository::class);
     }
 
-    public function testOfId(): void
+    /**
+     * @return list<string>
+     */
+    protected static function tablesToTruncate(): array
     {
-        /** @var DoctrineBookRepository $repository */
-        $repository = static::getContainer()->get(DoctrineBookRepository::class);
-
-        static::assertEmpty($repository);
-
-        $book = DummyBookFactory::createBook();
-        $repository->add($book);
-        self::$em->flush();
-        self::$em->clear();
-
-        static::assertEquals($book, $repository->ofId($book->id()));
-    }
-
-    public function testWithAuthor(): void
-    {
-        /** @var DoctrineBookRepository $repository */
-        $repository = static::getContainer()->get(DoctrineBookRepository::class);
-
-        $repository->add(DummyBookFactory::createBook(author: 'authorOne'));
-        $repository->add(DummyBookFactory::createBook(author: 'authorOne'));
-        $repository->add(DummyBookFactory::createBook(author: 'authorTwo'));
-        self::$em->flush();
-
-        static::assertCount(2, $repository->withAuthor(new Author('authorOne')));
-        static::assertCount(1, $repository->withAuthor(new Author('authorTwo')));
-    }
-
-    public function testWithCheapestsFirst(): void
-    {
-        /** @var DoctrineBookRepository $repository */
-        $repository = static::getContainer()->get(DoctrineBookRepository::class);
-
-        $repository->add(DummyBookFactory::createBook(price: 1));
-        $repository->add(DummyBookFactory::createBook(price: 3));
-        $repository->add(DummyBookFactory::createBook(price: 2));
-        self::$em->flush();
-
-        $prices = [];
-        foreach ($repository->withCheapestsFirst() as $book) {
-            $prices[] = $book->price()->amount;
-        }
-        static::assertSame([1, 2, 3], $prices);
-    }
-
-    public function testWithPagination(): void
-    {
-        /** @var DoctrineBookRepository $repository */
-        $repository = static::getContainer()->get(DoctrineBookRepository::class);
-        static::assertNull($repository->paginator());
-
-        $repository = $repository->withPagination(1, 2);
-
-        static::assertInstanceOf(DoctrinePaginator::class, $repository->paginator());
-    }
-
-    public function testWithoutPagination(): void
-    {
-        /** @var DoctrineBookRepository $repository */
-        $repository = static::getContainer()->get(DoctrineBookRepository::class);
-        $repository = $repository->withPagination(1, 2);
-        static::assertNotNull($repository->paginator());
-
-        $repository = $repository->withoutPagination();
-        static::assertNull($repository->paginator());
-    }
-
-    public function testIteratorWithoutPagination(): void
-    {
-        /** @var DoctrineBookRepository $repository */
-        $repository = static::getContainer()->get(DoctrineBookRepository::class);
-        static::assertNull($repository->paginator());
-
-        $books = [
-            DummyBookFactory::createBook(),
-            DummyBookFactory::createBook(),
-            DummyBookFactory::createBook(),
-        ];
-        foreach ($books as $book) {
-            $repository->add($book);
-        }
-        self::$em->flush();
-
-        $i = 0;
-        foreach ($repository as $book) {
-            static::assertSame($books[$i], $book);
-            ++$i;
-        }
-    }
-
-    public function testIteratorWithPagination(): void
-    {
-        /** @var DoctrineBookRepository $repository */
-        $repository = static::getContainer()->get(DoctrineBookRepository::class);
-        static::assertNull($repository->paginator());
-
-        $books = [
-            DummyBookFactory::createBook(),
-            DummyBookFactory::createBook(),
-            DummyBookFactory::createBook(),
-        ];
-
-        foreach ($books as $book) {
-            $repository->add($book);
-        }
-        self::$em->flush();
-
-        $repository = $repository->withPagination(1, 2);
-
-        $i = 0;
-        foreach ($repository as $book) {
-            static::assertContains($book, $books);
-            ++$i;
-        }
-
-        static::assertSame(2, $i);
-
-        $repository = $repository->withPagination(2, 2);
-
-        $i = 0;
-        foreach ($repository as $book) {
-            static::assertContains($book, $books);
-            ++$i;
-        }
-
-        static::assertSame(1, $i);
-    }
-
-    public function testCount(): void
-    {
-        /** @var DoctrineBookRepository $repository */
-        $repository = static::getContainer()->get(DoctrineBookRepository::class);
-
-        $books = [
-            DummyBookFactory::createBook(),
-            DummyBookFactory::createBook(),
-            DummyBookFactory::createBook(),
-        ];
-        foreach ($books as $book) {
-            $repository->add($book);
-        }
-        self::$em->flush();
-
-        static::assertCount(count($books), $repository);
-        static::assertCount(2, $repository->withPagination(1, 2));
+        return ['book'];
     }
 }

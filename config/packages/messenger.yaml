@@ -1,0 +1,16 @@
+framework:
+    messenger:
+        default_bus: command.bus
+        buses:
+            command.bus:
+                middleware:
+                    - messenger.middleware.doctrine_transaction
+            event.bus:
+                default_middleware:
+                    enabled: true
+                    allow_no_handlers: true
+        transports:
+            sync: 'sync://'
+        routing:
+            App\Shared\Application\Command\CommandInterface: sync
+            App\Shared\Domain\Event\EventInterface: sync

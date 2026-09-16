@@ -6,13 +6,16 @@ namespace App\BookStore\Domain\ValueObject;
 
 use Webmozart\Assert\Assert;
 
-final class Discount
+final readonly class Discount
 {
-    public readonly int $percentage;
+    public const int MIN = 0;
+    public const int MAX = 100;
+
+    public int $percentage;
 
     public function __construct(int $percentage)
     {
-        Assert::range($percentage, 0, 100);
+        Assert::range($percentage, self::MIN, self::MAX);
 
         $this->percentage = $percentage;
     }

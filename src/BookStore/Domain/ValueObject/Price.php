@@ -8,22 +8,37 @@ use Doctrine\ORM\Mapping as ORM;
 use Webmozart\Assert\Assert;
 
 #[ORM\Embeddable]
-final class Price
+final readonly class Price
 {
-    #[ORM\Column(name: 'price', type: 'integer', options: ['unsigned' => true])]
-    public readonly int $amount;
+    public const int MIN = 0;
 
-    public function __construct(int $amount)
-    {
-        Assert::greaterThanEq($amount, 0);
-
-        $this->amount = $amount;
+    public function __construct(
+        #[ORM\Column(name: 'price', type: 'integer', options: ['unsigned' => true])]
+        public int $value,
+    ) {
+        Assert::greaterThanEq($value, self::MIN);
     }
 
-    public function applyDiscount(Discount $discount): static
+    public static function zero(): self
     {
-        $amount = (int) ($this->amount - ($this->amount * $discount->percentage / 100));
+        return new self(0);
+    }
 
-        return new static($amount);
+    #[\NoDiscard('the discounted price is a new instance, the original is left untouched')]
+    public function applyDiscount(Discount $discount): self
+    {
+        $amountOff = $this->value * $discount->percentage / 100;
+
+        return new self((int) \round($this->value - $amountOff));
+    }
+
+    public function times(Quantity $quantity): self
+    {
+        return new self($this->value * $quantity->value);
+    }
+
+    public function plus(self $other): self
+    {
+        return new self($this->value + $other->value);
     }
 }

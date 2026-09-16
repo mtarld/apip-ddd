@@ -6,29 +6,26 @@ namespace App\BookStore\Infrastructure\ApiPlatform\State\Provider;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
-use App\BookStore\Application\Query\FindBookQuery;
 use App\BookStore\Domain\ValueObject\BookId;
-use App\BookStore\Infrastructure\ApiPlatform\Resource\BookResource;
-use App\Shared\Application\Query\QueryBusInterface;
-use Symfony\Component\Uid\Uuid;
+use App\BookStore\Infrastructure\ReadModel\BookView;
+use App\BookStore\Infrastructure\ReadModel\BookViewFinder;
+use Webmozart\Assert\Assert;
 
 /**
- * @implements ProviderInterface<BookResource>
+ * @implements ProviderInterface<BookView>
  */
 final readonly class BookItemProvider implements ProviderInterface
 {
     public function __construct(
-        private QueryBusInterface $queryBus,
+        private BookViewFinder $books,
     ) {
     }
 
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): ?BookResource
+    #[\Override]
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): BookView
     {
-        /** @var string $id */
-        $id = $uriVariables['id'];
+        Assert::isInstanceOf($uriVariables['id'], BookId::class);
 
-        $model = $this->queryBus->ask(new FindBookQuery(new BookId(Uuid::fromString($id))));
-
-        return BookResource::fromModel($model);
+        return $this->books->get($uriVariables['id']);
     }
 }

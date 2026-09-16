@@ -8,12 +8,11 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\BookStore\Application\Command\DeleteBookCommand;
 use App\BookStore\Domain\ValueObject\BookId;
-use App\BookStore\Infrastructure\ApiPlatform\Resource\BookResource;
 use App\Shared\Application\Command\CommandBusInterface;
 use Webmozart\Assert\Assert;
 
 /**
- * @implements ProcessorInterface<null>
+ * @implements ProcessorInterface<mixed, null>
  */
 final readonly class DeleteBookProcessor implements ProcessorInterface
 {
@@ -22,11 +21,12 @@ final readonly class DeleteBookProcessor implements ProcessorInterface
     ) {
     }
 
+    #[\Override]
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): null
     {
-        Assert::isInstanceOf($data, BookResource::class);
+        Assert::isInstanceOf($uriVariables['id'], BookId::class);
 
-        $this->commandBus->dispatch(new DeleteBookCommand(new BookId($data->id)));
+        $this->commandBus->dispatch(new DeleteBookCommand($uriVariables['id']));
 
         return null;
     }

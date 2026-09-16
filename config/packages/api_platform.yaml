@@ -1,0 +1,16 @@
+api_platform:
+    exception_to_status:
+        Symfony\Component\Serializer\Exception\ExceptionInterface: 400
+        ApiPlatform\Metadata\Exception\InvalidArgumentException: 400
+        Doctrine\ORM\OptimisticLockException: 409
+        App\Shared\Domain\Exception\MissingModelException: 404
+
+    formats:
+        json: ['application/json']
+        jsonld: ['application/ld+json']
+    patch_formats:
+        json: ['application/merge-patch+json']
+    defaults:
+        stateless: true
+        cache_headers:
+            vary: ['Content-Type', 'Authorization', 'Origin']

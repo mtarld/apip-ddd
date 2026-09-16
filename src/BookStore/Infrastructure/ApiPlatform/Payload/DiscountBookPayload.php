@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace App\BookStore\Infrastructure\ApiPlatform\Payload;
 
-use Symfony\Component\Validator\Constraints as Assert;
+use App\BookStore\Domain\ValueObject\Discount;
+use App\Shared\Infrastructure\Symfony\Validator\AssertValueObject;
 
-final readonly class DiscountBookPayload
+final class DiscountBookPayload
 {
-    public function __construct(
-        #[Assert\Range(min: 0, max: 100)]
-        public int $discountPercentage,
-    ) {
-    }
+    #[AssertValueObject(Discount::class)]
+    public int $discountPercentage;
 }

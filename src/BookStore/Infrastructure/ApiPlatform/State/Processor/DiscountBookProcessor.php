@@ -7,42 +7,44 @@ namespace App\BookStore\Infrastructure\ApiPlatform\State\Processor;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\BookStore\Application\Command\DiscountBookCommand;
-use App\BookStore\Application\Query\FindBookQuery;
 use App\BookStore\Domain\ValueObject\BookId;
 use App\BookStore\Domain\ValueObject\Discount;
+use App\BookStore\Infrastructure\ApiPlatform\Payload\DiscountBookMcpPayload;
 use App\BookStore\Infrastructure\ApiPlatform\Payload\DiscountBookPayload;
 use App\BookStore\Infrastructure\ApiPlatform\Resource\BookResource;
+use App\BookStore\Infrastructure\ReadModel\BookViewFinder;
 use App\Shared\Application\Command\CommandBusInterface;
-use App\Shared\Application\Query\QueryBusInterface;
+use Symfony\Component\ObjectMapper\ObjectMapperInterface;
+use Symfony\Component\Uid\Uuid;
 use Webmozart\Assert\Assert;
 
 /**
- * @implements ProcessorInterface<BookResource>
+ * @implements ProcessorInterface<DiscountBookPayload|DiscountBookMcpPayload, BookResource>
  */
 final readonly class DiscountBookProcessor implements ProcessorInterface
 {
     public function __construct(
         private CommandBusInterface $commandBus,
-        private QueryBusInterface $queryBus,
+        private ObjectMapperInterface $objectMapper,
+        private BookViewFinder $books,
     ) {
     }
 
+    #[\Override]
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): BookResource
     {
-        Assert::isInstanceOf($data, DiscountBookPayload::class);
+        Assert::isInstanceOfAny($data, [DiscountBookPayload::class, DiscountBookMcpPayload::class]);
 
-        $bookResource = $context['previous_data'] ?? null;
-        Assert::isInstanceOf($bookResource, BookResource::class);
+        $id = $data instanceof DiscountBookMcpPayload
+            ? new BookId(Uuid::fromString($data->id))
+            : $uriVariables['id'];
+        Assert::isInstanceOf($id, BookId::class);
 
-        $command = new DiscountBookCommand(
-            new BookId($bookResource->id),
+        $this->commandBus->dispatch(new DiscountBookCommand(
+            $id,
             new Discount($data->discountPercentage),
-        );
+        ));
 
-        $this->commandBus->dispatch($command);
-
-        $model = $this->queryBus->ask(new FindBookQuery($command->id));
-
-        return BookResource::fromModel($model);
+        return $this->objectMapper->map($this->books->get($id), BookResource::class);
     }
 }

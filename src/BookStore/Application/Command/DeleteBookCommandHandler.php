@@ -16,10 +16,6 @@ final readonly class DeleteBookCommandHandler
 
     public function __invoke(DeleteBookCommand $command): void
     {
-        if (null === $book = $this->bookRepository->ofId($command->id)) {
-            return;
-        }
-
-        $this->bookRepository->remove($book);
+        $this->bookRepository->remove($this->bookRepository->get($command->id));
     }
 }

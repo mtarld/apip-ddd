@@ -1,0 +1,9 @@
+framework:
+    secret: '%env(APP_SECRET)%'
+    handle_all_throwables: true
+    php_errors:
+        log: 4096
+
+when@test:
+    framework:
+        test: true

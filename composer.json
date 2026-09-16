@@ -9,38 +9,36 @@
       }
     ],
     "require": {
-        "php": ">=8.2",
+        "php": ">=8.5",
         "ext-ctype": "*",
         "ext-iconv": "*",
-        "api-platform/core": "^3.2",
-        "doctrine/doctrine-bundle": "^2.9",
-        "doctrine/orm": "^2.15",
-        "nelmio/cors-bundle": "^2.3",
-        "phpdocumentor/reflection-docblock": "^5.3",
-        "phpstan/phpdoc-parser": "^1.2",
-        "symfony/asset": "7.0.*",
-        "symfony/console": "7.0.*",
-        "symfony/dotenv": "7.0.*",
-        "symfony/expression-language": "7.0.*",
-        "symfony/flex": "^2",
-        "symfony/framework-bundle": "7.0.*",
-        "symfony/messenger": "7.0.*",
-        "symfony/monolog-bundle": "^3.8",
-        "symfony/property-access": "7.0.*",
-        "symfony/property-info": "7.0.*",
-        "symfony/runtime": "7.0.*",
-        "symfony/security-bundle": "7.0.*",
-        "symfony/serializer": "7.0.*",
-        "symfony/string": "*",
-        "symfony/twig-bundle": "7.0.*",
-        "symfony/uid": "7.0.*",
-        "symfony/validator": "7.0.*",
-        "symfony/yaml": "7.0.*",
-        "webmozart/assert": "^1.11"
+        "api-platform/core": "^4.3",
+        "api-platform/mcp": "^4.3",
+        "doctrine/doctrine-bundle": "^3.2",
+        "doctrine/orm": "^3.6",
+        "nelmio/cors-bundle": "^2.6",
+        "nyholm/psr7": "^1.8",
+        "phpdocumentor/reflection-docblock": "^6.0",
+        "psr/clock": "^1.0",
+        "symfony/console": "8.1.*",
+        "symfony/dotenv": "8.1.*",
+        "symfony/flex": "^2.10",
+        "symfony/framework-bundle": "8.1.*",
+        "symfony/json-streamer": "8.1.*",
+        "symfony/mcp-bundle": "^0.13.0",
+        "symfony/messenger": "8.1.*",
+        "symfony/monolog-bundle": "^4.0",
+        "symfony/object-mapper": "8.1.*",
+        "symfony/property-info": "8.1.*",
+        "symfony/runtime": "8.1.*",
+        "symfony/twig-bundle": "8.1.*",
+        "symfony/uid": "8.1.*",
+        "symfony/validator": "8.1.*",
+        "symfony/yaml": "8.1.*",
+        "webmozart/assert": "^2.1"
     },
     "config": {
         "allow-plugins": {
-            "composer/package-versions-deprecated": true,
             "symfony/flex": true,
             "symfony/runtime": true
         },
@@ -66,7 +64,11 @@
         "symfony/polyfill-php72": "*",
         "symfony/polyfill-php73": "*",
         "symfony/polyfill-php74": "*",
-        "symfony/polyfill-php80": "*"
+        "symfony/polyfill-php80": "*",
+        "symfony/polyfill-php81": "*",
+        "symfony/polyfill-php82": "*",
+        "symfony/polyfill-php83": "*",
+        "symfony/polyfill-php84": "*"
     },
     "scripts": {
         "auto-scripts": {
@@ -86,22 +88,22 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "7.0.*",
+            "require": "8.1.*",
             "docker": true
         }
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.17",
-        "justinrainbow/json-schema": "^5.2",
-        "phpunit/phpunit": "^9.6",
-        "qossmic/deptrac-shim": "^1.0",
-        "symfony/browser-kit": "7.0.*",
-        "symfony/css-selector": "7.0.*",
-        "symfony/debug-bundle": "7.0.*",
-        "symfony/http-client": "7.0.*",
-        "symfony/phpunit-bridge": "7.0.*",
-        "symfony/stopwatch": "7.0.*",
-        "symfony/web-profiler-bundle": "7.0.*",
-        "vimeo/psalm": "^5.12"
+        "deptrac/deptrac": "^4.6",
+        "friendsofphp/php-cs-fixer": "^3.94",
+        "justinrainbow/json-schema": "^6.8",
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-doctrine": "^2.0",
+        "phpstan/phpstan-symfony": "^2.0",
+        "phpunit/phpunit": "^13.1",
+        "rector/rector": "^2.3",
+        "symfony/browser-kit": "8.1.*",
+        "symfony/debug-bundle": "8.1.*",
+        "symfony/http-client": "8.1.*",
+        "symfony/web-profiler-bundle": "8.1.*"
     }
 }

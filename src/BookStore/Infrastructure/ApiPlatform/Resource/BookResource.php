@@ -9,116 +9,174 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\McpTool;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
-use App\BookStore\Application\Command\AnonymizeBooksCommand;
-use App\BookStore\Domain\Model\Book;
-use App\BookStore\Infrastructure\ApiPlatform\OpenApi\AuthorFilter;
+use ApiPlatform\Metadata\QueryParameter;
+use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\State\ParameterProvider\IriConverterParameterProvider;
+use App\BookStore\Infrastructure\ApiPlatform\ObjectMapper\AuthorIriTransform;
+use App\BookStore\Infrastructure\ApiPlatform\Output\BookListItemOutput;
+use App\BookStore\Infrastructure\ApiPlatform\Output\ClassificationOutput;
+use App\BookStore\Infrastructure\ApiPlatform\Payload\AmendBookPayload;
+use App\BookStore\Infrastructure\ApiPlatform\Payload\AnonymizeAuthorBooksPayload;
+use App\BookStore\Infrastructure\ApiPlatform\Payload\ClassifyBookPayload;
+use App\BookStore\Infrastructure\ApiPlatform\Payload\CreateBookPayload;
+use App\BookStore\Infrastructure\ApiPlatform\Payload\DiscountBookMcpPayload;
 use App\BookStore\Infrastructure\ApiPlatform\Payload\DiscountBookPayload;
-use App\BookStore\Infrastructure\ApiPlatform\State\Processor\AnonymizeBooksProcessor;
+use App\BookStore\Infrastructure\ApiPlatform\State\Processor\AmendBookProcessor;
+use App\BookStore\Infrastructure\ApiPlatform\State\Processor\AnonymizeAuthorBooksProcessor;
+use App\BookStore\Infrastructure\ApiPlatform\State\Processor\ClassifyBookProcessor;
 use App\BookStore\Infrastructure\ApiPlatform\State\Processor\CreateBookProcessor;
+use App\BookStore\Infrastructure\ApiPlatform\State\Processor\DeclassifyBookProcessor;
 use App\BookStore\Infrastructure\ApiPlatform\State\Processor\DeleteBookProcessor;
 use App\BookStore\Infrastructure\ApiPlatform\State\Processor\DiscountBookProcessor;
-use App\BookStore\Infrastructure\ApiPlatform\State\Processor\UpdateBookProcessor;
 use App\BookStore\Infrastructure\ApiPlatform\State\Provider\BookCollectionProvider;
 use App\BookStore\Infrastructure\ApiPlatform\State\Provider\BookItemProvider;
 use App\BookStore\Infrastructure\ApiPlatform\State\Provider\CheapestBooksProvider;
-use Symfony\Component\Uid\AbstractUid;
+use App\BookStore\Infrastructure\ReadModel\BookView;
+use App\Shared\Infrastructure\ApiPlatform\ObjectMapper\ScalarTransform;
+use Symfony\Component\ObjectMapper\Attribute\Map;
+use Symfony\Component\ObjectMapper\Transform\MapCollection;
+use Symfony\Component\TypeInfo\Type\BuiltinType;
+use Symfony\Component\TypeInfo\TypeIdentifier;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     shortName: 'Book',
+    description: 'A book in the store.',
     operations: [
-        // queries
         new GetCollection(
-            '/books/cheapest.{_format}',
-            openapiContext: ['summary' => 'Find cheapest Book resources.'],
+            '/books/cheapest',
+            openapi: new Operation(summary: 'Find cheapest Book resources.'),
+            output: BookListItemOutput::class,
+            itemUriTemplate: self::ITEM_URI_TEMPLATE,
             paginationEnabled: false,
             provider: CheapestBooksProvider::class,
+            parameters: [
+                'size' => new QueryParameter(
+                    description: 'How many books to return.',
+                    constraints: [new Assert\Range(min: 1, max: 100)],
+                    nativeType: new BuiltinType(TypeIdentifier::INT),
+                    castToNativeType: true,
+                    default: 10,
+                ),
+            ],
         ),
-
-        // commands
         new Post(
-            '/books/anonymize.{_format}',
+            '/books/anonymize',
             status: 202,
-            openapiContext: ['summary' => 'Anonymize author of every Book resources.'],
-            input: AnonymizeBooksCommand::class,
+            openapi: new Operation(summary: 'Anonymize author of every Book resources.'),
+            input: AnonymizeAuthorBooksPayload::class,
             output: false,
-            processor: AnonymizeBooksProcessor::class,
+            processor: AnonymizeAuthorBooksProcessor::class,
         ),
         new Post(
-            '/books/{id}/discount.{_format}',
-            openapiContext: ['summary' => 'Apply a discount percentage on a Book resource.'],
+            '/books/{id}/categories',
+            openapi: new Operation(summary: 'Classify a Book resource under a Category.'),
+            input: ClassifyBookPayload::class,
+            processor: ClassifyBookProcessor::class,
+        ),
+        new Delete(
+            '/books/{id}/categories/{categoryId}',
+            uriVariables: [
+                'id' => new Link(fromClass: BookResource::class),
+                'categoryId' => new Link(fromClass: CategoryResource::class, identifiers: ['id'], description: 'Category identifier'),
+            ],
+            openapi: new Operation(summary: 'Remove a Book resource from a Category.'),
+            read: false,
+            processor: DeclassifyBookProcessor::class,
+        ),
+        new Post(
+            '/books/{id}/discount',
+            openapi: new Operation(summary: 'Apply a discount percentage on a Book resource.'),
             input: DiscountBookPayload::class,
             provider: BookItemProvider::class,
             processor: DiscountBookProcessor::class,
         ),
-
-        // basic crud
         new GetCollection(
-            filters: [AuthorFilter::class],
+            output: BookListItemOutput::class,
+            itemUriTemplate: self::ITEM_URI_TEMPLATE,
             provider: BookCollectionProvider::class,
+            parameters: [
+                'author' => new QueryParameter(
+                    property: 'author',
+                    description: 'Filter books by author, as an IRI.',
+                    provider: IriConverterParameterProvider::class,
+                ),
+            ],
         ),
         new Get(
+            jsonStream: true,
             provider: BookItemProvider::class,
         ),
         new Post(
-            validationContext: ['groups' => ['create']],
+            input: CreateBookPayload::class,
             processor: CreateBookProcessor::class,
         ),
-        new Put(
-            provider: BookItemProvider::class,
-            processor: UpdateBookProcessor::class,
-            extraProperties: ['standard_put' => true],
-        ),
         new Patch(
+            input: AmendBookPayload::class,
             provider: BookItemProvider::class,
-            processor: UpdateBookProcessor::class,
+            processor: AmendBookProcessor::class,
         ),
         new Delete(
             provider: BookItemProvider::class,
             processor: DeleteBookProcessor::class,
         ),
     ],
+    mcp: [
+        'create_book' => new McpTool(
+            description: 'Add a new book to the store. The author is an IRI, as returned by list_authors.',
+            input: CreateBookPayload::class,
+            processor: CreateBookProcessor::class,
+            validate: true,
+        ),
+        'discount_book' => new McpTool(
+            description: 'Apply a discount percentage to a book, given its id.',
+            input: DiscountBookMcpPayload::class,
+            processor: DiscountBookProcessor::class,
+            validate: true,
+        ),
+        'anonymize_books' => new McpTool(
+            description: 'Anonymize every book of an author. The author is an IRI.',
+            input: AnonymizeAuthorBooksPayload::class,
+            processor: AnonymizeAuthorBooksProcessor::class,
+            validate: true,
+        ),
+    ],
 )]
+#[Map(source: BookView::class)]
 final class BookResource
 {
-    public function __construct(
-        #[ApiProperty(identifier: true, readable: false, writable: false)]
-        public ?AbstractUid $id = null,
+    public const string ITEM_URI_TEMPLATE = '/books/{id}{._format}';
 
-        #[Assert\NotNull(groups: ['create'])]
-        #[Assert\Length(min: 1, max: 255, groups: ['create', 'Default'])]
-        public ?string $name = null,
+    #[ApiProperty(writable: false, identifier: true, jsonSchemaContext: ['type' => 'string', 'format' => 'uuid'])]
+    #[Map(source: 'id', transform: ScalarTransform::class)]
+    public string $id;
 
-        #[Assert\NotNull(groups: ['create'])]
-        #[Assert\Length(min: 1, max: 1023, groups: ['create', 'Default'])]
-        public ?string $description = null,
+    #[ApiProperty(writable: false)]
+    public string $isbn;
 
-        #[Assert\NotNull(groups: ['create'])]
-        #[Assert\Length(min: 1, max: 255, groups: ['create', 'Default'])]
-        public ?string $author = null,
+    public string $name;
 
-        #[Assert\NotNull(groups: ['create'])]
-        #[Assert\Length(min: 1, max: 65535, groups: ['create', 'Default'])]
-        public ?string $content = null,
+    public string $description;
 
-        #[Assert\NotNull(groups: ['create'])]
-        #[Assert\PositiveOrZero(groups: ['create', 'Default'])]
-        public ?int $price = null,
-    ) {
-    }
+    #[ApiProperty(writable: false)]
+    #[Map(source: 'authorId', transform: AuthorIriTransform::class)]
+    public string $author;
 
-    public static function fromModel(Book $book): self
-    {
-        return new self(
-            $book->id()->value,
-            $book->name()->value,
-            $book->description()->value,
-            $book->author()->value,
-            $book->content()->value,
-            $book->price()->amount,
-        );
-    }
+    public string $content;
+
+    public int $price;
+
+    #[ApiProperty(writable: false)]
+    public ?float $averageRating = null;
+
+    /**
+     * @var list<ClassificationOutput>
+     */
+    #[ApiProperty(writable: false)]
+    #[Map(source: 'classifications', transform: new MapCollection(targetClass: ClassificationOutput::class))]
+    public array $classifications = [];
 }

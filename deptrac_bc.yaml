@@ -1,4 +1,4 @@
-parameters:
+deptrac:
     paths:
         - ./src
 
@@ -6,24 +6,26 @@ parameters:
         - name: BookStore
           collectors:
               - type: directory
-                regex: src/BookStore/.*
+                value: src/BookStore/.*
 
         - name: Subscription
           collectors:
               - type: directory
-                regex: src/Subscription/.*
+                value: src/Subscription/.*
 
         - name: Shared
           collectors:
               - type: directory
-                regex: src/Shared/.*
+                value: src/Shared/.*
 
         - name: Vendors
           collectors:
-              - { type: className, regex: ^ApiPlatform\\ }
-              - { type: className, regex: ^Symfony\\ }
-              - { type: className, regex: ^Doctrine\\ }
-              - { type: className, regex: ^Webmozart\\ }
+              - { type: classLike, value: ^ApiPlatform\\ }
+              - { type: classLike, value: ^Symfony\\ }
+              - { type: classLike, value: ^Doctrine\\ }
+              - { type: classLike, value: ^Webmozart\\ }
+              - { type: classLike, value: ^Psr\\ }
+              - { type: classLike, value: ^Mcp\\ }
 
     ruleset:
         BookStore: [ Shared, Vendors ]

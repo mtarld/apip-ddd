@@ -7,9 +7,6 @@ namespace App\BookStore\Application\Command;
 use App\BookStore\Domain\ValueObject\BookId;
 use App\Shared\Application\Command\CommandInterface;
 
-/**
- * @implements CommandInterface<void>
- */
 final readonly class DeleteBookCommand implements CommandInterface
 {
     public function __construct(

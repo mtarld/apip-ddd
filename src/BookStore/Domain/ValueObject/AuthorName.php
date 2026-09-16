@@ -1,0 +1,32 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\BookStore\Domain\ValueObject;
+
+use Doctrine\ORM\Mapping as ORM;
+use Webmozart\Assert\Assert;
+
+#[ORM\Embeddable]
+final readonly class AuthorName
+{
+    public const int MIN_LENGTH = 1;
+    public const int MAX_LENGTH = 255;
+
+    public function __construct(
+        #[ORM\Column(name: 'name', length: self::MAX_LENGTH)]
+        public string $value,
+    ) {
+        Assert::lengthBetween($value, self::MIN_LENGTH, self::MAX_LENGTH);
+    }
+
+    public static function anonymous(): self
+    {
+        return new self('anonymous');
+    }
+
+    public function equals(self $other): bool
+    {
+        return $other->value === $this->value;
+    }
+}

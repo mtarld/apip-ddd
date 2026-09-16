@@ -14,25 +14,17 @@ final class MessengerCommandBus implements CommandBusInterface
 {
     use HandleTrait;
 
-    public function __construct(MessageBusInterface $commandBus)
+    public function __construct(MessageBusInterface $messageBus)
     {
-        $this->messageBus = $commandBus;
+        $this->messageBus = $messageBus;
     }
 
-    /**
-     * @template T
-     *
-     * @param CommandInterface<T> $command
-     *
-     * @return T
-     */
-    public function dispatch(CommandInterface $command): mixed
+    public function dispatch(CommandInterface $command): void
     {
         try {
-            /** @var T */
-            return $this->handle($command);
+            $this->handle($command);
         } catch (HandlerFailedException $e) {
-            if ($exception = current($e->getWrappedExceptions())) {
+            if ($exception = \current($e->getWrappedExceptions())) {
                 throw $exception;
             }
 

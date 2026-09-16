@@ -8,56 +8,56 @@ use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use App\BookStore\Domain\Repository\BookRepositoryInterface;
 use App\BookStore\Domain\ValueObject\Price;
 use App\BookStore\Infrastructure\ApiPlatform\Resource\BookResource;
-use App\Tests\BookStore\DummyFactory\DummyBookFactory;
+use App\Tests\BookStore\Factory\BookFactory;
 
 final class DiscountBookTest extends ApiTestCase
 {
     public function testApplyADiscountOnBook(): void
     {
-        $client = static::createClient();
+        $client = self::createClient();
 
         /** @var BookRepositoryInterface $bookRepository */
-        $bookRepository = static::getContainer()->get(BookRepositoryInterface::class);
+        $bookRepository = self::getContainer()->get(BookRepositoryInterface::class);
 
-        $book = DummyBookFactory::createBook(price: 1000);
+        $book = BookFactory::create(price: 1000);
         $bookRepository->add($book);
 
-        $client->request('POST', sprintf('/api/books/%s/discount', $book->id()), [
+        $client->request('POST', \sprintf('/api/books/%s/discount', $book->id), [
             'json' => [
                 'discountPercentage' => 20,
             ],
         ]);
 
-        static::assertResponseIsSuccessful();
-        static::assertMatchesResourceItemJsonSchema(BookResource::class);
-        static::assertJsonContains(['price' => 800]);
+        self::assertResponseIsSuccessful();
+        self::assertMatchesResourceItemJsonSchema(BookResource::class);
+        self::assertJsonContains(['price' => 800]);
 
-        static::assertEquals(new Price(800), $bookRepository->ofId($book->id())->price());
+        self::assertEquals(new Price(800), $bookRepository->get($book->id)->price);
     }
 
     public function testValidateDiscountAmount(): void
     {
-        $client = static::createClient();
+        $client = self::createClient();
 
         /** @var BookRepositoryInterface $bookRepository */
-        $bookRepository = static::getContainer()->get(BookRepositoryInterface::class);
+        $bookRepository = self::getContainer()->get(BookRepositoryInterface::class);
 
-        $book = DummyBookFactory::createBook(price: 1000);
+        $book = BookFactory::create(price: 1000);
         $bookRepository->add($book);
 
-        $client->request('POST', sprintf('/api/books/%s/discount', $book->id()), [
+        $client->request('POST', \sprintf('/api/books/%s/discount', $book->id), [
             'json' => [
                 'discountPercentage' => 200,
             ],
         ]);
 
-        static::assertResponseIsUnprocessable();
-        static::assertJsonContains([
+        self::assertResponseIsUnprocessable();
+        self::assertJsonContains([
             'violations' => [
-                ['propertyPath' => 'discountPercentage', 'message' => 'This value should be between 0 and 100.'],
+                ['propertyPath' => 'discountPercentage', 'message' => 'Expected a value between 0 and 100. Got: 200'],
             ],
         ]);
 
-        static::assertEquals(new Price(1000), $bookRepository->ofId($book->id())->price());
+        self::assertEquals(new Price(1000), $bookRepository->get($book->id)->price);
     }
 }

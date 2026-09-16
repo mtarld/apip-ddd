@@ -8,15 +8,20 @@ use Doctrine\ORM\Mapping as ORM;
 use Webmozart\Assert\Assert;
 
 #[ORM\Embeddable]
-final class BookName
+final readonly class BookName
 {
-    #[ORM\Column(name: 'name', length: 255)]
-    public readonly string $value;
+    public const int MIN_LENGTH = 1;
+    public const int MAX_LENGTH = 255;
 
-    public function __construct(string $value)
+    public function __construct(
+        #[ORM\Column(name: 'name', length: self::MAX_LENGTH)]
+        public string $value,
+    ) {
+        Assert::lengthBetween($value, self::MIN_LENGTH, self::MAX_LENGTH);
+    }
+
+    public static function redacted(): self
     {
-        Assert::lengthBetween($value, 1, 255);
-
-        $this->value = $value;
+        return new self('redacted');
     }
 }

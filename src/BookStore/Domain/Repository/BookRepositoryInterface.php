@@ -4,23 +4,24 @@ declare(strict_types=1);
 
 namespace App\BookStore\Domain\Repository;
 
+use App\BookStore\Domain\Exception\MissingBookException;
 use App\BookStore\Domain\Model\Book;
-use App\BookStore\Domain\ValueObject\Author;
+use App\BookStore\Domain\ValueObject\AuthorId;
 use App\BookStore\Domain\ValueObject\BookId;
-use App\Shared\Domain\Repository\RepositoryInterface;
 
-/**
- * @extends RepositoryInterface<Book>
- */
-interface BookRepositoryInterface extends RepositoryInterface
+interface BookRepositoryInterface
 {
     public function add(Book $book): void;
 
     public function remove(Book $book): void;
 
-    public function ofId(BookId $id): ?Book;
+    /**
+     * @throws MissingBookException
+     */
+    public function get(BookId $id): Book;
 
-    public function withAuthor(Author $author): static;
-
-    public function withCheapestsFirst(): static;
+    /**
+     * @return iterable<BookId>
+     */
+    public function idsByAuthor(AuthorId $authorId): iterable;
 }

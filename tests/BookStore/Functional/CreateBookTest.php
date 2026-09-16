@@ -5,45 +5,57 @@ declare(strict_types=1);
 namespace App\Tests\BookStore\Functional;
 
 use App\BookStore\Application\Command\CreateBookCommand;
-use App\BookStore\Domain\Model\Book;
 use App\BookStore\Domain\Repository\BookRepositoryInterface;
-use App\BookStore\Domain\ValueObject\Author;
+use App\BookStore\Domain\ValueObject\AuthorId;
 use App\BookStore\Domain\ValueObject\BookContent;
 use App\BookStore\Domain\ValueObject\BookDescription;
+use App\BookStore\Domain\ValueObject\BookId;
 use App\BookStore\Domain\ValueObject\BookName;
 use App\BookStore\Domain\ValueObject\Price;
+use App\BookStore\Infrastructure\ReadModel\BookView;
+use App\BookStore\Infrastructure\ReadModel\BookViewFinder;
 use App\Shared\Application\Command\CommandBusInterface;
+use App\Tests\BookStore\Factory\BookFactory;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 final class CreateBookTest extends KernelTestCase
 {
     public function testCreateBook(): void
     {
+        $authorId = new AuthorId();
+
         /** @var BookRepositoryInterface $bookRepository */
-        $bookRepository = static::getContainer()->get(BookRepositoryInterface::class);
+        $bookRepository = self::getContainer()->get(BookRepositoryInterface::class);
+
+        /** @var BookViewFinder $books */
+        $books = self::getContainer()->get(BookViewFinder::class);
 
         /** @var CommandBusInterface $commandBus */
-        $commandBus = static::getContainer()->get(CommandBusInterface::class);
+        $commandBus = self::getContainer()->get(CommandBusInterface::class);
 
-        static::assertEmpty($bookRepository);
+        self::assertCount(0, $books->all());
 
         $commandBus->dispatch(new CreateBookCommand(
+            new BookId(),
+            BookFactory::anIsbn(),
             new BookName('name'),
             new BookDescription('description'),
-            new Author('author'),
+            $authorId,
             new BookContent('content'),
             new Price(1000),
         ));
 
-        static::assertCount(1, $bookRepository);
+        self::assertCount(1, $books->all());
 
-        /** @var Book $book */
-        $book = array_values(iterator_to_array($bookRepository))[0];
+        $view = \array_first(\iterator_to_array($books->all()));
+        self::assertInstanceOf(BookView::class, $view);
 
-        static::assertEquals(new BookName('name'), $book->name());
-        static::assertEquals(new BookDescription('description'), $book->description());
-        static::assertEquals(new Author('author'), $book->author());
-        static::assertEquals(new BookContent('content'), $book->content());
-        static::assertEquals(new Price(1000), $book->price());
+        $book = $bookRepository->get($view->id);
+
+        self::assertEquals(new BookName('name'), $book->name);
+        self::assertEquals(new BookDescription('description'), $book->description);
+        self::assertEquals($authorId, $book->authorId);
+        self::assertEquals(new BookContent('content'), $book->content);
+        self::assertEquals(new Price(1000), $book->price);
     }
 }

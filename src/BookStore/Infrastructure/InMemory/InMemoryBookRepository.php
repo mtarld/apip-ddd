@@ -4,42 +4,54 @@ declare(strict_types=1);
 
 namespace App\BookStore\Infrastructure\InMemory;
 
+use App\BookStore\Domain\Exception\MissingBookException;
 use App\BookStore\Domain\Model\Book;
 use App\BookStore\Domain\Repository\BookRepositoryInterface;
-use App\BookStore\Domain\ValueObject\Author;
+use App\BookStore\Domain\ValueObject\AuthorId;
 use App\BookStore\Domain\ValueObject\BookId;
-use App\Shared\Infrastructure\InMemory\InMemoryRepository;
+use Symfony\Component\DependencyInjection\Attribute\AsAlias;
+use Symfony\Component\DependencyInjection\Attribute\When;
 
-/**
- * @extends InMemoryRepository<Book>
- */
-final class InMemoryBookRepository extends InMemoryRepository implements BookRepositoryInterface
+#[AsAlias(BookRepositoryInterface::class, public: true, when: ['test'])]
+#[When('test')]
+final class InMemoryBookRepository implements BookRepositoryInterface
 {
+    /** @var array<string, Book> */
+    private array $books = [];
+
+    #[\Override]
     public function add(Book $book): void
     {
-        $this->entities[(string) $book->id()] = $book;
+        $this->books[(string) $book->id] = $book;
     }
 
+    #[\Override]
     public function remove(Book $book): void
     {
-        unset($this->entities[(string) $book->id()]);
+        unset($this->books[(string) $book->id]);
     }
 
-    public function ofId(BookId $id): ?Book
+    #[\Override]
+    public function get(BookId $id): Book
     {
-        return $this->entities[(string) $id] ?? null;
+        return $this->books[(string) $id] ?? throw new MissingBookException($id);
     }
 
-    public function withAuthor(Author $author): static
+    #[\Override]
+    public function idsByAuthor(AuthorId $authorId): iterable
     {
-        return $this->filter(fn (Book $book) => $book->author()->isEqualTo($author));
+        foreach ($this->books as $book) {
+            if ((string) $book->authorId === (string) $authorId) {
+                yield $book->id;
+            }
+        }
     }
 
-    public function withCheapestsFirst(): static
+    /**
+     * @return array<string, Book>
+     */
+    public function books(): array
     {
-        $cloned = clone $this;
-        uasort($cloned->entities, fn (Book $a, Book $b) => $a->price() <=> $b->price());
-
-        return $cloned;
+        return $this->books;
     }
 }

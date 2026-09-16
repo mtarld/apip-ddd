@@ -6,31 +6,29 @@ namespace App\BookStore\Infrastructure\ApiPlatform\State\Provider;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
-use App\BookStore\Application\Query\FindCheapestBooksQuery;
-use App\BookStore\Infrastructure\ApiPlatform\Resource\BookResource;
-use App\Shared\Application\Query\QueryBusInterface;
+use App\BookStore\Infrastructure\ReadModel\BookView;
+use App\BookStore\Infrastructure\ReadModel\BookViewFinder;
+use Webmozart\Assert\Assert;
 
 /**
- * @implements ProviderInterface<BookResource>
+ * @implements ProviderInterface<BookView>
  */
 final readonly class CheapestBooksProvider implements ProviderInterface
 {
-    public function __construct(private QueryBusInterface $queryBus)
-    {
+    public function __construct(
+        private BookViewFinder $books,
+    ) {
     }
 
     /**
-     * @return list<BookResource>
+     * @return list<BookView>
      */
+    #[\Override]
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
     {
-        $models = $this->queryBus->ask(new FindCheapestBooksQuery());
+        $size = $operation->getParameters()?->get('size')?->getValue();
+        Assert::positiveInteger($size);
 
-        $resources = [];
-        foreach ($models as $model) {
-            $resources[] = BookResource::fromModel($model);
-        }
-
-        return $resources;
+        return \array_values(\iterator_to_array($this->books->cheapest($size)));
     }
 }

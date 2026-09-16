@@ -1,4 +1,4 @@
-parameters:
+deptrac:
     paths:
         - ./src/BookStore
         - ./src/Shared
@@ -7,45 +7,57 @@ parameters:
         - name: Domain
           collectors:
               - type: directory
-                regex: .+/Domain/.*
+                value: .+/Domain/.*
 
         - name: Application
           collectors:
               - type: directory
-                regex: .+/Application/.*
+                value: .+/Application/.*
 
         - name: Infrastructure
           collectors:
               - type: directory
-                regex: .+/Infrastructure/.*
+                value: .+/Infrastructure/.*
 
         - name: Vendors
           collectors:
-              - { type: className, regex: ^ApiPlatform\\ }
-              - { type: className, regex: ^Symfony\\(?!(Component\\Uid\\)) }
-              - { type: className, regex: ^Doctrine\\(?!(ORM\\Mapping)) }
-              - { type: className, regex: ^Webmozart\\(?!Assert\\Assert) }
+              - { type: classLike, value: ^ApiPlatform\\ }
+              - { type: classLike, value: ^Symfony\\(?!(Component\\Uid\\)) }
+              - { type: classLike, value: ^Doctrine\\(?!(ORM\\Mapping|Common\\Collections)) }
+              - { type: classLike, value: ^Webmozart\\(?!Assert\\Assert) }
+              - { type: classLike, value: ^Psr\\(?!Clock\\) }
+              - { type: classLike, value: ^Mcp\\ }
 
         - name: Attributes
           collectors:
-              - { type: className, regex: ^Doctrine\\ORM\\Mapping }
+              - { type: classLike, value: ^Doctrine\\ORM\\Mapping }
 
+        # Libraries the Domain is allowed to lean on. They carry no infrastructure: a UUID, an
+        # assertion helper, a collection type and a way to ask what time it is are language-level
+        # tools, not adapters.
+        #
+        # PSR-20 is here rather than in Vendors on purpose. Banning it does not keep time out of
+        # the model — it keeps the *injectable* clock out and leaves `new \DateTimeImmutable()`
+        # as the only thing an aggregate can reach for, which is the untestable option. One
+        # method, no transport, no I/O: the same argument as symfony/uid, which sits right above.
         - name: Helpers
           collectors:
-              - { type: className, regex: ^Symfony\\Component\\Uid\\ }
-              - { type: className, regex: ^Webmozart\\Assert\\Assert }
+              - { type: classLike, value: ^Symfony\\Component\\Uid\\ }
+              - { type: classLike, value: ^Psr\\Clock\\ }
+              - { type: classLike, value: ^Webmozart\\Assert\\Assert }
+              - { type: classLike, value: ^Doctrine\\Common\\Collections }
 
     ruleset:
-        Domain: 
+        Domain:
             - Helpers
             - Attributes
 
-        Application: 
+        Application:
             - Domain
             - Helpers
             - Attributes
 
-        Infrastructure: 
+        Infrastructure:
             - Domain
             - Application
             - Vendors

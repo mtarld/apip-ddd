@@ -4,88 +4,160 @@ declare(strict_types=1);
 
 namespace App\BookStore\Domain\Model;
 
-use App\BookStore\Domain\ValueObject\Author;
+use App\BookStore\Domain\Event\BookPublished;
+use App\BookStore\Domain\Event\RecordsEvents;
+use App\BookStore\Domain\ValueObject\AuthorId;
 use App\BookStore\Domain\ValueObject\BookContent;
 use App\BookStore\Domain\ValueObject\BookDescription;
 use App\BookStore\Domain\ValueObject\BookId;
 use App\BookStore\Domain\ValueObject\BookName;
 use App\BookStore\Domain\ValueObject\Discount;
+use App\BookStore\Domain\ValueObject\Isbn;
 use App\BookStore\Domain\ValueObject\Price;
+use App\BookStore\Domain\ValueObject\ReviewComment;
+use App\BookStore\Domain\ValueObject\ReviewId;
+use App\BookStore\Domain\ValueObject\ReviewRating;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\AbstractUid;
 
 #[ORM\Entity]
-class Book
+#[ORM\Table(name: '`book`')]
+final class Book
 {
-    #[ORM\Embedded(columnPrefix: false)]
-    private readonly BookId $id;
+    use RecordsEvents;
+
+    #[ORM\Version]
+    #[ORM\Column(name: 'version', type: 'integer')]
+    public private(set) int $version = 1;
+
+    /**
+     * @var list<Review>
+     */
+    public array $reviews {
+        get => \array_values($this->reviewCollection->toArray());
+    }
+
+    /**
+     * @var list<Classification>
+     */
+    public array $classifications {
+        get => \array_values($this->classificationCollection->toArray());
+    }
+
+    /**
+     * @var list<Category>
+     */
+    public array $categories {
+        get => \array_map(static fn (Classification $classification): Category => $classification->category, $this->classifications);
+    }
+
+    public AuthorId $authorId {
+        get => new AuthorId($this->authorIdValue);
+    }
+
+    /**
+     * @var Collection<int, Review>
+     */
+    #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'book', cascade: ['persist'], orphanRemoval: true, fetch: 'EXTRA_LAZY')]
+    private Collection $reviewCollection;
+
+    /**
+     * @var Collection<int, Classification>
+     */
+    #[ORM\OneToMany(targetEntity: Classification::class, mappedBy: 'book', cascade: ['persist'], orphanRemoval: true)]
+    private Collection $classificationCollection;
+
+    #[ORM\Column(name: 'author_id', type: 'uuid')]
+    private AbstractUid $authorIdValue;
 
     public function __construct(
-        #[ORM\Embedded(columnPrefix: false)]
-        private BookName $name,
+        public readonly BookId $id,
 
-        #[ORM\Embedded(columnPrefix: false)]
-        private BookDescription $description,
+        public readonly Isbn $isbn,
 
-        #[ORM\Embedded(columnPrefix: false)]
-        private Author $author,
+        public private(set) BookName $name,
 
-        #[ORM\Embedded(columnPrefix: false)]
-        private BookContent $content,
+        public private(set) BookDescription $description,
 
-        #[ORM\Embedded(columnPrefix: false)]
-        private Price $price,
+        AuthorId $authorId,
+
+        public private(set) BookContent $content,
+
+        public private(set) Price $price,
     ) {
-        $this->id = new BookId();
+        $this->authorIdValue = $authorId->value;
+        $this->reviewCollection = new ArrayCollection();
+        $this->classificationCollection = new ArrayCollection();
+
+        $this->record(new BookPublished($this->id, $this->name, $authorId, $this->price));
     }
 
-    public function update(
-        ?BookName $name = null,
-        ?BookDescription $description = null,
-        ?Author $author = null,
-        ?BookContent $content = null,
-        ?Price $price = null,
-    ): void {
-        $this->name = $name ?? $this->name;
-        $this->description = $description ?? $this->description;
-        $this->author = $author ?? $this->author;
-        $this->content = $content ?? $this->content;
-        $this->price = $price ?? $this->price;
+    public function rename(BookName $name): void
+    {
+        $this->name = $name;
     }
 
-    public function applyDiscount(Discount $discount): static
+    public function describe(BookDescription $description): void
+    {
+        $this->description = $description;
+    }
+
+    public function reviseContent(BookContent $content): void
+    {
+        $this->content = $content;
+    }
+
+    public function reprice(Price $price): void
+    {
+        $this->price = $price;
+    }
+
+    public function anonymize(AuthorId $anonymousAuthorId): void
+    {
+        $this->name = BookName::redacted();
+        $this->description = BookDescription::redacted();
+        $this->content = BookContent::redacted();
+        $this->authorIdValue = $anonymousAuthorId->value;
+    }
+
+    public function applyDiscount(Discount $discount): void
     {
         $this->price = $this->price->applyDiscount($discount);
-
-        return $this;
     }
 
-    public function id(): BookId
+    public function review(ReviewId $id, ReviewRating $rating, ReviewComment $comment, \DateTimeImmutable $writtenAt): Review
     {
-        return $this->id;
+        $review = new Review($id, $this, $rating, $comment, $writtenAt);
+        $this->reviewCollection->add($review);
+
+        return $review;
     }
 
-    public function name(): BookName
+    public function classify(Category $category, \DateTimeImmutable $at): void
     {
-        return $this->name;
+        if (!$this->isClassifiedAs($category)) {
+            $this->classificationCollection->add(new Classification($this, $category, $at));
+        }
     }
 
-    public function description(): BookDescription
+    public function declassify(Category $category): void
     {
-        return $this->description;
+        if (($classification = $this->classificationUnder($category)) instanceof Classification) {
+            $this->classificationCollection->removeElement($classification);
+        }
     }
 
-    public function author(): Author
+    public function isClassifiedAs(Category $category): bool
     {
-        return $this->author;
+        return $this->classificationUnder($category) instanceof Classification;
     }
 
-    public function content(): BookContent
+    private function classificationUnder(Category $category): ?Classification
     {
-        return $this->content;
-    }
-
-    public function price(): Price
-    {
-        return $this->price;
+        return $this->classificationCollection->findFirst(
+            static fn (int $key, Classification $classification): bool => $classification->category->id->equals($category->id),
+        );
     }
 }
